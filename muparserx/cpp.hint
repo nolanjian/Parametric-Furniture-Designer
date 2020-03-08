@@ -1,0 +1,2 @@
+#define MUPARSERX_API __declspec(dllexport)
+#define MUPARSERX_API __declspec(dllimport)
