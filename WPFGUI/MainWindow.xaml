@@ -6,10 +6,25 @@
         xmlns:local="clr-namespace:WPFGUI"
         mc:Ignorable="d"
         Closed="Window_Closed"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
         SizeChanged="Window_SizeChanged"
-        Title="MainWindow" Width="1920" Height="1028">
+        Title="PFD" Width="1500" Height="900">
     <Grid>
-        <WindowsFormsHost x:Name="windowsFormHost" Width="1024" Height="768" />
+        <WindowsFormsHost x:Name="windowsFormHost" Width="1024" Height="768" Margin="237,29,652.6,201.4" />
+        <TreeView x:Name="Components" HorizontalAlignment="Left" Height="380" Margin="10,29,0,0" VerticalAlignment="Top" Width="199"/>
+        <ListView x:Name="Params" HorizontalAlignment="Left" Height="231" Margin="10,414,0,0" VerticalAlignment="Top" Width="199" RenderTransformOrigin="0.163,-0.086">
+            <ListView.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </ListView.RenderTransform>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

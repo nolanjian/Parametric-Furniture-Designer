@@ -10,13 +10,31 @@
 #define OSGCORE_API __declspec(dllimport)
 #endif
 
-// This class is exported from the dll
-class OSGCORE_API COSGCore {
-public:
-	COSGCore(void);
-	// TODO: add your methods here.
-};
+#include <memory>
+#include <thread>
 
-extern OSGCORE_API int nOSGCore;
+#include <osg/GraphicsContext>
+#include <osgViewer/Viewer>
+#include <osgViewer/api/Win32/GraphicsWindowWin32>
+#include <osgGA/TrackballManipulator>
 
-OSGCORE_API int fnOSGCore(void);
+namespace OSGCore
+{
+	class OSGCORE_API OSGAdapt
+	{
+	public:
+		OSGAdapt();
+
+		void Render(HWND hwnd);
+		void Destroy();
+		void RenderThread();
+
+		bool s_bKeepRunning = false;
+
+	private:
+		std::thread	m_renderThread;
+		HWND m_hwnd = NULL;
+
+		osg::ref_ptr<osgViewer::Viewer>	ptrViewer;
+	};
+}

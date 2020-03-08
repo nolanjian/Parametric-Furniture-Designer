@@ -1,10 +1,20 @@
 #pragma once
 
+#include "../OSGCore/OSGCore.h"
+
+#include <memory>
+
 using namespace System;
 
 namespace CLROSG {
-	public ref class Class1
+	public ref class Wrapper
 	{
-		// TODO: Add your methods for this class here.
+	public:
+		Wrapper();
+		void Render(IntPtr hwnd);
+		void Destroy();
+	private:
+
+		OSGCore::OSGAdapt* ptrOSGAdapt = nullptr;
 	};
 }

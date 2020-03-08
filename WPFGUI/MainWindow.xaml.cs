@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -20,19 +22,37 @@ namespace WPFGUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private CLROSG.Wrapper Wrapper { get; set; } = null;
+        private PictureBox DrawingArea { get; set; } = null;
+
         public MainWindow()
         {
             InitializeComponent();
+            Wrapper = new CLROSG.Wrapper();
+            DrawingArea = new PictureBox();
+            windowsFormHost.Child = DrawingArea;
+            DrawingArea.Paint += new PaintEventHandler(DrawingArea_Paint);
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-
+            if (Wrapper != null)
+            {
+                Wrapper.Destroy();
+            }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 
+        }
+
+        private void DrawingArea_Paint(object sender, PaintEventArgs e)
+        {
+            if (Wrapper != null)
+            {
+                Wrapper.Render(DrawingArea.Handle);
+            }
         }
     }
 }
