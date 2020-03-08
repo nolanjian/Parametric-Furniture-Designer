@@ -13,9 +13,15 @@ namespace CLROSG {
 		Wrapper();
 		bool Render(IntPtr hwnd);
 		void Destroy();
-		
+
 		void ShowGrids(bool bEnable);
 		bool IsShowGrids();
+
+		void ShowSelectedObjectCoordinate(bool bEnable);
+		bool IsShowSelectedObjectCoordinate();
+
+		void ShowDrillingAndGroove(bool bEnable);
+		bool IsShowDrillingAndGroove(); 
 	private:
 
 		OSGCore::OSGAdapt* ptrOSGAdapt = nullptr;

@@ -1,0 +1,2 @@
+#define PARAMS_API __declspec(dllexport)
+#define PARAMS_API __declspec(dllimport)

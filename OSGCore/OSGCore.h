@@ -34,10 +34,14 @@ namespace OSGCore
 
 		bool s_bKeepRunning = false;
 
+		osg::ref_ptr<osg::Group>	Get3DScene();
+		void						Set3DScene(osg::ref_ptr<osg::Group> ptr3DScene);
+
 	private:
 		std::thread	m_renderThread;
 		HWND m_hwnd = NULL;
 
-		osg::ref_ptr<osgViewer::Viewer>	ptrViewer;
+		osg::ref_ptr<osgViewer::Viewer>	m_ptrViewer;
+		osg::ref_ptr<osg::Group>	m_ptr3DScene = new osg::Group();
 	};
 }

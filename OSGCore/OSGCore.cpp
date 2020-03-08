@@ -111,13 +111,13 @@ bool OSGCore::OSGAdapt::Render(HWND hwnd)
 	camera->setReadBuffer(GL_BACK);
 
 	// Create the viewer and attach the camera to it 
-	ptrViewer = new osgViewer::Viewer;
-	ptrViewer->addSlave(camera.get());
+	m_ptrViewer = new osgViewer::Viewer;
+	m_ptrViewer->addSlave(camera.get());
 
-	ptrViewer->setCamera(camera.get());
-	//ptrViewer->setSceneData(osgDB::readNodeFile("cessna.osg"));
-	ptrViewer->setKeyEventSetsDone(0);
-	ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	m_ptrViewer->setCamera(camera.get());
+	m_ptrViewer->setSceneData(m_ptr3DScene);
+	m_ptrViewer->setKeyEventSetsDone(0);
+	m_ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
 
 	m_renderThread = std::thread(std::bind(&OSGAdapt::RenderThread, this));
 
@@ -127,7 +127,7 @@ bool OSGCore::OSGAdapt::Render(HWND hwnd)
 void OSGCore::OSGAdapt::Destroy()
 {
 	s_bKeepRunning = false;
-	ptrViewer->setDone(true);
+	m_ptrViewer->setDone(true);
 	if (m_renderThread.joinable())
 	{
 		m_renderThread.join();
@@ -137,9 +137,9 @@ void OSGCore::OSGAdapt::Destroy()
 void OSGCore::OSGAdapt::RenderThread()
 {
 	s_bKeepRunning = true;
-	while (s_bKeepRunning && !ptrViewer->done())
+	while (s_bKeepRunning && !m_ptrViewer->done())
 	{
-		ptrViewer->frame();
+		m_ptrViewer->frame();
 	}
 }
 
@@ -150,4 +150,14 @@ void OSGCore::OSGAdapt::ShowGrids(bool bEnable)
 bool OSGCore::OSGAdapt::IsShowGrids()
 {
 	return false;
+}
+
+osg::ref_ptr<osg::Group> OSGCore::OSGAdapt::Get3DScene()
+{
+	return m_ptr3DScene;
+}
+
+void OSGCore::OSGAdapt::Set3DScene(osg::ref_ptr<osg::Group> ptr3DScene)
+{
+	m_ptr3DScene = ptr3DScene;
 }
