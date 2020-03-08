@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Closed="Window_Closed"
+        WindowStartupLocation="CenterScreen"
+        SizeChanged="Window_SizeChanged"
+        Title="MainWindow" Width="1920" Height="1028">
     <Grid>
-
+        <WindowsFormsHost x:Name="windowsFormHost" Width="1024" Height="768" />
     </Grid>
 </Window>
