@@ -106,6 +106,10 @@
       <Project>{6aec16f9-772b-4f82-a283-96e4d62ab456}</Project>
       <Name>CLROSG</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogHelper\LogHelper.csproj">
+      <Project>{68d9c136-28bc-4774-b6f9-7bb75354ad7b}</Project>
+      <Name>LogHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

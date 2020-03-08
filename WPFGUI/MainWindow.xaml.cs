@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,9 +25,15 @@ namespace WPFGUI
     {
         private CLROSG.Wrapper Wrapper { get; set; } = null;
         private PictureBox DrawingArea { get; set; } = null;
+        public static ILog Log { get; set; } = LogHelper.Logger.Log;
 
         public MainWindow()
         {
+            LogHelper.Logger.InitLogger();
+            Log = LogHelper.Logger.Log;
+            Log.Info("PFD Start");
+            
+
             InitializeComponent();
             Wrapper = new CLROSG.Wrapper();
             DrawingArea = new PictureBox();
@@ -40,6 +47,8 @@ namespace WPFGUI
             {
                 Wrapper.Destroy();
             }
+
+            Log.Info("PFD End");
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
