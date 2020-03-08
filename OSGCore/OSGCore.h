@@ -25,9 +25,12 @@ namespace OSGCore
 	public:
 		OSGAdapt();
 
-		void Render(HWND hwnd);
+		bool Render(HWND hwnd);
 		void Destroy();
 		void RenderThread();
+
+		void ShowGrids(bool bEnable);
+		bool IsShowGrids();
 
 		bool s_bKeepRunning = false;
 

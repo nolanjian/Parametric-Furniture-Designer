@@ -5,12 +5,12 @@ namespace LogHelper
 {
     public class Logger
     {
-        static public ILog Log { get; set; } = null;
+        static public ILog WPFLog { get; set; } = null;
         static public void InitLogger()
         {
-            string strLog4netConfig = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config/log4net.config");
+            string strLog4netConfig = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "config/WPFLog.config");
             log4net.Config.XmlConfigurator.Configure(new FileInfo(strLog4netConfig));
-            Log = LogManager.GetLogger("PFDLogger");
+            WPFLog = LogManager.GetLogger("PFDLogger");
         }
     }
 }

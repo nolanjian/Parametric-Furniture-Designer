@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "CLROSG.h"
+#include <cassert>
 
 
 CLROSG::Wrapper::Wrapper()
@@ -8,13 +9,14 @@ CLROSG::Wrapper::Wrapper()
 {
 }
 
-void CLROSG::Wrapper::Render(IntPtr hwnd)
+bool CLROSG::Wrapper::Render(IntPtr hwnd)
 {
 	HWND nativeHWND = (HWND)hwnd.ToPointer();
 	if (ptrOSGAdapt != nullptr)
 	{
-		ptrOSGAdapt->Render(nativeHWND);
+		return ptrOSGAdapt->Render(nativeHWND);
 	}
+	return false;
 }
 
 void CLROSG::Wrapper::Destroy()
@@ -23,4 +25,16 @@ void CLROSG::Wrapper::Destroy()
 	{
 		ptrOSGAdapt->Destroy();
 	}
+}
+
+void CLROSG::Wrapper::ShowGrids(bool bEnable)
+{
+	assert(ptrOSGAdapt != nullptr);
+	ptrOSGAdapt->ShowGrids(bEnable);
+}
+
+bool CLROSG::Wrapper::IsShowGrids()
+{
+	assert(ptrOSGAdapt != nullptr);
+	return ptrOSGAdapt->IsShowGrids();
 }

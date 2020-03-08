@@ -11,8 +11,11 @@ namespace CLROSG {
 	{
 	public:
 		Wrapper();
-		void Render(IntPtr hwnd);
+		bool Render(IntPtr hwnd);
 		void Destroy();
+		
+		void ShowGrids(bool bEnable);
+		bool IsShowGrids();
 	private:
 
 		OSGCore::OSGAdapt* ptrOSGAdapt = nullptr;

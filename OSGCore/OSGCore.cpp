@@ -6,21 +6,27 @@
 #include "OSGCore.h"
 #include <functional>
 #include <chrono>
+#include <cassert>
 
 OSGCore::OSGAdapt::OSGAdapt()
 {
 	s_bKeepRunning = false;
 }
 
-void OSGCore::OSGAdapt::Render(HWND hwnd)
+bool OSGCore::OSGAdapt::Render(HWND hwnd)
 {
-	if (m_hwnd == NULL)
+	assert(hwnd != nullptr);
+	if (hwnd == NULL)
+	{
+		return false;
+	}
+	else if (m_hwnd == NULL)
 	{
 		m_hwnd = hwnd;
 	}
 	else if (m_hwnd == hwnd)
 	{
-		return;
+		return true;
 	}
 	else
 	{
@@ -75,7 +81,7 @@ void OSGCore::OSGAdapt::Render(HWND hwnd)
 	{
 		// Destroys the window associated with the CWindow object and sets m_hWnd to NULL. 
 		::DestroyWindow(m_hwnd);
-		return;
+		return false;
 	}
 
 	// The ChoosePixelFormat OpenGL function attempts to match an appropriate pixel format supported by a device context to a given pixel format specification. 
@@ -85,7 +91,7 @@ void OSGCore::OSGAdapt::Render(HWND hwnd)
 		// (MFC)Releases the display device context of a container of a windowless control, freeing the device context for use by other applications 
 		::ReleaseDC(m_hwnd, hdc);
 		::DestroyWindow(m_hwnd);
-		return;
+		return false;
 	}
 
 	// The SetPixelFormat OpenGL function sets the pixel format of the specified device context to the format specified by the iPixelFormat index. 
@@ -93,7 +99,7 @@ void OSGCore::OSGAdapt::Render(HWND hwnd)
 	{
 		::ReleaseDC(m_hwnd, hdc);
 		::DestroyWindow(m_hwnd);
-		return;
+		return false;
 	}
 
 	// Create graphics context 
@@ -114,6 +120,8 @@ void OSGCore::OSGAdapt::Render(HWND hwnd)
 	ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
 
 	m_renderThread = std::thread(std::bind(&OSGAdapt::RenderThread, this));
+
+	return true;
 }
 
 void OSGCore::OSGAdapt::Destroy()
@@ -133,4 +141,13 @@ void OSGCore::OSGAdapt::RenderThread()
 	{
 		ptrViewer->frame();
 	}
+}
+
+void OSGCore::OSGAdapt::ShowGrids(bool bEnable)
+{
+}
+
+bool OSGCore::OSGAdapt::IsShowGrids()
+{
+	return false;
 }
