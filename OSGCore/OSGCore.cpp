@@ -161,3 +161,8 @@ void OSGCore::OSGAdapt::Set3DScene(osg::ref_ptr<osg::Group> ptr3DScene)
 {
 	m_ptr3DScene = ptr3DScene;
 }
+
+void OSGCore::OSGAdapt::Cale(const std::wstring& pStrVal)
+{
+	
+}

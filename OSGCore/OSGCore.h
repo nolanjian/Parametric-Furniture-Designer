@@ -37,6 +37,8 @@ namespace OSGCore
 		osg::ref_ptr<osg::Group>	Get3DScene();
 		void						Set3DScene(osg::ref_ptr<osg::Group> ptr3DScene);
 
+		void Cale(const std::wstring& pStrVal);
+
 	private:
 		std::thread	m_renderThread;
 		HWND m_hwnd = NULL;

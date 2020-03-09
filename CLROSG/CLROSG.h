@@ -22,6 +22,8 @@ namespace CLROSG {
 
 		void ShowDrillingAndGroove(bool bEnable);
 		bool IsShowDrillingAndGroove(); 
+
+		void Cale(String^ strVal);
 	private:
 
 		OSGCore::OSGAdapt* ptrOSGAdapt = nullptr;

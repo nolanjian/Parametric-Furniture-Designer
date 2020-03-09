@@ -58,3 +58,11 @@ bool CLROSG::Wrapper::IsShowDrillingAndGroove()
 {
 	return false;
 }
+
+void CLROSG::Wrapper::Cale(String^ strVal)
+{
+	const wchar_t* pChars = (const wchar_t*)Runtime::InteropServices::Marshal::StringToHGlobalUni(strVal).ToPointer();
+	std::wstring	wstr = pChars;
+	ptrOSGAdapt->Cale(wstr);
+
+}

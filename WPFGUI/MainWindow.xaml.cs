@@ -50,5 +50,29 @@ namespace WPFGUI
                 Log.Error("Init Render Fail!");
             }
         }
+
+        private void RichTextBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                // has a cale
+
+                System.Windows.Controls.RichTextBox rtx = (System.Windows.Controls.RichTextBox)sender;
+                System.Windows.Documents.TextRange textRange = new System.Windows.Documents.TextRange(rtx.Document.ContentStart, rtx.Document.ContentEnd);
+
+                Wrapper.Cale(textRange.Text);
+            }
+        }
+
+        private void RichTextBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                // has a cale
+
+                RichTextBox rtx = (RichTextBox)sender;
+                Wrapper.Cale(rtx.Text);
+            }
+        }
     }
 }

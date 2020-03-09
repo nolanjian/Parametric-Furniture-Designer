@@ -163,13 +163,17 @@
     <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseObject.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="OSGCore.h" />
+    <ClInclude Include="Panel.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="OSGCore.cpp" />
+    <ClCompile Include="Panel.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
