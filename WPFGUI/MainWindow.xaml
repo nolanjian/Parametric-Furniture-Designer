@@ -10,30 +10,40 @@
         SizeChanged="Window_SizeChanged"
         Title="PFD" Width="1500" Height="900">
     <Grid>
-        <WindowsFormsHost x:Name="windowsFormHost" Width="1024" Height="768" Margin="237,29,652.6,201.4" />
-        <TreeView x:Name="Components" HorizontalAlignment="Left" Height="380" Margin="10,29,0,0" VerticalAlignment="Top" Width="199"/>
-        <ListView x:Name="Params" HorizontalAlignment="Left" Height="231" Margin="10,414,0,0" VerticalAlignment="Top" Width="199" RenderTransformOrigin="0.163,-0.086">
-            <ListView.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </ListView.RenderTransform>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <RichTextBox HorizontalAlignment="Left" Height="81" Margin="1266,29,0,0" VerticalAlignment="Top" Width="218" 
+        <StackPanel Orientation="Horizontal">
+            <StackPanel x:Name="LeftPanel" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <local:ParamGrids HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="350">
+                    
+                </local:ParamGrids>
+            </StackPanel>
+            <StackPanel x:Name="MidPanel" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <WindowsFormsHost x:Name="windowsFormHost" Width="800" Height="600" />
+                <RichTextBox HorizontalAlignment="Stretch" Height="230"  VerticalAlignment="Stretch" Width="auto" 
                      KeyDown="RichTextBox_KeyDown"
                      KeyUp="RichTextBox_KeyUp">
-            <FlowDocument>
-                <Paragraph KeyDown="RichTextBox_KeyDown" KeyUp="RichTextBox_KeyUp">
-                    <Run Text=""/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+                    <FlowDocument>
+                        <Paragraph KeyDown="RichTextBox_KeyDown" KeyUp="RichTextBox_KeyUp">
+                            <Run Text=""/>
+                        </Paragraph>
+                    </FlowDocument>
+                </RichTextBox>
+            </StackPanel>
+            <StackPanel x:Name="RightPanel" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <ListView x:Name="Params" HorizontalAlignment="Left" Height="231" Margin="10,414,0,0" VerticalAlignment="Top" Width="199" RenderTransformOrigin="0.163,-0.086">
+                    <ListView.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ListView.RenderTransform>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
