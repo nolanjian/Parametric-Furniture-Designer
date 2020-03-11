@@ -29,7 +29,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -83,15 +83,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ParamGrids.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParamGrids.xaml.cs">
-      <DependentUpon>ParamGrids.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -119,13 +112,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CLROSG\CLROSG.vcxproj">
-      <Project>{6aec16f9-772b-4f82-a283-96e4d62ab456}</Project>
-      <Name>CLROSG</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LogHelper\LogHelper.csproj">
       <Project>{68d9c136-28bc-4774-b6f9-7bb75354ad7b}</Project>
       <Name>LogHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OSGCLR\OSGCLR.vcxproj">
+      <Project>{89e868d0-95c6-41c0-9922-01437c5e0fd0}</Project>
+      <Name>OSGCLR</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

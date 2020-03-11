@@ -10,7 +10,7 @@ namespace WPFGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private CLROSG.Wrapper Wrapper { get; set; } = null;
+        private OSGCLR.Wrapper Wrapper { get; set; } = null;
         private PictureBox DrawingArea { get; set; } = null;
         public static ILog Log { get; set; } = LogHelper.Logger.WPFLog;
 
@@ -22,7 +22,7 @@ namespace WPFGUI
             
 
             InitializeComponent();
-            Wrapper = new CLROSG.Wrapper();
+            Wrapper = new OSGCLR.Wrapper();
             DrawingArea = new PictureBox();
             windowsFormHost.Child = DrawingArea;
             DrawingArea.Paint += new PaintEventHandler(DrawingArea_Paint);
@@ -73,6 +73,11 @@ namespace WPFGUI
                 RichTextBox rtx = (RichTextBox)sender;
                 Wrapper.Cale(rtx.Text);
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

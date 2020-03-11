@@ -1,20 +1,18 @@
-#include "pch.h"
-
-#include "CLROSG.h"
+#include "OSGCLR.h"
 #include <cassert>
 
 
-CLROSG::Wrapper::Wrapper()
+OSGCLR::Wrapper::Wrapper()
 	:ptrInterfaceOSG(new OSGCore::InterfaceOSG())
 {
 }
 
-CLROSG::Wrapper::~Wrapper()
+OSGCLR::Wrapper::~Wrapper()
 {
 	delete ptrInterfaceOSG;
 }
 
-bool CLROSG::Wrapper::Render(IntPtr hwnd)
+bool OSGCLR::Wrapper::Render(IntPtr hwnd)
 {
 	HWND nativeHWND = (HWND)hwnd.ToPointer();
 	if (ptrInterfaceOSG != nullptr)
@@ -24,7 +22,7 @@ bool CLROSG::Wrapper::Render(IntPtr hwnd)
 	return false;
 }
 
-void CLROSG::Wrapper::Destroy()
+void OSGCLR::Wrapper::Destroy()
 {
 	if (ptrInterfaceOSG != nullptr)
 	{
@@ -32,40 +30,40 @@ void CLROSG::Wrapper::Destroy()
 	}
 }
 
-void CLROSG::Wrapper::ShowGrids(bool bEnable)
+void OSGCLR::Wrapper::ShowGrids(bool bEnable)
 {
 	assert(ptrInterfaceOSG != nullptr);
 	//ptrInterfaceOSG->ShowGrids(bEnable);
 }
 
-bool CLROSG::Wrapper::IsShowGrids()
+bool OSGCLR::Wrapper::IsShowGrids()
 {
 	assert(ptrInterfaceOSG != nullptr);
 	return false;
 	//return ptrInterfaceOSG->IsShowGrids();
 }
 
-void CLROSG::Wrapper::ShowSelectedObjectCoordinate(bool bEnable)
+void OSGCLR::Wrapper::ShowSelectedObjectCoordinate(bool bEnable)
 {
 	throw gcnew System::NotImplementedException();
 }
 
-bool CLROSG::Wrapper::IsShowSelectedObjectCoordinate()
+bool OSGCLR::Wrapper::IsShowSelectedObjectCoordinate()
 {
 	return false;
 }
 
-void CLROSG::Wrapper::ShowDrillingAndGroove(bool bEnable)
+void OSGCLR::Wrapper::ShowDrillingAndGroove(bool bEnable)
 {
 	throw gcnew System::NotImplementedException();
 }
 
-bool CLROSG::Wrapper::IsShowDrillingAndGroove()
+bool OSGCLR::Wrapper::IsShowDrillingAndGroove()
 {
 	return false;
 }
 
-void CLROSG::Wrapper::Cale(String^ strVal)
+void OSGCLR::Wrapper::Cale(String^ strVal)
 {
 	const wchar_t* pChars = (const wchar_t*)Runtime::InteropServices::Marshal::StringToHGlobalUni(strVal).ToPointer();
 	//std::wstring	wstr = pChars;

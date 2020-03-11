@@ -36,10 +36,10 @@
     <ClInclude Include="OSGCoreExport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ImpOSGCore.h">
+    <ClInclude Include="InterfaceOSGCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InterfaceOSGCore.h">
+    <ClInclude Include="ImplementOSGCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClCompile Include="InterfaceOSGCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ImpOSGCore.cpp">
+    <ClCompile Include="ImplementOSGCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

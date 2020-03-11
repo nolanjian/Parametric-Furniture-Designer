@@ -61,13 +61,14 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalIncludeDirectories>D:\library\OpenSceneGraph-3.6.5-VC2019-64-Debug\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>D:\library\OpenSceneGraph-3.6.5-VC2019-64-Debug\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenThreadsd.lib;osgAnimationd.lib;osgd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgManipulatord.lib;osgParticled.lib;osgPresentationd.lib;osgQOpenGLd.lib;osgQt5d.lib;osgShadowd.lib;osgSimd.lib;osgTerraind.lib;osgTextd.lib;osgUId.lib;osgUtild.lib;osgViewerd.lib;osgVolumed.lib;osgWidgetd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>osgd.lib;osgViewerd.lib;osgGAd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -95,7 +96,7 @@
   <ItemGroup>
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="ImpOSGCore.h" />
+    <ClInclude Include="ImplementOSGCore.h" />
     <ClInclude Include="InterfaceOSGCore.h" />
     <ClInclude Include="OSGCoreExport.h" />
     <ClInclude Include="Panel.h" />
@@ -104,7 +105,7 @@
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="ImpOSGCore.cpp" />
+    <ClCompile Include="ImplementOSGCore.cpp" />
     <ClCompile Include="InterfaceOSGCore.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="pch.cpp">

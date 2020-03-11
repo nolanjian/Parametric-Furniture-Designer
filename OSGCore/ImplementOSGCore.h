@@ -6,11 +6,11 @@
 
 namespace OSGCore
 {
-	class ImpOSGCore
+	class ImplementOSGCore
 	{
 	public:
-		ImpOSGCore();
-		virtual ~ImpOSGCore();
+		ImplementOSGCore();
+		virtual ~ImplementOSGCore();
 
 		bool Render(HWND);
 		void Destory();

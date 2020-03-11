@@ -6,7 +6,7 @@
 
 using namespace System;
 
-namespace CLROSG {
+namespace OSGCLR {
 	public ref class Wrapper
 	{
 	public:
@@ -22,7 +22,7 @@ namespace CLROSG {
 		bool IsShowSelectedObjectCoordinate();
 
 		void ShowDrillingAndGroove(bool bEnable);
-		bool IsShowDrillingAndGroove(); 
+		bool IsShowDrillingAndGroove();
 
 		void Cale(String^ strVal);
 	private:

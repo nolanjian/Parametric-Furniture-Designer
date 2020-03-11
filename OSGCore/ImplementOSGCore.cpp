@@ -1,20 +1,21 @@
 #include "pch.h"
-#include "ImpOSGCore.h"
+#include "ImplementOSGCore.h"
 #include <cassert>
 #include <osg/GraphicsContext>
 #include <osgViewer/Viewer>
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
 #include <osgGA/TrackballManipulator>
 
-OSGCore::ImpOSGCore::ImpOSGCore()
+OSGCore::ImplementOSGCore::ImplementOSGCore()
 {
 }
 
-OSGCore::ImpOSGCore::~ImpOSGCore()
+OSGCore::ImplementOSGCore::~ImplementOSGCore()
 {
+	Destory();
 }
 
-bool OSGCore::ImpOSGCore::Render(HWND hwnd)
+bool OSGCore::ImplementOSGCore::Render(HWND hwnd)
 {
 	assert(hwnd != nullptr);
 	if (hwnd == NULL)
@@ -120,22 +121,25 @@ bool OSGCore::ImpOSGCore::Render(HWND hwnd)
 	m_ptrViewer->setKeyEventSetsDone(0);
 	m_ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
 
-	m_renderThread = std::thread(std::bind(&ImpOSGCore::RenderThread, this));
+	m_renderThread = std::thread(std::bind(&ImplementOSGCore::RenderThread, this));
 
 	return true;
 }
 
-void OSGCore::ImpOSGCore::Destory()
+void OSGCore::ImplementOSGCore::Destory()
 {
 	s_bKeepRunning = false;
-	m_ptrViewer->setDone(true);
+	if (m_ptrViewer.get())
+	{
+		m_ptrViewer->setDone(true);
+	}
 	if (m_renderThread.joinable())
 	{
 		m_renderThread.join();
 	}
 }
 
-void OSGCore::ImpOSGCore::RenderThread()
+void OSGCore::ImplementOSGCore::RenderThread()
 {
 	s_bKeepRunning = true;
 	while (s_bKeepRunning && !m_ptrViewer->done())

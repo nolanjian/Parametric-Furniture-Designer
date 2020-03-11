@@ -1,18 +1,18 @@
 #include "pch.h"
 #include <cassert>
 #include "InterfaceOSGCore.h"
-#include "ImpOSGCore.h"
+#include "ImplementOSGCore.h"
 
-static OSGCore::ImpOSGCore* GetImplement(void* ptr)
+static OSGCore::ImplementOSGCore* GetImplement(void* ptr)
 {
-	OSGCore::ImpOSGCore* ptrImp = static_cast<OSGCore::ImpOSGCore*>(ptr);
+	OSGCore::ImplementOSGCore* ptrImp = static_cast<OSGCore::ImplementOSGCore*>(ptr);
 	assert(ptrImp);
 	return ptrImp;
 }
 
 OSGCore::InterfaceOSG::InterfaceOSG()
 {
-	ptrImp = (void*)(new ImpOSGCore());
+	ptrImp = (void*)(new ImplementOSGCore());
 }
 
 OSGCore::InterfaceOSG::~InterfaceOSG()
