@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../OSGCore/OSGCore.h"
+#include "../OSGCore/InterfaceOSGCore.h"
 
 #include <memory>
 
@@ -11,6 +11,7 @@ namespace CLROSG {
 	{
 	public:
 		Wrapper();
+		~Wrapper();
 		bool Render(IntPtr hwnd);
 		void Destroy();
 
@@ -26,6 +27,6 @@ namespace CLROSG {
 		void Cale(String^ strVal);
 	private:
 
-		OSGCore::OSGAdapt* ptrOSGAdapt = nullptr;
+		OSGCore::InterfaceOSG* ptrInterfaceOSG = nullptr;
 	};
 }

@@ -5,38 +5,44 @@
 
 
 CLROSG::Wrapper::Wrapper()
-	:ptrOSGAdapt(new OSGCore::OSGAdapt())
+	:ptrInterfaceOSG(new OSGCore::InterfaceOSG())
 {
+}
+
+CLROSG::Wrapper::~Wrapper()
+{
+	delete ptrInterfaceOSG;
 }
 
 bool CLROSG::Wrapper::Render(IntPtr hwnd)
 {
 	HWND nativeHWND = (HWND)hwnd.ToPointer();
-	if (ptrOSGAdapt != nullptr)
+	if (ptrInterfaceOSG != nullptr)
 	{
-		return ptrOSGAdapt->Render(nativeHWND);
+		return ptrInterfaceOSG->Render(nativeHWND);
 	}
 	return false;
 }
 
 void CLROSG::Wrapper::Destroy()
 {
-	if (ptrOSGAdapt != nullptr)
+	if (ptrInterfaceOSG != nullptr)
 	{
-		ptrOSGAdapt->Destroy();
+		ptrInterfaceOSG->Destroy();
 	}
 }
 
 void CLROSG::Wrapper::ShowGrids(bool bEnable)
 {
-	assert(ptrOSGAdapt != nullptr);
-	ptrOSGAdapt->ShowGrids(bEnable);
+	assert(ptrInterfaceOSG != nullptr);
+	//ptrInterfaceOSG->ShowGrids(bEnable);
 }
 
 bool CLROSG::Wrapper::IsShowGrids()
 {
-	assert(ptrOSGAdapt != nullptr);
-	return ptrOSGAdapt->IsShowGrids();
+	assert(ptrInterfaceOSG != nullptr);
+	return false;
+	//return ptrInterfaceOSG->IsShowGrids();
 }
 
 void CLROSG::Wrapper::ShowSelectedObjectCoordinate(bool bEnable)
@@ -62,7 +68,7 @@ bool CLROSG::Wrapper::IsShowDrillingAndGroove()
 void CLROSG::Wrapper::Cale(String^ strVal)
 {
 	const wchar_t* pChars = (const wchar_t*)Runtime::InteropServices::Marshal::StringToHGlobalUni(strVal).ToPointer();
-	std::wstring	wstr = pChars;
-	ptrOSGAdapt->Cale(wstr);
+	//std::wstring	wstr = pChars;
+	//ptrInterfaceOSG->Cale(wstr);
 
 }

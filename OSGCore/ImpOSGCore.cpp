@@ -1,19 +1,20 @@
-// OSGCore.cpp : Defines the exported functions for the DLL.
-//
-
 #include "pch.h"
-#include "framework.h"
-#include "OSGCore.h"
-#include <functional>
-#include <chrono>
+#include "ImpOSGCore.h"
 #include <cassert>
+#include <osg/GraphicsContext>
+#include <osgViewer/Viewer>
+#include <osgViewer/api/Win32/GraphicsWindowWin32>
+#include <osgGA/TrackballManipulator>
 
-OSGCore::OSGAdapt::OSGAdapt()
+OSGCore::ImpOSGCore::ImpOSGCore()
 {
-	s_bKeepRunning = false;
 }
 
-bool OSGCore::OSGAdapt::Render(HWND hwnd)
+OSGCore::ImpOSGCore::~ImpOSGCore()
+{
+}
+
+bool OSGCore::ImpOSGCore::Render(HWND hwnd)
 {
 	assert(hwnd != nullptr);
 	if (hwnd == NULL)
@@ -31,7 +32,7 @@ bool OSGCore::OSGAdapt::Render(HWND hwnd)
 	else
 	{
 		s_bKeepRunning = false;
-		Destroy();
+		Destory();
 	}
 
 	RECT rect;
@@ -119,12 +120,12 @@ bool OSGCore::OSGAdapt::Render(HWND hwnd)
 	m_ptrViewer->setKeyEventSetsDone(0);
 	m_ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
 
-	m_renderThread = std::thread(std::bind(&OSGAdapt::RenderThread, this));
+	m_renderThread = std::thread(std::bind(&ImpOSGCore::RenderThread, this));
 
 	return true;
 }
 
-void OSGCore::OSGAdapt::Destroy()
+void OSGCore::ImpOSGCore::Destory()
 {
 	s_bKeepRunning = false;
 	m_ptrViewer->setDone(true);
@@ -134,35 +135,11 @@ void OSGCore::OSGAdapt::Destroy()
 	}
 }
 
-void OSGCore::OSGAdapt::RenderThread()
+void OSGCore::ImpOSGCore::RenderThread()
 {
 	s_bKeepRunning = true;
 	while (s_bKeepRunning && !m_ptrViewer->done())
 	{
 		m_ptrViewer->frame();
 	}
-}
-
-void OSGCore::OSGAdapt::ShowGrids(bool bEnable)
-{
-}
-
-bool OSGCore::OSGAdapt::IsShowGrids()
-{
-	return false;
-}
-
-osg::ref_ptr<osg::Group> OSGCore::OSGAdapt::Get3DScene()
-{
-	return m_ptr3DScene;
-}
-
-void OSGCore::OSGAdapt::Set3DScene(osg::ref_ptr<osg::Group> ptr3DScene)
-{
-	m_ptr3DScene = ptr3DScene;
-}
-
-void OSGCore::OSGAdapt::Cale(const std::wstring& pStrVal)
-{
-	
 }

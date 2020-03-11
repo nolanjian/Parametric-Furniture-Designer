@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:WPFGUI"
         mc:Ignorable="d"
         Closed="Window_Closed"
-        WindowStartupLocation="Manual"
         SizeChanged="Window_SizeChanged"
         Title="PFD" Width="1500" Height="900">
     <Grid>
