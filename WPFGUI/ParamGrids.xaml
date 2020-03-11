@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="WPFGUI.ParamGrids"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFGUI"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="350">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="1 1 1 1" Style="{StaticResource MaterialDesignHeadline5TextBlock}">Params</TextBlock>
+                <Button Margin="1 1 1 1">
+                    <materialDesign:PackIcon Kind="AddThick" Height="18" Width="18" />
+                </Button>
+                <Button Margin="1 1 1 1">
+                    <materialDesign:PackIcon Kind="FilterRemoveOutline" Height="18" Width="18" />
+                </Button>
+            </StackPanel>
+            
+            
+            <DataGrid Margin="0 8 0 0" Height="500"
+                      ItemsSource="{Binding ParamItems}" CanUserSortColumns="True" CanUserAddRows="False"
+                  materialDesign:DataGridAssist.CellPadding="4 2 2 2" materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2">
+                <DataGrid.Columns>
+                    <materialDesign:DataGridTextColumn Binding="{Binding Name}"
+                                                           Header="Name"
+                                                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+                        
+                    </materialDesign:DataGridTextColumn>
+                    <materialDesign:DataGridTextColumn Binding="{Binding Formula}"
+                                                           Header="Formula"
+                                                           EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
+
+                    </materialDesign:DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+
+    </ScrollViewer>
+</UserControl>

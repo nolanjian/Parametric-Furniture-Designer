@@ -1,7 +1,9 @@
 ﻿using log4net;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Windows;
 using System.Windows.Forms;
+using WPFGUI.ViewModel;
 
 namespace WPFGUI
 {
@@ -26,6 +28,8 @@ namespace WPFGUI
             DrawingArea = new PictureBox();
             windowsFormHost.Child = DrawingArea;
             DrawingArea.Paint += new PaintEventHandler(DrawingArea_Paint);
+
+            DataContext = new MainWindowViewModel();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -77,6 +81,7 @@ namespace WPFGUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ITheme cur = System.Windows.Application.Current.Resources.GetTheme();
 
         }
     }
