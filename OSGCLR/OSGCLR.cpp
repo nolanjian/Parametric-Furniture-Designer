@@ -1,7 +1,6 @@
 #include "OSGCLR.h"
 #include <cassert>
 
-
 OSGCLR::Wrapper::Wrapper()
 	:ptrInterfaceOSG(new OSGCore::InterfaceOSG())
 {
@@ -66,8 +65,6 @@ bool OSGCLR::Wrapper::IsShowDrillingAndGroove()
 void OSGCLR::Wrapper::Cale(String^ strVal)
 {
 	const wchar_t* pChars = (const wchar_t*)Runtime::InteropServices::Marshal::StringToHGlobalUni(strVal).ToPointer();
-	//std::wstring	wstr = pChars;
-	//ptrInterfaceOSG->Cale(wstr);
 
 }
 
@@ -100,6 +97,19 @@ void OSGCLR::Wrapper::SetParam(Int64 objID, String^ name, String^ formula)
 	std::wstring	wFormula;
 	String2CPPWString(formula, wFormula);
 	ptrInterfaceOSG->SetParam(objID, wName, wFormula);
+}
+
+void OSGCLR::Wrapper::SetHandlerOnSelectObject(OnSelectObjectDelegate^ handler)
+{
+	handlerOnSelectObject = handler;
+	IntPtr fnPTR = Runtime::InteropServices::Marshal::GetFunctionPointerForDelegate(handler);
+	ptrInterfaceOSG->SetOnSelectObjectCallback(static_cast<void(*)(long long int)>(fnPTR.ToPointer()));
+
+}
+
+void OSGCLR::Wrapper::OnSelectObject(Int64 objID)
+{
+	throw gcnew System::NotImplementedException();
 }
 
 void OSGCLR::Wrapper::String2CPPWString(String^ from, std::wstring& to)

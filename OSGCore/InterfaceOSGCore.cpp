@@ -39,3 +39,8 @@ void OSGCore::InterfaceOSG::SetModelPath(const std::wstring& path)
 void OSGCore::InterfaceOSG::SetParam(long long int objectID, const std::wstring& name, const std::wstring& formula)
 {
 }
+
+void OSGCore::InterfaceOSG::SetOnSelectObjectCallback(void(*ptr)(long long int))
+{
+
+}

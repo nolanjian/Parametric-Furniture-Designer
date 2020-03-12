@@ -160,4 +160,9 @@ void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
 		m_ptr3DScene->addChild(pModel);
 	}
 
+	if (fnOnSelectObjectCallback)
+	{
+		fnOnSelectObjectCallback(-1);
+	}
+
 }

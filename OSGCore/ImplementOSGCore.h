@@ -17,6 +17,7 @@ namespace OSGCore
 		void Destory();
 		void RenderThread();
 		void SetModelPath(const std::wstring& path);
+		void SetOnSelectObjectCallback(void(*ptr)(long long int)) { fnOnSelectObjectCallback = ptr; }
 	protected:
 	private:
 		bool s_bKeepRunning = false;
@@ -24,5 +25,7 @@ namespace OSGCore
 		HWND m_hwnd = NULL;
 		osg::ref_ptr<osgViewer::Viewer>	m_ptrViewer;
 		osg::ref_ptr<osg::Group>	m_ptr3DScene = new osg::Group();
+
+		void(*fnOnSelectObjectCallback)(long long int) = nullptr;
 	};
 }

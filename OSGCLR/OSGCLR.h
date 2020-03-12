@@ -6,10 +6,15 @@
 
 using namespace System;
 
+
+
 namespace OSGCLR {
+	public delegate void OnSelectObjectDelegate(Int64 objID);
+
 	public ref class Wrapper
 	{
 	public:
+
 		Wrapper();
 		~Wrapper();
 		bool Render(IntPtr hwnd);
@@ -32,8 +37,14 @@ namespace OSGCLR {
 		void SetParams(Int64 objID, String^ paramJson);
 		String^ GetParams(Int64 objID);
 		void SetParam(Int64 objID, String^ name, String^ formula);
+
+		void SetHandlerOnSelectObject(OnSelectObjectDelegate^ handler);
+		void OnSelectObject(Int64 objID);
+
 	protected:
 		void String2CPPWString(String^ from, std::wstring& to);
+
+		OnSelectObjectDelegate^ handlerOnSelectObject = nullptr;
 	private:
 
 		OSGCore::InterfaceOSG* ptrInterfaceOSG = nullptr;
