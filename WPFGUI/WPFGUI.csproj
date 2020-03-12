@@ -47,6 +47,10 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.0.1.920, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.0.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OSGCLR, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -71,8 +75,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\Param.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\ParamGridsViewModel.cs" />
+    <Compile Include="ViewModel\ParamViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,13 +126,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CLRResource\CLRResource.csproj">
+      <Project>{5e1cc547-c373-4324-81cb-b078ae181596}</Project>
+      <Name>CLRResource</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LogHelper\LogHelper.csproj">
       <Project>{68d9c136-28bc-4774-b6f9-7bb75354ad7b}</Project>
       <Name>LogHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OSGCLR\OSGCLR.vcxproj">
-      <Project>{89e868d0-95c6-41c0-9922-01437c5e0fd0}</Project>
-      <Name>OSGCLR</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

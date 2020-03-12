@@ -30,3 +30,12 @@ void OSGCore::InterfaceOSG::Destroy()
 {
 	GetImplement(ptrImp)->Destory();
 }
+
+void OSGCore::InterfaceOSG::SetModelPath(const std::wstring& path)
+{
+	GetImplement(ptrImp)->SetModelPath(path);
+}
+
+void OSGCore::InterfaceOSG::SetParam(long long int objectID, const std::wstring& name, const std::wstring& formula)
+{
+}

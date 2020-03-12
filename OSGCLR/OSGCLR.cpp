@@ -70,3 +70,40 @@ void OSGCLR::Wrapper::Cale(String^ strVal)
 	//ptrInterfaceOSG->Cale(wstr);
 
 }
+
+void OSGCLR::Wrapper::SetModelPath(String^ strPath)
+{
+	assert(ptrInterfaceOSG);
+	std::wstring	wstr;
+	String2CPPWString(strPath, wstr);
+	ptrInterfaceOSG->SetModelPath(wstr);
+}
+
+void OSGCLR::Wrapper::CleanParam()
+{
+}
+
+void OSGCLR::Wrapper::SetParams(Int64 objID, String^ paramJson)
+{
+}
+
+String^ OSGCLR::Wrapper::GetParams(Int64 objID)
+{
+	return gcnew String("");
+}
+
+void OSGCLR::Wrapper::SetParam(Int64 objID, String^ name, String^ formula)
+{
+	assert(ptrInterfaceOSG);
+	std::wstring	wName;
+	String2CPPWString(name, wName);
+	std::wstring	wFormula;
+	String2CPPWString(formula, wFormula);
+	ptrInterfaceOSG->SetParam(objID, wName, wFormula);
+}
+
+void OSGCLR::Wrapper::String2CPPWString(String^ from, std::wstring& to)
+{
+	const wchar_t* pChars = (const wchar_t*)Runtime::InteropServices::Marshal::StringToHGlobalUni(from).ToPointer();
+	to = pChars;
+}

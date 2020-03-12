@@ -5,6 +5,7 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
 #include <osgGA/TrackballManipulator>
+#include <osgDB/ReadFile>
 
 OSGCore::ImplementOSGCore::ImplementOSGCore()
 {
@@ -118,6 +119,9 @@ bool OSGCore::ImplementOSGCore::Render(HWND hwnd)
 
 	m_ptrViewer->setCamera(camera.get());
 	m_ptrViewer->setSceneData(m_ptr3DScene);
+	osg::Node*	pCow = osgDB::readNodeFile("D:\\library\\Parametric-Furniture-Designer\\OpenSceneGraph-Data-3.0.0\\SmokeBox.osgt");
+	m_ptr3DScene->addChild(pCow);
+
 	m_ptrViewer->setKeyEventSetsDone(0);
 	m_ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
 
@@ -142,8 +146,18 @@ void OSGCore::ImplementOSGCore::Destory()
 void OSGCore::ImplementOSGCore::RenderThread()
 {
 	s_bKeepRunning = true;
-	while (s_bKeepRunning && !m_ptrViewer->done())
+	m_ptrViewer->run();
+	s_bKeepRunning = false;
+}
+
+void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
+{
+	m_ptr3DScene->removeChildren(0, m_ptr3DScene->getNumChildren());
+	std::string	modelPath;
+	osg::Node* pModel = osgDB::readNodeFile(modelPath);
+	if (pModel)
 	{
-		m_ptrViewer->frame();
+		m_ptr3DScene->addChild(pModel);
 	}
+
 }

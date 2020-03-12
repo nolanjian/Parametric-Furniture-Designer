@@ -12,7 +12,6 @@ namespace WPFGUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private OSGCLR.Wrapper Wrapper { get; set; } = null;
         private PictureBox DrawingArea { get; set; } = null;
         public static ILog Log { get; set; } = LogHelper.Logger.WPFLog;
 
@@ -24,21 +23,19 @@ namespace WPFGUI
             
 
             InitializeComponent();
-            Wrapper = new OSGCLR.Wrapper();
+            
             DrawingArea = new PictureBox();
             windowsFormHost.Child = DrawingArea;
             DrawingArea.Paint += new PaintEventHandler(DrawingArea_Paint);
 
-            DataContext = new MainWindowViewModel();
+            
+
+            //DataContext = new MainWindowViewModel();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            if (Wrapper != null)
-            {
-                Wrapper.Destroy();
-            }
-
+            CLRResource.OSGAdapt.Wrapper.Destroy();
             Log.Info("PFD End");
         }
 
@@ -49,7 +46,7 @@ namespace WPFGUI
 
         private void DrawingArea_Paint(object sender, PaintEventArgs e)
         {
-            if (Wrapper == null || Wrapper.Render(DrawingArea.Handle) == false)
+            if (CLRResource.OSGAdapt.Wrapper == null || CLRResource.OSGAdapt.Wrapper.Render(DrawingArea.Handle) == false)
             {
                 Log.Error("Init Render Fail!");
             }
@@ -64,7 +61,7 @@ namespace WPFGUI
                 System.Windows.Controls.RichTextBox rtx = (System.Windows.Controls.RichTextBox)sender;
                 System.Windows.Documents.TextRange textRange = new System.Windows.Documents.TextRange(rtx.Document.ContentStart, rtx.Document.ContentEnd);
 
-                Wrapper.Cale(textRange.Text);
+                CLRResource.OSGAdapt.Wrapper.SetModelPath(textRange.Text);
             }
         }
 
@@ -74,8 +71,10 @@ namespace WPFGUI
             {
                 // has a cale
 
-                RichTextBox rtx = (RichTextBox)sender;
-                Wrapper.Cale(rtx.Text);
+                System.Windows.Controls.RichTextBox rtx = (System.Windows.Controls.RichTextBox)sender;
+                System.Windows.Documents.TextRange textRange = new System.Windows.Documents.TextRange(rtx.Document.ContentStart, rtx.Document.ContentEnd);
+                //Wrapper.Cale(rtx.Text);
+                CLRResource.OSGAdapt.Wrapper.SetModelPath(textRange.Text);
             }
         }
 
@@ -83,6 +82,7 @@ namespace WPFGUI
         {
             ITheme cur = System.Windows.Application.Current.Resources.GetTheme();
 
+            
         }
     }
 }

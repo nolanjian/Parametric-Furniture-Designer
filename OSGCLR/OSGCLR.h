@@ -25,6 +25,15 @@ namespace OSGCLR {
 		bool IsShowDrillingAndGroove();
 
 		void Cale(String^ strVal);
+
+		void SetModelPath(String^ strPath);
+
+		void CleanParam();
+		void SetParams(Int64 objID, String^ paramJson);
+		String^ GetParams(Int64 objID);
+		void SetParam(Int64 objID, String^ name, String^ formula);
+	protected:
+		void String2CPPWString(String^ from, std::wstring& to);
 	private:
 
 		OSGCore::InterfaceOSG* ptrInterfaceOSG = nullptr;

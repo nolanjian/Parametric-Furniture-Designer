@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPFGUI"
+             xmlns:localViewModel="clr-namespace:WPFGUI.ViewModel"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="350">
@@ -15,36 +16,60 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer>
-        <StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="1 1 1 1" Style="{StaticResource MaterialDesignHeadline5TextBlock}">Params</TextBlock>
-                <Button Margin="1 1 1 1">
-                    <materialDesign:PackIcon Kind="AddThick" Height="18" Width="18" />
-                </Button>
-                <Button Margin="1 1 1 1">
-                    <materialDesign:PackIcon Kind="FilterRemoveOutline" Height="18" Width="18" />
-                </Button>
-            </StackPanel>
-            
-            
-            <DataGrid Margin="0 8 0 0" Height="500"
-                      ItemsSource="{Binding ParamItems}" CanUserSortColumns="True" CanUserAddRows="False"
+    <UserControl.DataContext>
+        <localViewModel:ParamGridsViewModel/>
+    </UserControl.DataContext>
+
+    <StackPanel Orientation="Vertical">
+        <ScrollViewer>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="1 1 1 1" Style="{StaticResource MaterialDesignHeadline5TextBlock}">Params</TextBlock>
+                    <Button Margin="1 1 1 1" Click="Button_Click_Add">
+                        <materialDesign:PackIcon Kind="AddThick" Height="18" Width="18" />
+                    </Button>
+                    <Button Margin="1 1 1 1" Click="Button_Click_Del">
+                        <materialDesign:PackIcon Kind="FilterRemoveOutline" Height="18" Width="18" />
+                    </Button>
+                </StackPanel>
+                <DataGrid Margin="0 8 0 0" Height="500" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="True"
+                      ItemsSource="{Binding ParamItems}" CanUserSortColumns="True"
                   materialDesign:DataGridAssist.CellPadding="4 2 2 2" materialDesign:DataGridAssist.ColumnHeaderPadding="4 2 2 2">
-                <DataGrid.Columns>
-                    <materialDesign:DataGridTextColumn Binding="{Binding Name}"
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Binding="{Binding IsSelected}"
+                                            ElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnStyle}"
+                                            EditingElementStyle="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}">
+                            <DataGridCheckBoxColumn.Header>
+                                <Border Background="Transparent" Padding="6 0 6 0" HorizontalAlignment="Center">
+                                    <CheckBox HorizontalAlignment="Center"
+                                              DataContext="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext}"
+                                              IsChecked="{Binding IsAllItemsSelected}" />
+                                </Border>
+                            </DataGridCheckBoxColumn.Header>
+                        </DataGridCheckBoxColumn>
+                        <materialDesign:DataGridTextColumn MinWidth="60" Binding="{Binding Name}"
                                                            Header="Name"
                                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
-                        
-                    </materialDesign:DataGridTextColumn>
-                    <materialDesign:DataGridTextColumn Binding="{Binding Formula}"
+
+                        </materialDesign:DataGridTextColumn>
+
+                        <materialDesign:DataGridTextColumn Width="*" Binding="{Binding Formula}"
                                                            Header="Formula"
                                                            EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}">
 
-                    </materialDesign:DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
+                        </materialDesign:DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
 
-    </ScrollViewer>
+        </ScrollViewer>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Margin="1 1 1 1" Click="Button_Click_Recover">
+                <materialDesign:PackIcon Kind="RestoreFromTrash" Height="18" Width="18" />
+            </Button>
+            <Button Margin="1 1 1 1" Click="Button_Click_Save">
+                <materialDesign:PackIcon Kind="ContentSave" Height="18" Width="18" />
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

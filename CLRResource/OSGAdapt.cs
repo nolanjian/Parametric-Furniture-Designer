@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPFGUI.Model
+namespace CLRResource
 {
-    public class Param
+    public class OSGAdapt
     {
-        public string name { get; set; }
-        public string formula { get; set; }
+        static public OSGCLR.Wrapper Wrapper { get; set; } = new OSGCLR.Wrapper();
     }
 }

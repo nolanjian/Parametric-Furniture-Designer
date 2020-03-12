@@ -12,8 +12,7 @@
     <Grid>
         <StackPanel Orientation="Horizontal">
             <StackPanel x:Name="LeftPanel" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <local:ParamGrids HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="350">
-                    
+                <local:ParamGrids x:Name="ParamGridCtl" HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="350">
                 </local:ParamGrids>
             </StackPanel>
             <StackPanel x:Name="MidPanel" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
