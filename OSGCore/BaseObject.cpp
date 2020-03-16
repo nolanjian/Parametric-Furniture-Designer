@@ -72,7 +72,12 @@ bool BaseObject::SetParentFormulars()
 
 bool BaseObject::UpdateFormulas()
 {
-	if (!ReInitParser() || !SetParentFormulars() || !UpdateSelfFormulas())
+	if (!ReInitParser() || !SetParentFormulars())
+	{
+		return false;
+	}
+
+	if (!UpdateSelfFormulas())
 	{
 		return false;
 	}
@@ -90,8 +95,9 @@ bool BaseObject::UpdateFormulas()
 }
 
 bool BaseObject::UpdateSelfFormulas()
-{
+{	
 	assert(m_parser);
+	m_formulasResult.clear();
 
 	std::list<std::wstring>	lstFormulas;
 
@@ -140,6 +146,21 @@ bool BaseObject::UpdateSelfFormulas()
 	}
 
 	assert(m_parser->GetVar().size() >= GetFormulas().size() + (GetParent() ? GetParent()->FormulasResult().size() : 0));
+
+	for (auto& kv : m_formulas)
+	{
+		if (m_parser->IsVarDefined(kv.first))
+		{
+			const mup::var_maptype& m = m_parser->GetVar();
+			m_formulasResult[kv.first] = m.at(kv.first);		
+		}
+		else
+		{
+			m_formulasResult.clear();
+			assert(false);
+			return false;
+		}
+	}
 
 	return true;
 }
