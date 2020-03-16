@@ -39,3 +39,5 @@
 */obj
 /packages/*
 /OpenSceneGraph-Data-3.0.0/*
+/OpenSceneGraph-Data/*
+/OpenSceneGraph-Data-3.4.0.zip
