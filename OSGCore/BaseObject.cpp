@@ -3,6 +3,8 @@
 #include "../Utils/IDGenerater.h"
 #include "../easyloggingpp/easylogging++.h"
 
+#include <filesystem>
+
 BaseObject::BaseObject()
 	:osg::Group()
 {
@@ -197,8 +199,7 @@ osg::ref_ptr<BaseObject> BaseObject::JSON2OSG(const std::string& str)
 {
 	std::stringstream	ss;
 	ss << str;
-	std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>();
-	*ptrObj = fx::gltf::LoadFromText(ss, "");
+	std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(ss, std::filesystem::current_path().u8string()));
 	return GLTF2OSG(ptrObj);
 }
 
@@ -210,15 +211,21 @@ std::string BaseObject::OSG2JSON(osg::ref_ptr<BaseObject> pObj)
 	return ss.str();
 }
 
+osg::ref_ptr<osg::Group> BaseObject::LoadSceneFromJsonFile(const std::string& strPath)
+{
+	std::shared_ptr<fx::gltf::Document>	ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(strPath));
+	return GLTF2OSG(ptrDOC);
+}
+
 osg::ref_ptr<BaseObject> BaseObject::GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject)
-{	
-	// TODO
-	osg::ref_ptr<BaseObject> ptrOSG = new BaseObject();
+{
+	if (!gltfObject.get() || gltfObject->scenes.size() < 1 || (gltfObject->scenes[0]).nodes.size() < 1)
+	{
+		return nullptr;
+	}
 
-	
-
-
-	return ptrOSG;
+	osg::ref_ptr<BaseObject> ptrScene = GLTFNode2BaseObject(gltfObject, gltfObject->scenes[0].nodes[0]);
+	return ptrScene;
 }
 
 std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject> pObj)
@@ -233,11 +240,11 @@ osg::ref_ptr<BaseObject> BaseObject::GLTFNode2BaseObject(std::shared_ptr<fx::glt
 
 	osg::ref_ptr<BaseObject> curRoot = new BaseObject();
 	
-	curRoot->GetRotation(curNode);
-	curRoot->GetScale(curNode);
-	curRoot->GetTranslation(curNode);
-	curRoot->GetMatrix(curNode);
-	curRoot->GetParamsFromExtras(curNode.extensionsAndExtras);
+	curRoot->LoadRotation(curNode);
+	curRoot->LoadScale(curNode);
+	curRoot->LoadTranslation(curNode);
+	curRoot->LoadMatrix(curNode);
+	curRoot->LoadParams(curNode.extensionsAndExtras);
 
 	for (auto childID : curNode.children)
 	{
@@ -247,7 +254,7 @@ osg::ref_ptr<BaseObject> BaseObject::GLTFNode2BaseObject(std::shared_ptr<fx::glt
 	return curRoot;
 }
 
-bool BaseObject::GetRotation(const fx::gltf::Node& node)
+bool BaseObject::LoadRotation(const fx::gltf::Node& node)
 {
 	vRotation.x() = node.rotation.at(0);
 	vRotation.y() = node.rotation.at(1);
@@ -256,7 +263,7 @@ bool BaseObject::GetRotation(const fx::gltf::Node& node)
 	return true;
 }
 
-bool BaseObject::GetScale(const fx::gltf::Node& node)
+bool BaseObject::LoadScale(const fx::gltf::Node& node)
 {
 	vScale.x() = node.scale.at(0);
 	vScale.y() = node.scale.at(1);
@@ -264,7 +271,7 @@ bool BaseObject::GetScale(const fx::gltf::Node& node)
 	return true;
 }
 
-bool BaseObject::GetTranslation(const fx::gltf::Node& node)
+bool BaseObject::LoadTranslation(const fx::gltf::Node& node)
 {
 	vTranslation.x() = node.translation.at(0);
 	vTranslation.y() = node.translation.at(1);
@@ -272,7 +279,7 @@ bool BaseObject::GetTranslation(const fx::gltf::Node& node)
 	return false;
 }
 
-bool BaseObject::GetMatrix(const fx::gltf::Node& node)
+bool BaseObject::LoadMatrix(const fx::gltf::Node& node)
 {
 	mat.set(node.matrix[0], node.matrix[1], node.matrix[2], node.matrix[3]
 		, node.matrix[4], node.matrix[5], node.matrix[6], node.matrix[7]
@@ -282,15 +289,15 @@ bool BaseObject::GetMatrix(const fx::gltf::Node& node)
 	return true;
 }
 
-bool BaseObject::GetParamsFromExtras(const nlohmann::json& extensionsAndExtras)
+bool BaseObject::LoadParams(const fx::gltf::Node& node)
 {
 	m_formulas.clear();
-	if (!extensionsAndExtras.contains("params"))
+	if (!node.extensionsAndExtras.contains("params"))
 	{
 		return true;
 	}
 
-	const nlohmann::json::value_type& params = extensionsAndExtras["params"];
+	const nlohmann::json::value_type& params = node.extensionsAndExtras["params"];
 	if (!params.is_array())
 	{
 		// TODO LOG
@@ -307,4 +314,63 @@ bool BaseObject::GetParamsFromExtras(const nlohmann::json& extensionsAndExtras)
 	assert(params.size() == m_formulas.size());
 
 	return true;
+}
+
+bool BaseObject::LoadMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node)
+{
+	if (node.mesh == -1)
+	{
+		return true;
+	}
+
+	const fx::gltf::Mesh& mesh = gltfObject->meshes[node.mesh];
+	for (const auto& primitive : mesh.primitives)
+	{
+		switch (primitive.mode)
+		{
+		case fx::gltf::Primitive::Mode::Points:
+		case fx::gltf::Primitive::Mode::Lines:
+		case fx::gltf::Primitive::Mode::LineLoop:
+		case fx::gltf::Primitive::Mode::LineStrip:
+		case fx::gltf::Primitive::Mode::Triangles:
+		case fx::gltf::Primitive::Mode::TriangleStrip:
+		case fx::gltf::Primitive::Mode::TriangleFan:
+		default:
+			break;
+		}
+	}
+
+	return false;
+}
+
+osg::ref_ptr<osg::Drawable> BaseObject::LoadPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
+{
+	if (primitive.indices == -1)
+	{
+		switch (primitive.mode)
+		{
+		case fx::gltf::Primitive::Mode::Points:
+			break;
+		case fx::gltf::Primitive::Mode::Lines:
+			break;
+		case fx::gltf::Primitive::Mode::LineLoop:
+			break;
+		case fx::gltf::Primitive::Mode::LineStrip:
+			break;
+		case fx::gltf::Primitive::Mode::Triangles:
+			break;
+		case fx::gltf::Primitive::Mode::TriangleStrip:
+			break;
+		case fx::gltf::Primitive::Mode::TriangleFan:
+			break;
+		default:
+			assert(false);
+			return nullptr;
+		}
+	}
+	else
+	{
+
+	}
+	primitive;
 }

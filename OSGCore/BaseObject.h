@@ -32,18 +32,20 @@ public:
 	static osg::ref_ptr<BaseObject> JSON2OSG(const std::string& str);
 	static std::string OSG2JSON(osg::ref_ptr<BaseObject> pObj);
 	// GLTF MEMORY MODEL OBJECT
+	static osg::ref_ptr<Group>	LoadSceneFromJsonFile(const std::string& strPath);
 	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject);
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
 	static osg::ref_ptr<BaseObject> GLTFNode2BaseObject(std::shared_ptr<fx::gltf::Document> gltfObject, int32_t nodeID);
 
 protected:
-	bool GetRotation(const fx::gltf::Node& node);
-	bool GetScale(const fx::gltf::Node& node);
-	bool GetTranslation(const fx::gltf::Node& node);
-	bool GetMatrix(const fx::gltf::Node& node);
-	bool GetParamsFromExtras(const nlohmann::json& extensionsAndExtras);
-
+	bool LoadRotation(const fx::gltf::Node& node);
+	bool LoadScale(const fx::gltf::Node& node);
+	bool LoadTranslation(const fx::gltf::Node& node);
+	bool LoadMatrix(const fx::gltf::Node& node);
+	bool LoadParams(const fx::gltf::Node& node);
+	bool LoadMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
+	osg::ref_ptr<osg::Drawable> LoadPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 
 	osg::Vec4	vRotation;
 	osg::Vec3	vScale;
