@@ -2,12 +2,45 @@
 #include "BaseObject.h"
 
 BaseObject::BaseObject()
-	:Group()
+	:osg::Group()
 {
 }
 
 BaseObject::~BaseObject()
 {
+}
+
+bool BaseObject::SetParentFormulars()
+{
+	osg::ref_ptr<BaseObject> pParent = GetParent();
+	if (!pParent.valid())
+	{
+		return false;
+	}
+
+	try
+	{
+		osg::ref_ptr<BaseObject> pParent = GetParent();
+		m_parser.ClearVar();
+		assert(m_parser.GetExprVar().size());
+		for (auto pKV : pParent->GetFormulasResult())
+		{
+			mup::string_type	formular = _T("Parent_") + pKV.first + _T("=") + pKV.second;
+			m_parser.SetExpr(formular);
+		}
+		assert(pParent->GetFormulasResult().size() == m_parser.GetExprVar().size());
+
+		return true;
+	}
+	catch (const mup::ParserError & e)
+	{
+		// Parse Parent Params Error
+		return false;
+	}
+	catch (const std::exception & e)
+	{
+		return false;
+	}
 }
 
 void BaseObject::UpdateFormulas()
@@ -41,9 +74,23 @@ void BaseObject::UpdateFormulas()
 	// begin to cal
 	try
 	{
+		mup::ParserX	parser(mup::pckALL_NON_COMPLEX);
+		osg::ref_ptr<BaseObject> pParent = GetParent();
+		assert(parser.GetExprVar().size());
+		for (auto pKV : pParent->GetFormulasResult())
+		{
+			mup::string_type	formular = _T("Parent_") + pKV.first + _T("=") + pKV.second;
+			parser.SetExpr(formular);
+		}
+		assert(pParent->GetFormulasResult().size() == parser.GetExprVar().size());
+
 
 	}
-	catch (const std::exception&)
+	catch (const mup::ParserError & e)
+	{
+
+	}
+	catch (const std::exception& e)
 	{
 
 	}

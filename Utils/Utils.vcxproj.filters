@@ -21,24 +21,21 @@
     <ClInclude Include="framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Params.h">
+    <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IParamsManager.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="IDGenerater.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParamsExport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParamsManagerImp.h">
+    <ClInclude Include="UtilsExport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Params.cpp">
+    <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
@@ -47,10 +44,7 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IParamsManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParamsManagerImp.cpp">
+    <ClCompile Include="IDGenerater.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

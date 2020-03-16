@@ -5,18 +5,33 @@
 #include "framework.h"
 #include "Params.h"
 
+#include <cassert>
 
-// This is an example of an exported variable
-PARAMS_API int nParams=0;
-
-// This is an example of an exported function.
-PARAMS_API int fnParams(void)
+CParams::CParams(unsigned long long int id)
+    :m_id(id)
 {
-    return 0;
+    assert(m_id > 0);
 }
 
-// This is the constructor of a class that has been exported.
-CParams::CParams()
+CParams::CParams(unsigned long long int id, const std::map<std::string, std::string>& params)
+    : m_id(id), m_params(params)
 {
-    return;
+}
+
+bool CParams::Valid()
+{
+    return m_id != 0;
+}
+
+void CParams::Remove(const std::string& key)
+{
+    if (m_params.find(key) != m_params.end())
+    {
+        m_params.erase(key);
+    }
+}
+
+void CParams::SetKV(const std::string& key, const std::string& value)
+{
+    m_params[key] = value;
 }
