@@ -192,3 +192,32 @@ const mup::var_maptype& BaseObject::FormulasResult()
 {
 	return m_formulasResult;
 }
+
+osg::ref_ptr<BaseObject> BaseObject::JSON2OSG(const std::string& str)
+{
+	std::stringstream	ss;
+	ss << str;
+	std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>();
+	*ptrObj = fx::gltf::LoadFromText(ss, "");
+	return GLTF2OSG(ptrObj);
+}
+
+std::string BaseObject::OSG2JSON(osg::ref_ptr<BaseObject> pObj)
+{
+	std::shared_ptr<fx::gltf::Document>	ptrObj = OSG2GLTF(pObj);
+	std::stringstream	ss;
+	fx::gltf::Save(*ptrObj, ss, "", false);
+	return ss.str();
+}
+
+osg::ref_ptr<BaseObject> BaseObject::GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject)
+{
+	// TODO
+	return osg::ref_ptr<BaseObject>();
+}
+
+std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject> pObj)
+{
+	// TODO
+	return std::shared_ptr<fx::gltf::Document>();
+}

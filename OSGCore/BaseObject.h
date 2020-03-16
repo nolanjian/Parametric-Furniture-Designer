@@ -6,6 +6,9 @@
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"
 
+#include <fx/gltf.h>
+
+
 class BaseObject : public osg::Group
 {
 public:
@@ -24,6 +27,13 @@ public:
 	bool SetOneLine(const std::wstring& line);
 
 	const mup::var_maptype& FormulasResult();
+
+	// GLTF JSON STRING
+	static osg::ref_ptr<BaseObject> JSON2OSG(const std::string& str);
+	static std::string OSG2JSON(osg::ref_ptr<BaseObject> pObj);
+	// GLTF MEMORY MODEL OBJECT
+	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject);
+	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
 protected:
 	std::map<std::wstring, std::wstring>	m_formulas;
