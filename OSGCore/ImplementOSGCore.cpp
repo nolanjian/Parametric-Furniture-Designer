@@ -7,8 +7,14 @@
 #include <osgGA/TrackballManipulator>
 #include <osgDB/ReadFile>
 
+#include "../Utils/Utils.h"
+//#include "../easyloggingpp/easylogging++.h"
+
 OSGCore::ImplementOSGCore::ImplementOSGCore()
 {
+	InitLogger();
+
+	LOG(INFO) << "ImplementOSGCore";
 }
 
 OSGCore::ImplementOSGCore::~ImplementOSGCore()

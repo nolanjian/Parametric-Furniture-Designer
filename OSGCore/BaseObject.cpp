@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "BaseObject.h"
+#include "../Utils/IDGenerater.h"
+#include "../easyloggingpp/easylogging++.h"
 
 BaseObject::BaseObject()
 	:osg::Group()
 {
+	m_ID = IDGenerater::Get()->GetNext();
 }
 
 BaseObject::~BaseObject()
@@ -54,14 +57,17 @@ bool BaseObject::SetParentFormulars()
 	}
 	catch (const mup::ParserError & e)
 	{
-		// TODO Set Log
-		return false;
+		LOG(ERROR) << e.GetMsg();
 	}
 	catch (const std::exception & e)
 	{
-		// TODO Set Log
-		return false;
+		LOG(ERROR) << e.what();
 	}
+	catch (...)
+	{
+		LOG(ERROR) << "UNKNOW";
+	}
+	return false;
 }
 
 bool BaseObject::UpdateFormulas()
@@ -71,14 +77,16 @@ bool BaseObject::UpdateFormulas()
 		return false;
 	}
 	
+	bool bUpdateALL = true;
 	for (auto& child : _children)
 	{
 		BaseObject* pBaseObject = dynamic_cast<BaseObject*>(child.get());
 		if (pBaseObject)
 		{
-			pBaseObject->UpdateFormulas();
+			bUpdateALL &= pBaseObject->UpdateFormulas();
 		}
 	}
+	return bUpdateALL;
 }
 
 bool BaseObject::UpdateSelfFormulas()
@@ -121,7 +129,12 @@ bool BaseObject::UpdateSelfFormulas()
 		}
 		if (lstFormulas.size() == preSize)
 		{
-			// TODO LOG
+			std::wstring	outMsg = _T("Parsing Fail for:\n");
+			for (auto& s : lstFormulas)
+			{
+				outMsg += s + _T("\n");
+			}
+			LOG(ERROR) << outMsg;
 			return false;
 		}
 	}
@@ -141,15 +154,15 @@ bool BaseObject::SetOneLine(const std::wstring& line)
 	}
 	catch (const mup::ParserError & e)
 	{
-		// TODO LOG
+		LOG(ERROR) << e.GetMsg();
 	}
-	catch (const std::exception&)
+	catch (const std::exception& e)
 	{
-		// TODO LOG
+		LOG(ERROR) << e.what();
 	}
 	catch (...)
 	{
-		// TODO LOG
+		LOG(ERROR) << "UNKNOW";
 	}
 	return false;
 }

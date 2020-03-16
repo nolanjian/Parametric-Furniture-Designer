@@ -5,7 +5,8 @@
 // UTILS_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
 #include "UtilsExport.h"
-
+#include "../easyloggingpp/easylogging++.h"
+INITIALIZE_EASYLOGGINGPP
 // This class is exported from the dll
 class UTILS_API CUtils {
 public:
@@ -15,4 +16,4 @@ public:
 
 extern UTILS_API int nUtils;
 
-UTILS_API int fnUtils(void);
+UTILS_API bool InitLogger(void);

@@ -2,7 +2,6 @@
 #include <osg/Group>
 #include <string>
 #include <memory>
-#include "../Params/Params.h"
 #include "../muparserx/mpParser.h"
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"
@@ -34,8 +33,8 @@ protected:
 	mup::var_maptype	m_formulasResult;
 
 private:
+	unsigned long long int	m_ID = 0;
 	bool m_bDirty = true;
-
 	osg::ref_ptr<BaseObject>	m_parent;
 	std::shared_ptr<mup::ParserX>	m_parser;
 };
