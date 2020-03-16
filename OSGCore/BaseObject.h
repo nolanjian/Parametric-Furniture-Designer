@@ -35,7 +35,21 @@ public:
 	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject);
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
+	static osg::ref_ptr<BaseObject> GLTFNode2BaseObject(std::shared_ptr<fx::gltf::Document> gltfObject, int32_t nodeID);
+
 protected:
+	bool GetRotation(const fx::gltf::Node& node);
+	bool GetScale(const fx::gltf::Node& node);
+	bool GetTranslation(const fx::gltf::Node& node);
+	bool GetMatrix(const fx::gltf::Node& node);
+	bool GetParamsFromExtras(const nlohmann::json& extensionsAndExtras);
+
+
+	osg::Vec4	vRotation;
+	osg::Vec3	vScale;
+	osg::Vec3	vTranslation;
+	osg::Matrixd	mat;
+
 	std::map<std::wstring, std::wstring>	m_formulas;
 	std::map<std::wstring, std::wstring>	m_formulasResult4Cal;
 	std::map<std::wstring, std::wstring>	m_parentFormulasResult;
