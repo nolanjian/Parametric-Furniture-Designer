@@ -4,6 +4,10 @@
 class Panel : public BaseObject
 {
 public:
+	Panel();
+	virtual ~Panel();
+	virtual bool InitFromParams() override;
+
 	void SetDepth(double dVal);
 	double GetDepth();
 	void SetHeight(double dVal);

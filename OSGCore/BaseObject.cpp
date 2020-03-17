@@ -2,11 +2,12 @@
 #include "BaseObject.h"
 #include "../Utils/IDGenerater.h"
 #include "../easyloggingpp/easylogging++.h"
+#include "ObjectFactory.h"
 
 #include <filesystem>
 
 BaseObject::BaseObject()
-	:osg::Group()
+	:osg::MatrixTransform()
 {
 	m_ID = IDGenerater::Get()->GetNext();
 }
@@ -83,6 +84,8 @@ bool BaseObject::UpdateFormulas()
 	{
 		return false;
 	}
+
+	InitFromParams();
 	
 	bool bUpdateALL = true;
 	for (auto& child : _children)
@@ -219,42 +222,101 @@ osg::ref_ptr<osg::Group> BaseObject::LoadSceneFromJsonFile(const std::string& st
 
 osg::ref_ptr<BaseObject> BaseObject::GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject)
 {
-	if (!gltfObject.get() || gltfObject->scenes.size() < 1 || (gltfObject->scenes[0]).nodes.size() < 1)
-	{
-		return nullptr;
-	}
-
-	osg::ref_ptr<BaseObject> ptrScene = GLTFNode2BaseObject(gltfObject, gltfObject->scenes[0].nodes[0]);
+	osg::ref_ptr<BaseObject> ptrScene = ObjectFactory::CreateObject(ObjectFactory::SCENE);
+	ptrScene->InitFromDocument(gltfObject);
 	return ptrScene;
 }
 
 std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject> pObj)
 {
-	// TODO
-	return std::shared_ptr<fx::gltf::Document>();
+	std::shared_ptr<fx::gltf::Document>	ptrDOC = std::make_shared<fx::gltf::Document>();
+
+	
+	
+
+
+	return ptrDOC;
 }
 
-osg::ref_ptr<BaseObject> BaseObject::GLTFNode2BaseObject(std::shared_ptr<fx::gltf::Document> gltfObject, int32_t nodeID)
+std::shared_ptr<RawBufferInfo> BaseObject::GetRawBufferInfo(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
 {
-	const fx::gltf::Node& curNode = gltfObject->nodes[nodeID];
+	std::shared_ptr<RawBufferInfo> pInfo = std::make_shared<RawBufferInfo>();
 
-	osg::ref_ptr<BaseObject> curRoot = new BaseObject();
-	
-	curRoot->LoadRotation(curNode);
-	curRoot->LoadScale(curNode);
-	curRoot->LoadTranslation(curNode);
-	curRoot->LoadMatrix(curNode);
-	curRoot->LoadParams(curNode.extensionsAndExtras);
+	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
+	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
 
+	const uint32_t dataTypeSize = GetElementSize(accessor);
+	pInfo->accessor = &accessor;
+	pInfo->data = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+	pInfo->dataStride = dataTypeSize;
+	pInfo->totalSize = accessor.count * dataTypeSize;
+	return pInfo;
+}
+
+void BaseObject::LoadTSRFromMatrix()
+{
+	vRotation = mat.getRotate().asVec4();
+	vScale = mat.getScale();
+	vTranslation = mat.getTrans();
+}
+
+void BaseObject::InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject)
+{
+	// Scene level
+	if (gltfObject.get() && gltfObject->scenes.size() > 0 && (gltfObject->scenes[0]).nodes.size() > 0)
+	{
+		return;
+	}
+	// Scene level
+	const fx::gltf::Node& curNode = gltfObject->nodes[gltfObject->scenes[0].nodes[0]];
+	InitFromNode(gltfObject, curNode);
+}
+
+void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& curNode)
+{
+	m_name = curNode.name;
+#pragma region LOAD_MATRIX
+	if (ImportMatrix(curNode))
+	{
+		LoadTSRFromMatrix();
+	}
+	else
+	{
+		ImportRotation(curNode);
+		ImportScale(curNode);
+		ImportTranslation(curNode);
+	}
+	setMatrix(GetMatrix());
+#pragma endregion LOAD_MATRIX
+
+	ImportParams(curNode.extensionsAndExtras);
+	ImportMesh(gltfObject, curNode);
+
+#pragma region UPDATE_CHILDREN
 	for (auto childID : curNode.children)
 	{
-		osg::ref_ptr<BaseObject> child = GLTFNode2BaseObject(gltfObject, childID);
-		curRoot->addChild(child);
+		const fx::gltf::Node& childNode = gltfObject->nodes[childID];
+		osg::ref_ptr<BaseObject> pChild = ObjectFactory::CreateObject((ObjectFactory::CLASS_TYPE)GetClassType(childNode));
+		if (pChild == nullptr)
+		{
+			continue;
+		}
+		pChild->InitFromNode(gltfObject, childNode);
+		addChild(pChild);
 	}
-	return curRoot;
+#pragma endregion UPDATE_CHILDREN
 }
 
-bool BaseObject::LoadRotation(const fx::gltf::Node& node)
+int BaseObject::GetClassType(const fx::gltf::Node& node)
+{
+	if (node.extensionsAndExtras.contains("class"))
+	{
+		return node.extensionsAndExtras["class"].get<int>();
+	}
+	return 0;
+}
+
+bool BaseObject::ImportRotation(const fx::gltf::Node& node)
 {
 	vRotation.x() = node.rotation.at(0);
 	vRotation.y() = node.rotation.at(1);
@@ -263,7 +325,16 @@ bool BaseObject::LoadRotation(const fx::gltf::Node& node)
 	return true;
 }
 
-bool BaseObject::LoadScale(const fx::gltf::Node& node)
+bool BaseObject::ExportRotation(fx::gltf::Node& node)
+{
+	node.rotation.at(0) = vRotation.x();
+	node.rotation.at(1) = vRotation.y();
+	node.rotation.at(2) = vRotation.z();
+	node.rotation.at(3) = vRotation.w();
+	return true;
+}
+
+bool BaseObject::ImportScale(const fx::gltf::Node& node)
 {
 	vScale.x() = node.scale.at(0);
 	vScale.y() = node.scale.at(1);
@@ -271,25 +342,51 @@ bool BaseObject::LoadScale(const fx::gltf::Node& node)
 	return true;
 }
 
-bool BaseObject::LoadTranslation(const fx::gltf::Node& node)
+bool BaseObject::ExportScale(fx::gltf::Node& node)
+{
+	node.scale.at(0) = vScale.x();
+	node.scale.at(1) = vScale.y();
+	node.scale.at(2) = vScale.z();
+	return true;
+}
+
+bool BaseObject::ImportTranslation(const fx::gltf::Node& node)
 {
 	vTranslation.x() = node.translation.at(0);
 	vTranslation.y() = node.translation.at(1);
 	vTranslation.z() = node.translation.at(2);
-	return false;
+	return true;
 }
 
-bool BaseObject::LoadMatrix(const fx::gltf::Node& node)
+bool BaseObject::ExportTranslation(fx::gltf::Node& node)
+{
+	node.translation.at(0) = vTranslation.x();
+	node.translation.at(1) = vTranslation.y();
+	node.translation.at(2) = vTranslation.z();
+	return true;
+}
+
+bool BaseObject::ImportMatrix(const fx::gltf::Node& node)
 {
 	mat.set(node.matrix[0], node.matrix[1], node.matrix[2], node.matrix[3]
 		, node.matrix[4], node.matrix[5], node.matrix[6], node.matrix[7]
 		, node.matrix[8], node.matrix[9], node.matrix[10], node.matrix[11]
 		, node.matrix[12], node.matrix[13], node.matrix[14], node.matrix[15]);
 
+	return mat.isIdentity() == false;
+}
+
+bool BaseObject::ExportMatrix(fx::gltf::Node& node)
+{
+	for (int ii = 0; ii < 16; ++ii)
+	{
+		node.matrix.at(ii) = *(mat.ptr() + ii);
+	}
+
 	return true;
 }
 
-bool BaseObject::LoadParams(const fx::gltf::Node& node)
+bool BaseObject::ImportParams(const fx::gltf::Node& node)
 {
 	m_formulas.clear();
 	if (!node.extensionsAndExtras.contains("params"))
@@ -316,7 +413,21 @@ bool BaseObject::LoadParams(const fx::gltf::Node& node)
 	return true;
 }
 
-bool BaseObject::LoadMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node)
+bool BaseObject::ExportParams(fx::gltf::Node& node)
+{
+	auto paramArr = nlohmann::json::array();
+	for (auto& kv : m_formulas)
+	{
+		auto obj = nlohmann::json::object();
+		obj["name"] = kv.first;
+		obj["formula"] = kv.second;
+		paramArr.push_back(obj);
+	}
+	node.extensionsAndExtras["params"] = paramArr;
+	return true;
+}
+
+bool BaseObject::ImportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node)
 {
 	if (node.mesh == -1)
 	{
@@ -324,53 +435,128 @@ bool BaseObject::LoadMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const 
 	}
 
 	const fx::gltf::Mesh& mesh = gltfObject->meshes[node.mesh];
-	for (const auto& primitive : mesh.primitives)
+	osg::ref_ptr<osg::Geode>	geo = new osg::Geode();
+	addChild(geo);
+
+	for (const fx::gltf::Primitive& primitive : mesh.primitives)
 	{
-		switch (primitive.mode)
-		{
-		case fx::gltf::Primitive::Mode::Points:
-		case fx::gltf::Primitive::Mode::Lines:
-		case fx::gltf::Primitive::Mode::LineLoop:
-		case fx::gltf::Primitive::Mode::LineStrip:
-		case fx::gltf::Primitive::Mode::Triangles:
-		case fx::gltf::Primitive::Mode::TriangleStrip:
-		case fx::gltf::Primitive::Mode::TriangleFan:
-		default:
-			break;
-		}
+		geo->addDrawable(ImportPrimitive(gltfObject, primitive));
 	}
 
+	return true;
+}
+
+bool BaseObject::ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node)
+{
 	return false;
 }
 
-osg::ref_ptr<osg::Drawable> BaseObject::LoadPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
+osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
 {
-	if (primitive.indices == -1)
+#pragma region LOAD_ATTRIBUTE
+	for (const std::pair<std::string, uint32_t>& attribute : primitive.attributes)
 	{
-		switch (primitive.mode)
+		if (attribute.first == "POSITION")
 		{
-		case fx::gltf::Primitive::Mode::Points:
-			break;
-		case fx::gltf::Primitive::Mode::Lines:
-			break;
-		case fx::gltf::Primitive::Mode::LineLoop:
-			break;
-		case fx::gltf::Primitive::Mode::LineStrip:
-			break;
-		case fx::gltf::Primitive::Mode::Triangles:
-			break;
-		case fx::gltf::Primitive::Mode::TriangleStrip:
-			break;
-		case fx::gltf::Primitive::Mode::TriangleFan:
-			break;
-		default:
-			assert(false);
-			return nullptr;
+			m_vertexBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+		}
+		else if (attribute.first == "NORMAL")
+		{
+			m_normalBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+		}
+		else if (attribute.first == "TANGENT")
+		{
+			m_tangentBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+		}
+		else if (attribute.first == "TEXCOORD_0")
+		{
+			m_texCoord0Buffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
 		}
 	}
-	else
-	{
+#pragma endregion LOAD_ATTRIBUTE
+	m_indexBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[primitive.indices]);
+#pragma region ATTRIBUTE_TO_OSG_OBJECT
+	// TODO
+#pragma endregion ATTRIBUTE_TO_OSG_OBJECT
 
+	if (primitive.material >= 0)
+	{
+		//TODO LOAD MATRERIAL
 	}
-	primitive;
+
+
+
+	switch (primitive.mode)
+	{
+	case fx::gltf::Primitive::Mode::Points:
+		break;
+	case fx::gltf::Primitive::Mode::Lines:
+		break;
+	case fx::gltf::Primitive::Mode::LineLoop:
+		break;
+	case fx::gltf::Primitive::Mode::LineStrip:
+		break;
+	case fx::gltf::Primitive::Mode::Triangles:
+		break;
+	case fx::gltf::Primitive::Mode::TriangleStrip:
+		break;
+	case fx::gltf::Primitive::Mode::TriangleFan:
+		break;
+	default:
+		break;
+	}
+
+	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
+	ptrRet->setVertexArray(nullptr);
+	ptrRet->setNormalArray(nullptr);
+	return ptrRet;
+}
+
+bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive)
+{
+	return false;
+}
+
+uint32_t BaseObject::GetElementSize(const fx::gltf::Accessor& accessor)
+{
+	uint32_t elementSize = 0;
+	switch (accessor.componentType)
+	{
+	case fx::gltf::Accessor::ComponentType::Byte:
+	case fx::gltf::Accessor::ComponentType::UnsignedByte:
+		elementSize = 1;
+		break;
+	case fx::gltf::Accessor::ComponentType::Short:
+	case fx::gltf::Accessor::ComponentType::UnsignedShort:
+		elementSize = 2;
+		break;
+	case fx::gltf::Accessor::ComponentType::UnsignedInt:
+	case fx::gltf::Accessor::ComponentType::Float:
+		elementSize = 4;
+		break;
+	default:
+		break;
+	}
+
+	switch (accessor.type)
+	{
+	case fx::gltf::Accessor::Type::Scalar:
+		return elementSize;
+	case fx::gltf::Accessor::Type::Vec2:
+		return elementSize * 2;
+	case fx::gltf::Accessor::Type::Vec3:
+		return elementSize * 3;
+	case fx::gltf::Accessor::Type::Vec4:
+		return elementSize * 4;
+	case fx::gltf::Accessor::Type::Mat2:
+		return elementSize * 4;
+	case fx::gltf::Accessor::Type::Mat3:
+		return elementSize * 9;
+	case fx::gltf::Accessor::Type::Mat4:
+		return elementSize * 16;
+	default:
+		break;
+	}
+
+	return 0;
 }

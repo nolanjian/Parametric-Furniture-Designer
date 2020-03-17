@@ -1,6 +1,21 @@
 #include "pch.h"
 #include "Panel.h"
 
+Panel::Panel()
+	:BaseObject()
+{
+
+}
+
+Panel::~Panel()
+{
+}
+
+bool Panel::InitFromParams()
+{
+	return false;
+}
+
 void Panel::SetDepth(double dVal)
 {
 	dDepth = dVal;
