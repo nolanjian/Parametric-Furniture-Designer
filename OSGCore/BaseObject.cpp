@@ -6,6 +6,8 @@
 
 #include <filesystem>
 
+#include <osg/PrimitiveSet>
+
 BaseObject::BaseObject()
 	:osg::MatrixTransform()
 {
@@ -494,31 +496,35 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		//TODO LOAD MATRERIAL
 	}
 
-
-
-	switch (primitive.mode)
+	auto fnGetOSGPrimitiveType = [&]()
 	{
-	case fx::gltf::Primitive::Mode::Points:
-		break;
-	case fx::gltf::Primitive::Mode::Lines:
-		break;
-	case fx::gltf::Primitive::Mode::LineLoop:
-		break;
-	case fx::gltf::Primitive::Mode::LineStrip:
-		break;
-	case fx::gltf::Primitive::Mode::Triangles:
-		break;
-	case fx::gltf::Primitive::Mode::TriangleStrip:
-		break;
-	case fx::gltf::Primitive::Mode::TriangleFan:
-		break;
-	default:
-		break;
-	}
+		switch (primitive.mode)
+		{
+		case fx::gltf::Primitive::Mode::Points:
+			return osg::PrimitiveSet::POINTS;
+		case fx::gltf::Primitive::Mode::Lines:
+			return osg::PrimitiveSet::LINES;
+		case fx::gltf::Primitive::Mode::LineLoop:
+			return osg::PrimitiveSet::LINE_LOOP;
+		case fx::gltf::Primitive::Mode::LineStrip:
+			return osg::PrimitiveSet::LINE_STRIP;
+		case fx::gltf::Primitive::Mode::Triangles:
+			return osg::PrimitiveSet::TRIANGLES;
+		case fx::gltf::Primitive::Mode::TriangleStrip:
+			return osg::PrimitiveSet::TRIANGLE_STRIP;
+		case fx::gltf::Primitive::Mode::TriangleFan:
+			return osg::PrimitiveSet::TRIANGLE_FAN;
+		default:
+			return osg::PrimitiveSet::POINTS;
+		}
+	};
 
 	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
-	//ptrRet->setVertexArray(nullptr);
-	//ptrRet->setNormalArray(nullptr);
+
+	ptrRet->addPrimitiveSet(new osg::DrawArrays(fnGetOSGPrimitiveType(), 0, (m_vertexBuffer->accessor->count)));
+	ptrRet->setVertexArray(&m_vertex);
+	ptrRet->setNormalArray(&m_normal);
+	
 	return ptrRet;
 }
 

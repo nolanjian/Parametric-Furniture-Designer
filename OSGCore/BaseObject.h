@@ -2,6 +2,7 @@
 #include <osg/MatrixTransform>
 #include <osg/Geode>
 #include <osg/Geometry>
+#include <osg/Array>
 
 #include <string>
 #include <memory>
@@ -64,6 +65,8 @@ public:
 	std::string	m_name;
 
 protected:
+	osg::Vec4Array	LoadVertexArray();
+
 	bool ImportRotation(const fx::gltf::Node& node);
 	bool ExportRotation(fx::gltf::Node& node);
 	bool ImportScale(const fx::gltf::Node& node);
@@ -103,4 +106,6 @@ private:
 	osg::ref_ptr<BaseObject>	m_parent;
 	std::shared_ptr<mup::ParserX>	m_parser;
 	
+	osg::Vec4Array	m_vertex;
+	osg::Vec4Array	m_normal;
 };
