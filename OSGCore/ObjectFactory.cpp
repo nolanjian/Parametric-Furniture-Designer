@@ -21,7 +21,6 @@ osg::ref_ptr<BaseObject> ObjectFactory::CreateObject(CLASS_TYPE type)
     case ObjectFactory::HANDLER:
         return new Handler();
     default:
-        assert(false);
-        return nullptr;
+        return new BaseObject();
 	}
 }

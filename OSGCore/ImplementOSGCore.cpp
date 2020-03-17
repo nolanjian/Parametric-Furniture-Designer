@@ -6,6 +6,7 @@
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
 #include <osgGA/TrackballManipulator>
 #include <osgDB/ReadFile>
+#include "BaseObject.h"
 
 #include "../Utils/Utils.h"
 //#include "../easyloggingpp/easylogging++.h"
@@ -171,4 +172,9 @@ void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
 		fnOnSelectObjectCallback(-1);
 	}
 
+}
+
+void OSGCore::ImplementOSGCore::LoadScene(const std::string& path)
+{
+	BaseObject::LoadSceneFromJsonFile(path);
 }

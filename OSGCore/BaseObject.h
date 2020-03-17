@@ -27,7 +27,7 @@ public:
 	BaseObject();
 	virtual ~BaseObject();
 
-	virtual bool InitFromParams() = 0;
+	virtual bool InitFromParams() { return false; };
 
 	void SetParent(osg::ref_ptr<BaseObject> parent) { m_parent = parent; }
 	osg::ref_ptr<BaseObject> GetParent() { return m_parent; }
@@ -59,7 +59,7 @@ public:
 	void	InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject,const fx::gltf::Node& curNode);
 	int		GetClassType(const fx::gltf::Node& node);
 
-	const osg::Matrixd& GetMatrix() { return mat; }
+	void	RetsetMatrixFromTSR();
 
 	std::string	m_name;
 

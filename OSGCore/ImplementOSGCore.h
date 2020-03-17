@@ -18,6 +18,7 @@ namespace OSGCore
 		void RenderThread();
 		void SetModelPath(const std::wstring& path);
 		void SetOnSelectObjectCallback(void(*ptr)(long long int)) { fnOnSelectObjectCallback = ptr; }
+		void LoadScene(const std::string& path);
 	protected:
 	private:
 		bool s_bKeepRunning = false;

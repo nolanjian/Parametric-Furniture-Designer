@@ -265,11 +265,9 @@ void BaseObject::InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject
 	// Scene level
 	if (gltfObject.get() && gltfObject->scenes.size() > 0 && (gltfObject->scenes[0]).nodes.size() > 0)
 	{
-		return;
+		const fx::gltf::Node& curNode = gltfObject->nodes[gltfObject->scenes[0].nodes[0]];
+		InitFromNode(gltfObject, curNode);
 	}
-	// Scene level
-	const fx::gltf::Node& curNode = gltfObject->nodes[gltfObject->scenes[0].nodes[0]];
-	InitFromNode(gltfObject, curNode);
 }
 
 void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& curNode)
@@ -285,8 +283,9 @@ void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, co
 		ImportRotation(curNode);
 		ImportScale(curNode);
 		ImportTranslation(curNode);
+		RetsetMatrixFromTSR();
 	}
-	setMatrix(GetMatrix());
+	setMatrix(mat);
 #pragma endregion LOAD_MATRIX
 
 	ImportParams(curNode.extensionsAndExtras);
@@ -316,6 +315,14 @@ int BaseObject::GetClassType(const fx::gltf::Node& node)
 	return 0;
 }
 
+void BaseObject::RetsetMatrixFromTSR()
+{
+	mat.makeIdentity();
+	mat.makeRotate(osg::Quat(vRotation));
+	mat.makeScale(vScale);
+	mat.makeTranslate(vTranslation);
+}
+
 bool BaseObject::ImportRotation(const fx::gltf::Node& node)
 {
 	vRotation.x() = node.rotation.at(0);
@@ -327,6 +334,7 @@ bool BaseObject::ImportRotation(const fx::gltf::Node& node)
 
 bool BaseObject::ExportRotation(fx::gltf::Node& node)
 {
+	vRotation = mat.getRotate().asVec4();
 	node.rotation.at(0) = vRotation.x();
 	node.rotation.at(1) = vRotation.y();
 	node.rotation.at(2) = vRotation.z();
@@ -344,6 +352,7 @@ bool BaseObject::ImportScale(const fx::gltf::Node& node)
 
 bool BaseObject::ExportScale(fx::gltf::Node& node)
 {
+	vScale = mat.getScale();
 	node.scale.at(0) = vScale.x();
 	node.scale.at(1) = vScale.y();
 	node.scale.at(2) = vScale.z();
@@ -360,6 +369,7 @@ bool BaseObject::ImportTranslation(const fx::gltf::Node& node)
 
 bool BaseObject::ExportTranslation(fx::gltf::Node& node)
 {
+	vTranslation = mat.getTrans();
 	node.translation.at(0) = vTranslation.x();
 	node.translation.at(1) = vTranslation.y();
 	node.translation.at(2) = vTranslation.z();
@@ -507,8 +517,8 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 	}
 
 	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
-	ptrRet->setVertexArray(nullptr);
-	ptrRet->setNormalArray(nullptr);
+	//ptrRet->setVertexArray(nullptr);
+	//ptrRet->setNormalArray(nullptr);
 	return ptrRet;
 }
 

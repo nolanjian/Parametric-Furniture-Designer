@@ -44,3 +44,8 @@ void OSGCore::InterfaceOSG::SetOnSelectObjectCallback(void(*ptr)(long long int))
 {
 
 }
+
+void OSGCore::InterfaceOSG::LoadScene(const std::string& path)
+{
+	GetImplement(ptrImp)->LoadScene(path);
+}
