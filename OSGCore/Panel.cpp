@@ -13,7 +13,20 @@ Panel::~Panel()
 
 bool Panel::InitFromParams()
 {
-	return false;
+	if (m_formulasResult.find(L"W") != m_formulasResult.end())
+	{
+		dWidth = m_formulasResult[L"W"]->AsIValue()->GetFloat();
+	}
+	if (m_formulasResult.find(L"D") != m_formulasResult.end())
+	{
+		dDepth = m_formulasResult[L"D"]->AsIValue()->GetFloat();
+	}
+	if (m_formulasResult.find(L"H") != m_formulasResult.end())
+	{
+		dHeight = m_formulasResult[L"H"]->AsIValue()->GetFloat();
+	}
+
+	return true;
 }
 
 void Panel::SetDepth(double dVal)
