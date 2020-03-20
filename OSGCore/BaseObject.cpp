@@ -45,7 +45,7 @@ bool BaseObject::SetParentFormulars()
 		for (auto pKV : parentFormulasResult)
 		{
 			mup::IValue* pValue = pKV.second->AsIValue();
-			if (pValue ==  nullptr)
+			if (pValue == nullptr)
 			{
 				continue;
 			}
@@ -53,7 +53,7 @@ bool BaseObject::SetParentFormulars()
 
 
 			mup::ptr_tok_type ptt = pKV.second;
-			
+
 			m_parser->DefineVar(name, mup::Variable(pValue));
 		}
 		assert(parentFormulasResult.size() == m_parser->GetExprVar().size());
@@ -88,7 +88,7 @@ bool BaseObject::UpdateFormulas()
 	}
 
 	InitFromParams();
-	
+
 	bool bUpdateALL = true;
 	for (auto& child : _children)
 	{
@@ -102,7 +102,7 @@ bool BaseObject::UpdateFormulas()
 }
 
 bool BaseObject::UpdateSelfFormulas()
-{	
+{
 	assert(m_parser);
 	m_formulasResult.clear();
 
@@ -159,7 +159,7 @@ bool BaseObject::UpdateSelfFormulas()
 		if (m_parser->IsVarDefined(kv.first))
 		{
 			const mup::var_maptype& m = m_parser->GetVar();
-			m_formulasResult[kv.first] = m.at(kv.first);		
+			m_formulasResult[kv.first] = m.at(kv.first);
 		}
 		else
 		{
@@ -184,7 +184,7 @@ bool BaseObject::SetOneLine(const std::wstring& line)
 	{
 		LOG(ERROR) << e.GetMsg();
 	}
-	catch (const std::exception& e)
+	catch (const std::exception & e)
 	{
 		LOG(ERROR) << e.what();
 	}
@@ -233,8 +233,8 @@ std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject
 {
 	std::shared_ptr<fx::gltf::Document>	ptrDOC = std::make_shared<fx::gltf::Document>();
 
-	
-	
+
+
 
 
 	return ptrDOC;
@@ -253,6 +253,208 @@ std::shared_ptr<RawBufferInfo> BaseObject::GetRawBufferInfo(std::shared_ptr<fx::
 	pInfo->dataStride = dataTypeSize;
 	pInfo->totalSize = accessor.count * dataTypeSize;
 	return pInfo;
+}
+
+osg::ref_ptr<osg::Vec4dArray> BaseObject::GetVec4Array(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
+{
+	size_t itemSize = 0;
+	switch (accessor.type)
+	{
+	case fx::gltf::Accessor::Type::Vec2:
+		itemSize = 2;
+		break;
+	case fx::gltf::Accessor::Type::Vec3:
+		itemSize = 3;
+		break;
+	case fx::gltf::Accessor::Type::Vec4:
+		itemSize = 4;
+		break;
+	default:
+		LOG(ERROR) << "GetVec4Array only support Vec2,Vec3,Vec4";
+		return nullptr;
+	}
+
+	size_t	elementSize = 0;
+	switch (accessor.componentType)
+	{
+	case fx::gltf::Accessor::ComponentType::Byte:
+	case fx::gltf::Accessor::ComponentType::UnsignedByte:
+		elementSize = 1;
+		break;
+	case fx::gltf::Accessor::ComponentType::Short:
+	case fx::gltf::Accessor::ComponentType::UnsignedShort:
+		elementSize = 2;
+		break;
+	case fx::gltf::Accessor::ComponentType::UnsignedInt:
+	case fx::gltf::Accessor::ComponentType::Float:
+		elementSize = 4;
+		break;
+	default:
+		return nullptr;
+	}
+
+	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
+	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
+
+	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
+	
+	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+
+	size_t totalSize = itemSize * elementSize * accessor.count;
+	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
+	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
+
+	osg::ref_ptr<osg::Vec4dArray> arr = new osg::Vec4dArray();
+	for (size_t ii = 0; ii < accessor.count; ++ii)
+	{
+		osg::Vec4d	vec;
+		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
+		for (size_t jj = 0; jj < itemSize; ++jj)
+		{
+			const uint8_t* pCurElement = pCurItem + jj * elementSize;
+			
+			switch (accessor.componentType)
+			{
+			case fx::gltf::Accessor::ComponentType::Byte:
+			{
+				int8_t nVal = *((int8_t*)(pCurElement));
+				vec[jj] = double(nVal);
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::UnsignedByte:
+			{
+				uint8_t nVal = *((uint8_t*)(pCurElement));
+				vec[jj] = double(nVal);
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::Short:
+			{
+				int16_t nVal = *((int16_t*)(pCurElement));
+				vec[jj] = double(nVal);
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::UnsignedShort:
+			{
+				uint16_t nVal = *((uint16_t*)(pCurElement));
+				vec[jj] = double(nVal);
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::UnsignedInt:
+			{
+				uint32_t nVal = *((uint32_t*)(pCurElement));
+				vec[jj] = double(nVal);
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::Float:
+			{
+				float nVal = *((float*)(pCurElement));
+				vec[jj] = double(nVal);
+				break;
+			}
+			default:
+				return nullptr;
+			}
+
+
+		}
+		arr->push_back(vec);
+	}
+	return arr;
+}
+
+std::vector<double> BaseObject::GetNumArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
+{
+	size_t itemSize = 0;
+	switch (accessor.type)
+	{
+	case fx::gltf::Accessor::Type::Scalar:
+		itemSize = 1;
+		break;
+	default:
+		LOG(ERROR) << "GetNumArray only support Scalar";
+		return std::vector<double>();
+	}
+
+	size_t	elementSize = 0;
+	switch (accessor.componentType)
+	{
+	case fx::gltf::Accessor::ComponentType::Byte:
+	case fx::gltf::Accessor::ComponentType::UnsignedByte:
+		elementSize = 1;
+		break;
+	case fx::gltf::Accessor::ComponentType::Short:
+	case fx::gltf::Accessor::ComponentType::UnsignedShort:
+		elementSize = 2;
+		break;
+	case fx::gltf::Accessor::ComponentType::UnsignedInt:
+	case fx::gltf::Accessor::ComponentType::Float:
+		elementSize = 4;
+		break;
+	default:
+		return std::vector<double>();
+	}
+
+	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
+	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
+
+	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
+
+	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+
+	size_t totalSize = itemSize * elementSize * accessor.count;
+	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
+	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
+
+	std::vector<double>	arr;
+	for (size_t ii = 0; ii < accessor.count; ++ii)
+	{
+		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
+		for (size_t jj = 0; jj < itemSize; ++jj)
+		{
+			const uint8_t* pCurElement = pCurItem + jj * elementSize;
+
+			switch (accessor.componentType)
+			{
+			case fx::gltf::Accessor::ComponentType::Byte:
+			{
+				int8_t nVal = *((int8_t*)(pCurElement));
+				arr.push_back(double(nVal));
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::UnsignedByte:
+			{
+				uint8_t nVal = *((uint8_t*)(pCurElement));
+				arr.push_back(double(nVal));
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::Short:
+			{
+				int16_t nVal = *((int16_t*)(pCurElement));
+				arr.push_back(double(nVal));
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::UnsignedShort:
+			{
+				uint16_t nVal = *((uint16_t*)(pCurElement));
+				arr.push_back(double(nVal));
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::UnsignedInt:
+			{
+				uint32_t nVal = *((uint32_t*)(pCurElement));
+				arr.push_back(double(nVal));
+				break;
+			}
+			case fx::gltf::Accessor::ComponentType::Float:
+			{
+				float nVal = *((float*)(pCurElement));
+				arr.push_back(double(nVal));
+				break;
+			}
+			}
+		}
+	}
+	return arr;
 }
 
 void BaseObject::LoadTSRFromMatrix()
@@ -409,6 +611,8 @@ bool BaseObject::ImportParams(const fx::gltf::Node& node)
 	const nlohmann::json::value_type& params = node.extensionsAndExtras["params"];
 	if (!params.is_array())
 	{
+
+		LOG(ERROR) << "params is not array";
 		// TODO LOG
 		return false;
 	}
@@ -470,23 +674,23 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 	{
 		if (attribute.first == "POSITION")
 		{
-			m_vertexBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+			m_vertex = GetVec4Array(gltfObject, gltfObject->accessors[attribute.second]);
 		}
 		else if (attribute.first == "NORMAL")
 		{
-			m_normalBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+			m_normal = GetVec4Array(gltfObject, gltfObject->accessors[attribute.second]);
 		}
 		else if (attribute.first == "TANGENT")
 		{
-			m_tangentBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+			//m_tangentBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{
-			m_texCoord0Buffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+			//m_texCoord0Buffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
 		}
 	}
 #pragma endregion LOAD_ATTRIBUTE
-	m_indexBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[primitive.indices]);
+	m_indexl = GetNumArray(gltfObject, gltfObject->accessors[primitive.indices]);
 #pragma region ATTRIBUTE_TO_OSG_OBJECT
 	// TODO
 #pragma endregion ATTRIBUTE_TO_OSG_OBJECT
@@ -521,10 +725,28 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 
 	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
 
-	ptrRet->addPrimitiveSet(new osg::DrawArrays(fnGetOSGPrimitiveType(), 0, (m_vertexBuffer->accessor->count)));
-	ptrRet->setVertexArray(&m_vertex);
-	ptrRet->setNormalArray(&m_normal);
-	
+	auto ptrPrimitiveSet = new osg::DrawElementsUInt(fnGetOSGPrimitiveType());
+	for (auto index : m_indexl)
+	{
+		ptrPrimitiveSet->push_back(unsigned int(index));
+	}
+
+	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
+	ptrRet->setVertexArray(m_vertex);
+	ptrRet->setNormalArray(m_normal);
+	if (m_texCoord0)
+	{
+		ptrRet->setTexCoordArray(0, m_texCoord0);
+	}
+	if (m_texCoord1)
+	{
+		ptrRet->setTexCoordArray(1, m_texCoord1);
+	}
+	if (m_texCoord2)
+	{
+		ptrRet->setTexCoordArray(2, m_texCoord2);
+	}
+
 	return ptrRet;
 }
 

@@ -52,6 +52,9 @@ public:
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
 	static std::shared_ptr<RawBufferInfo> GetRawBufferInfo(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+
+	static osg::ref_ptr<osg::Vec4dArray> GetVec4Array(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+	static std::vector<double>	GetNumArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
 	
 	static uint32_t GetElementSize(const fx::gltf::Accessor& accessor);
 
@@ -65,8 +68,6 @@ public:
 	std::string	m_name;
 
 protected:
-	osg::Vec4Array	LoadVertexArray();
-
 	bool ImportRotation(const fx::gltf::Node& node);
 	bool ExportRotation(fx::gltf::Node& node);
 	bool ImportScale(const fx::gltf::Node& node);
@@ -81,12 +82,6 @@ protected:
 	bool ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
 	osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	bool ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive);
-
-	std::shared_ptr<RawBufferInfo> m_indexBuffer;
-	std::shared_ptr<RawBufferInfo> m_vertexBuffer;
-	std::shared_ptr<RawBufferInfo> m_normalBuffer;
-	std::shared_ptr<RawBufferInfo> m_tangentBuffer;
-	std::shared_ptr<RawBufferInfo> m_texCoord0Buffer;
 
 	osg::Vec4	vRotation;
 	osg::Vec3	vScale;
@@ -105,7 +100,11 @@ private:
 	bool m_bDirty = true;
 	osg::ref_ptr<BaseObject>	m_parent;
 	std::shared_ptr<mup::ParserX>	m_parser;
-	
-	osg::Vec4Array	m_vertex;
-	osg::Vec4Array	m_normal;
+
+	osg::ref_ptr<osg::Vec4dArray> m_vertex;
+	osg::ref_ptr<osg::Vec4dArray> m_normal;
+	std::vector<double>				m_indexl;
+	osg::ref_ptr<osg::Vec4dArray> m_texCoord0;
+	osg::ref_ptr<osg::Vec4dArray> m_texCoord1;
+	osg::ref_ptr<osg::Vec4dArray> m_texCoord2;
 };
