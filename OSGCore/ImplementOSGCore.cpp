@@ -160,12 +160,9 @@ void OSGCore::ImplementOSGCore::RenderThread()
 void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
 {
 	m_ptr3DScene->removeChildren(0, m_ptr3DScene->getNumChildren());
-	std::string	modelPath;
-	osg::Node* pModel = osgDB::readNodeFile(modelPath);
-	if (pModel)
-	{
-		m_ptr3DScene->addChild(pModel);
-	}
+
+	std::string strPath;
+	m_ptr3DScene = BaseObject::LoadSceneFromJsonFile(strPath);
 
 	if (fnOnSelectObjectCallback)
 	{
