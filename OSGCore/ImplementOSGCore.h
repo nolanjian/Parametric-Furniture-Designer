@@ -1,9 +1,8 @@
 #pragma once
 #include <windows.h>
-#include <thread>
-#include <osgViewer/Viewer>
-#include <osg/Group>
-#include <string>
+
+#include "OSGIncluding.h"
+#include "STLIncluding.h"
 
 namespace OSGCore
 {

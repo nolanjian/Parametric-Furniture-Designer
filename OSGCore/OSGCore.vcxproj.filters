@@ -64,6 +64,8 @@
     <ClInclude Include="TestOSGWin.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="OSGIncluding.h" />
+    <ClInclude Include="STLIncluding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">

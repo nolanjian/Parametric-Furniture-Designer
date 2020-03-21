@@ -104,10 +104,12 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="OSGCoreExport.h" />
+    <ClInclude Include="OSGIncluding.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="ParametricComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="STLIncluding.h" />
     <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>
   <ItemGroup>

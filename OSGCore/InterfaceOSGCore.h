@@ -1,8 +1,8 @@
 #pragma once
 #include "OSGCoreExport.h"
+#include "STLIncluding.h"
 #include <windows.h>
-#include <string>
-#include <functional>
+
 
 namespace OSGCore
 {

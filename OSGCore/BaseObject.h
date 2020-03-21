@@ -1,11 +1,9 @@
 #pragma once
-#include <osg/MatrixTransform>
-#include <osg/Geode>
-#include <osg/Geometry>
-#include <osg/Array>
 
-#include <string>
-#include <memory>
+
+
+#include "OSGIncluding.h"
+#include "STLIncluding.h"
 #include "../muparserx/mpParser.h"
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"

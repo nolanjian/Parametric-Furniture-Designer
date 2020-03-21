@@ -4,10 +4,6 @@
 #include "../easyloggingpp/easylogging++.h"
 #include "ObjectFactory.h"
 
-#include <filesystem>
-
-#include <osg/PrimitiveSet>
-
 BaseObject::BaseObject()
 	:osg::MatrixTransform()
 {

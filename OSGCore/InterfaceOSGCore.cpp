@@ -1,5 +1,4 @@
 #include "pch.h"
-#include <cassert>
 #include "InterfaceOSGCore.h"
 #include "ImplementOSGCore.h"
 

@@ -1,15 +1,5 @@
 #include "pch.h"
 #include "ImplementOSGCore.h"
-#include <cassert>
-#include <osg/Program>
-#include <osg/PatchParameter>
-#include <osg/ShapeDrawable>
-#include <osg/GraphicsContext>
-#include <osgViewer/Viewer>
-#include <osgViewer/api/Win32/GraphicsWindowWin32>
-#include <osgViewer/ViewerEventHandlers>
-#include <osgGA/TrackballManipulator>
-#include <osgDB/ReadFile>
 #include "BaseObject.h"
 
 #include "TestOSGWin.h"
