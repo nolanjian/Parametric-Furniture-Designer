@@ -49,3 +49,8 @@ void OSGCore::InterfaceOSG::LoadScene(const std::string& path)
 {
 	GetImplement(ptrImp)->LoadScene(path);
 }
+
+void OSGCore::InterfaceOSG::OpenSceneInNewWindow(const std::string& path)
+{
+	GetImplement(ptrImp)->OpenSceneInNewWindow(path);
+}

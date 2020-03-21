@@ -5,7 +5,7 @@
 int main()
 {
 	OSGCore::InterfaceOSG* ptr = new OSGCore::InterfaceOSG();
-	ptr->LoadScene("D:\\Box.gltf");
-
+	ptr->OpenSceneInNewWindow("D:\\Box.gltf");
+	delete ptr;
 	return 0;
 }

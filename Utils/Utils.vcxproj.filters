@@ -33,6 +33,9 @@
     <ClInclude Include="UtilsExport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IParamsConverter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IDGenerater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="IParamsConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

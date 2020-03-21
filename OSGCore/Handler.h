@@ -1,6 +1,6 @@
 #pragma once
-#include "BaseObject.h"
-class Handler : public BaseObject
+#include "Model.h"
+class Handler : public Model
 {
 public:
 	Handler();

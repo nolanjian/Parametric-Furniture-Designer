@@ -1,7 +1,7 @@
 #pragma once
-#include "BaseObject.h"
+#include "Model.h"
 
-class Hard : public BaseObject
+class Hard : public Model
 {
 public:
 	Hard();

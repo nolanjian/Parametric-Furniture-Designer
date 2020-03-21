@@ -67,7 +67,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>D:\library\osg_build\lib;$(OutDir);D:\library\Parametric-Furniture-Designer\easyloggingpp</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\library\osg_build\lib;$(OutDir);D:\library\Parametric-Furniture-Designer\easyloggingpp;D:\Library\OpenSceneGraph\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenThreadsd.lib;osgAnimationd.lib;osgd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgManipulatord.lib;osgParticled.lib;osgPresentationd.lib;osgShadowd.lib;osgSimd.lib;osgTerraind.lib;osgTextd.lib;osgUId.lib;osgUtild.lib;osgViewerd.lib;osgVolumed.lib;osgWidgetd.lib;MUPARSERX.lib;UTILS.lib;easyloggingppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -101,11 +101,14 @@
     <ClInclude Include="Hard.h" />
     <ClInclude Include="ImplementOSGCore.h" />
     <ClInclude Include="InterfaceOSGCore.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="OSGCoreExport.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="ParametricComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp" />
@@ -122,6 +125,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="TestOSGWin.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

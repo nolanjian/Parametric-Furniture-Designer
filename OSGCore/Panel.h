@@ -1,7 +1,7 @@
 #pragma once
-#include "BaseObject.h"
+#include "ParametricComponent.h"
 
-class Panel : public BaseObject
+class Panel : public ParametricComponent
 {
 public:
 	Panel();

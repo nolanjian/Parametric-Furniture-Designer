@@ -1,13 +1,18 @@
 #include "pch.h"
 #include "ImplementOSGCore.h"
 #include <cassert>
+#include <osg/Program>
+#include <osg/PatchParameter>
+#include <osg/ShapeDrawable>
 #include <osg/GraphicsContext>
 #include <osgViewer/Viewer>
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
+#include <osgViewer/ViewerEventHandlers>
 #include <osgGA/TrackballManipulator>
 #include <osgDB/ReadFile>
 #include "BaseObject.h"
 
+#include "TestOSGWin.h"
 #include "../Utils/Utils.h"
 //#include "../easyloggingpp/easylogging++.h"
 
@@ -174,4 +179,18 @@ void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
 void OSGCore::ImplementOSGCore::LoadScene(const std::string& path)
 {
 	BaseObject::LoadSceneFromJsonFile(path);
+}
+
+osg::ref_ptr<osg::Program> createProgram()
+{
+	return nullptr;
+}
+
+void OSGCore::ImplementOSGCore::OpenSceneInNewWindow(const std::string& path)
+{
+	TestOSGWin* pWin = new TestOSGWin();
+	pWin->Run(path);
+	delete pWin;
+	pWin = nullptr;
+	return;
 }

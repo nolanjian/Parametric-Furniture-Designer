@@ -202,10 +202,22 @@ const mup::var_maptype& BaseObject::FormulasResult()
 
 osg::ref_ptr<BaseObject> BaseObject::JSON2OSG(const std::string& str)
 {
-	std::stringstream	ss;
-	ss << str;
-	std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(ss, std::filesystem::current_path().u8string()));
-	return GLTF2OSG(ptrObj);
+	try
+	{
+		std::stringstream	ss;
+		ss << str;
+		std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(ss, std::filesystem::current_path().u8string()));
+		return GLTF2OSG(ptrObj);
+	}
+	catch (const std::exception& e)
+	{
+		LOG(ERROR) << e.what();
+	}
+	catch (...)
+	{
+		LOG(ERROR) << "JSON2OSG unknown exception";
+	}
+	return nullptr;
 }
 
 std::string BaseObject::OSG2JSON(osg::ref_ptr<BaseObject> pObj)
@@ -218,8 +230,20 @@ std::string BaseObject::OSG2JSON(osg::ref_ptr<BaseObject> pObj)
 
 osg::ref_ptr<osg::Group> BaseObject::LoadSceneFromJsonFile(const std::string& strPath)
 {
-	std::shared_ptr<fx::gltf::Document>	ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(strPath));
-	return GLTF2OSG(ptrDOC);
+	try
+	{
+		std::shared_ptr<fx::gltf::Document>	ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(strPath));
+		return GLTF2OSG(ptrDOC);
+	}
+	catch (const std::exception & e)
+	{
+		LOG(ERROR) << e.what();
+	}
+	catch (...)
+	{
+		LOG(ERROR) << "JSON2OSG unknown exception";
+	}
+	return nullptr;
 }
 
 osg::ref_ptr<BaseObject> BaseObject::GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject)
@@ -307,7 +331,7 @@ osg::ref_ptr<osg::Vec4dArray> BaseObject::GetVec4Array(std::shared_ptr<fx::gltf:
 	osg::ref_ptr<osg::Vec4dArray> arr = new osg::Vec4dArray();
 	for (size_t ii = 0; ii < accessor.count; ++ii)
 	{
-		osg::Vec4d	vec;
+		osg::Vec4d	vec(0, 0, 0, 1);
 		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
 		for (size_t jj = 0; jj < itemSize; ++jj)
 		{
@@ -359,6 +383,7 @@ osg::ref_ptr<osg::Vec4dArray> BaseObject::GetVec4Array(std::shared_ptr<fx::gltf:
 		}
 		arr->push_back(vec);
 	}
+	assert(accessor.count == arr->size());
 	return arr;
 }
 
@@ -734,6 +759,11 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
 	ptrRet->setVertexArray(m_vertex);
 	ptrRet->setNormalArray(m_normal);
+
+	osg::Vec4dArray* pColor = new osg::Vec4dArray();
+	pColor->push_back(osg::Vec4(255, 0, 0, 255));
+
+	ptrRet->setColorArray(pColor, osg::Array::Binding::BIND_OVERALL);
 	if (m_texCoord0)
 	{
 		ptrRet->setTexCoordArray(0, m_texCoord0);

@@ -21,6 +21,7 @@ namespace OSGCore
 		void SetOnSelectObjectCallback(void(*ptr)(long long int));
 
 		void LoadScene(const std::string& path);
+		void OpenSceneInNewWindow(const std::string& path);
 
 	private:
 		void* ptrImp = nullptr;

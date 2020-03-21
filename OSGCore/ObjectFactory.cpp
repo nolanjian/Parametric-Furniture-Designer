@@ -5,6 +5,7 @@
 #include "FrameGroup.h"
 #include "Hard.h"
 #include "Handler.h"
+#include "Model.h"
 
 osg::ref_ptr<BaseObject> ObjectFactory::CreateObject(CLASS_TYPE type)
 {
@@ -20,6 +21,8 @@ osg::ref_ptr<BaseObject> ObjectFactory::CreateObject(CLASS_TYPE type)
         return new Hard();
     case ObjectFactory::HANDLER:
         return new Handler();
+    case ObjectFactory::MODEL:
+        return new Model();
     default:
         return new BaseObject();
 	}

@@ -2,7 +2,7 @@
 #include "Panel.h"
 
 Panel::Panel()
-	:BaseObject()
+	:ParametricComponent()
 {
 
 }

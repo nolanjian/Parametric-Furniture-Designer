@@ -1,8 +1,8 @@
 #pragma once
 
-#include "BaseObject.h"
+#include "ParametricComponent.h"
 
-class FrameGroup : public BaseObject
+class FrameGroup : public ParametricComponent
 {
 public:
 	FrameGroup();
