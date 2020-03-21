@@ -719,7 +719,8 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 
 	if (primitive.material >= 0)
 	{
-		//TODO LOAD MATRERIAL
+		assert(gltfObject->materials.size() > primitive.material&& primitive.material >= 0);
+		ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
 	}
 
 	auto fnGetOSGPrimitiveType = [&]()
@@ -778,6 +779,17 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 }
 
 bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive)
+{
+	return false;
+}
+
+bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material)
+{
+
+	return false;
+}
+
+bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material)
 {
 	return false;
 }

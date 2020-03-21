@@ -14,4 +14,5 @@
 #include <osgViewer/ViewerEventHandlers>
 #include <osgGA/TrackballManipulator>
 #include <osgDB/ReadFile>
-
+#include <osg/Texture2D>
+#include <osg/Texture3D>

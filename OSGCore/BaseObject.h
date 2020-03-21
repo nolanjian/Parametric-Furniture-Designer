@@ -80,7 +80,8 @@ protected:
 	bool ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
 	osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	bool ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive);
-
+	bool ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& Material);
+	bool ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material);
 	bool ParseParams(const nlohmann::json::value_type& params);
 
 	osg::Vec4	vRotation;
