@@ -206,7 +206,7 @@ osg::ref_ptr<BaseObject> BaseObject::JSON2OSG(const std::string& str)
 		std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(ss, std::filesystem::current_path().u8string()));
 		return GLTF2OSG(ptrObj);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception & e)
 	{
 		LOG(ERROR) << e.what();
 	}
@@ -261,222 +261,241 @@ std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject
 	return ptrDOC;
 }
 
-std::shared_ptr<RawBufferInfo> BaseObject::GetRawBufferInfo(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
+template<class ArrayType, class ItemType, size_t itemSize>
+osg::ref_ptr<osg::Array> BaseObject::_GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
 {
-	std::shared_ptr<RawBufferInfo> pInfo = std::make_shared<RawBufferInfo>();
+	ArrayType* pRet = new ArrayType();
 
 	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
 	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
+	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
+	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+	size_t totalSize = itemSize * accessor.count;
+	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
+	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
 
-	const uint32_t dataTypeSize = GetElementSize(accessor);
-	pInfo->accessor = &accessor;
-	pInfo->data = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
-	pInfo->dataStride = dataTypeSize;
-	pInfo->totalSize = accessor.count * dataTypeSize;
-	return pInfo;
+	for (size_t ii = 0; ii < accessor.count; ++ii)
+	{
+		const uint8_t* pCurItem = pBuf + itemSize * ii;
+
+		ItemType	item;
+		item = *((ItemType*)(pCurItem));
+		pRet->push_back(item);
+	}
+
+	return pRet;
 }
 
-osg::ref_ptr<osg::Vec4dArray> BaseObject::GetVec4Array(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
+template<class ArrayType, class ItemType, class ElementType, size_t itemSize, size_t elementSize>
+osg::ref_ptr<osg::Array> BaseObject::_GetOSGVecArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
 {
-	size_t itemSize = 0;
-	switch (accessor.type)
-	{
-	case fx::gltf::Accessor::Type::Vec2:
-		itemSize = 2;
-		break;
-	case fx::gltf::Accessor::Type::Vec3:
-		itemSize = 3;
-		break;
-	case fx::gltf::Accessor::Type::Vec4:
-		itemSize = 4;
-		break;
-	default:
-		LOG(ERROR) << "GetVec4Array only support Vec2,Vec3,Vec4";
-		return nullptr;
-	}
-
-	size_t	elementSize = 0;
-	switch (accessor.componentType)
-	{
-	case fx::gltf::Accessor::ComponentType::Byte:
-	case fx::gltf::Accessor::ComponentType::UnsignedByte:
-		elementSize = 1;
-		break;
-	case fx::gltf::Accessor::ComponentType::Short:
-	case fx::gltf::Accessor::ComponentType::UnsignedShort:
-		elementSize = 2;
-		break;
-	case fx::gltf::Accessor::ComponentType::UnsignedInt:
-	case fx::gltf::Accessor::ComponentType::Float:
-		elementSize = 4;
-		break;
-	default:
-		return nullptr;
-	}
+	ArrayType* pRet = new ArrayType();
 
 	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
 	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
-
 	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
-	
 	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
-
 	size_t totalSize = itemSize * elementSize * accessor.count;
 	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
 	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
 
-	osg::ref_ptr<osg::Vec4dArray> arr = new osg::Vec4dArray();
 	for (size_t ii = 0; ii < accessor.count; ++ii)
 	{
-		osg::Vec4d	vec(0, 0, 0, 1);
 		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
+
+		ItemType	item;
 		for (size_t jj = 0; jj < itemSize; ++jj)
 		{
-			const uint8_t* pCurElement = pCurItem + jj * elementSize;
-			
-			switch (accessor.componentType)
-			{
-			case fx::gltf::Accessor::ComponentType::Byte:
-			{
-				int8_t nVal = *((int8_t*)(pCurElement));
-				vec[jj] = double(nVal);
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::UnsignedByte:
-			{
-				uint8_t nVal = *((uint8_t*)(pCurElement));
-				vec[jj] = double(nVal);
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::Short:
-			{
-				int16_t nVal = *((int16_t*)(pCurElement));
-				vec[jj] = double(nVal);
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::UnsignedShort:
-			{
-				uint16_t nVal = *((uint16_t*)(pCurElement));
-				vec[jj] = double(nVal);
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::UnsignedInt:
-			{
-				uint32_t nVal = *((uint32_t*)(pCurElement));
-				vec[jj] = double(nVal);
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::Float:
-			{
-				float nVal = *((float*)(pCurElement));
-				vec[jj] = double(nVal);
-				break;
-			}
-			default:
-				return nullptr;
-			}
-
-
+			const uint8_t* pCurElement = pCurItem + elementSize * jj;
+			item[jj] = *((ElementType*)(pCurElement));
 		}
-		arr->push_back(vec);
+		pRet->push_back(item);
 	}
-	assert(accessor.count == arr->size());
-	return arr;
+
+	return pRet;
 }
 
-std::vector<double> BaseObject::GetNumArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
+osg::ref_ptr<osg::Array> BaseObject::GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
 {
-	size_t itemSize = 0;
 	switch (accessor.type)
 	{
 	case fx::gltf::Accessor::Type::Scalar:
-		itemSize = 1;
-		break;
-	default:
-		LOG(ERROR) << "GetNumArray only support Scalar";
-		return std::vector<double>();
-	}
-
-	size_t	elementSize = 0;
-	switch (accessor.componentType)
 	{
-	case fx::gltf::Accessor::ComponentType::Byte:
-	case fx::gltf::Accessor::ComponentType::UnsignedByte:
-		elementSize = 1;
-		break;
-	case fx::gltf::Accessor::ComponentType::Short:
-	case fx::gltf::Accessor::ComponentType::UnsignedShort:
-		elementSize = 2;
-		break;
-	case fx::gltf::Accessor::ComponentType::UnsignedInt:
-	case fx::gltf::Accessor::ComponentType::Float:
-		elementSize = 4;
-		break;
-	default:
-		return std::vector<double>();
-	}
-
-	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
-	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
-
-	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
-
-	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
-
-	size_t totalSize = itemSize * elementSize * accessor.count;
-	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
-	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
-
-	std::vector<double>	arr;
-	for (size_t ii = 0; ii < accessor.count; ++ii)
-	{
-		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
-		for (size_t jj = 0; jj < itemSize; ++jj)
+		switch (accessor.componentType)
 		{
-			const uint8_t* pCurElement = pCurItem + jj * elementSize;
-
-			switch (accessor.componentType)
-			{
-			case fx::gltf::Accessor::ComponentType::Byte:
-			{
-				int8_t nVal = *((int8_t*)(pCurElement));
-				arr.push_back(double(nVal));
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::UnsignedByte:
-			{
-				uint8_t nVal = *((uint8_t*)(pCurElement));
-				arr.push_back(double(nVal));
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::Short:
-			{
-				int16_t nVal = *((int16_t*)(pCurElement));
-				arr.push_back(double(nVal));
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::UnsignedShort:
-			{
-				uint16_t nVal = *((uint16_t*)(pCurElement));
-				arr.push_back(double(nVal));
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::UnsignedInt:
-			{
-				uint32_t nVal = *((uint32_t*)(pCurElement));
-				arr.push_back(double(nVal));
-				break;
-			}
-			case fx::gltf::Accessor::ComponentType::Float:
-			{
-				float nVal = *((float*)(pCurElement));
-				arr.push_back(double(nVal));
-				break;
-			}
-			}
+		case fx::gltf::Accessor::ComponentType::Byte:
+			return _GetOSGArray<osg::ByteArray, int8_t, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedByte:
+			return _GetOSGArray<osg::UByteArray, uint8_t, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Short:
+			return _GetOSGArray<osg::ShortArray, short, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedShort:
+			return _GetOSGArray<osg::UShortArray, unsigned short, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedInt:
+			return _GetOSGArray<osg::UIntArray, unsigned int, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Float:
+			return _GetOSGArray<osg::FloatArray, float, 1>(gltfObject, accessor);
+		default:
+			return nullptr;
 		}
+		break;
 	}
-	return arr;
+	case fx::gltf::Accessor::Type::Vec2:
+	{
+		switch (accessor.componentType)
+		{
+		case fx::gltf::Accessor::ComponentType::Byte:
+			return _GetOSGVecArray<osg::Vec2bArray, osg::Vec2b, int8_t, 2, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedByte:
+			return _GetOSGVecArray<osg::Vec2ubArray, osg::Vec2ub, uint8_t, 2, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Short:
+			return _GetOSGVecArray<osg::Vec2sArray, osg::Vec2s, short, 2, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedShort:
+			return _GetOSGVecArray<osg::Vec2usArray, osg::Vec2us, unsigned short, 2, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedInt:
+			return _GetOSGVecArray<osg::Vec2uiArray, osg::Vec2ui, unsigned int, 2, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Float:
+			return _GetOSGVecArray<osg::Vec2Array, osg::Vec2, float, 2, 1>(gltfObject, accessor);
+		default:
+			return nullptr;
+		}
+		break;
+	}
+	case fx::gltf::Accessor::Type::Vec3:
+	{
+		switch (accessor.componentType)
+		{
+		case fx::gltf::Accessor::ComponentType::Byte:
+			return _GetOSGVecArray<osg::Vec3bArray, osg::Vec3b, int8_t, 3, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedByte:
+			return _GetOSGVecArray<osg::Vec3ubArray, osg::Vec3ub, uint8_t, 3, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Short:
+			return _GetOSGVecArray<osg::Vec3sArray, osg::Vec3s, short, 3, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedShort:
+			return _GetOSGVecArray<osg::Vec3usArray, osg::Vec3us, unsigned short, 3, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedInt:
+			return _GetOSGVecArray<osg::Vec3uiArray, osg::Vec3ui, unsigned int, 3, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Float:
+			return _GetOSGVecArray<osg::Vec3Array, osg::Vec3, float, 3, 1>(gltfObject, accessor);
+		default:
+			return nullptr;
+		}
+		break;
+	}
+	case fx::gltf::Accessor::Type::Vec4:
+	{
+		switch (accessor.componentType)
+		{
+		case fx::gltf::Accessor::ComponentType::Byte:
+			return _GetOSGVecArray<osg::Vec4bArray, osg::Vec4b, int8_t, 4, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedByte:
+			return _GetOSGVecArray<osg::Vec4ubArray, osg::Vec4ub, uint8_t, 4, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Short:
+			return _GetOSGVecArray<osg::Vec4sArray, osg::Vec4s, short, 4, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedShort:
+			return _GetOSGVecArray<osg::Vec4usArray, osg::Vec4us, unsigned short, 4, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::UnsignedInt:
+			return _GetOSGVecArray<osg::Vec4uiArray, osg::Vec4ui, unsigned int, 4, 1>(gltfObject, accessor);
+		case fx::gltf::Accessor::ComponentType::Float:
+			return _GetOSGVecArray<osg::Vec4Array, osg::Vec4, float, 4, 1>(gltfObject, accessor);
+		default:
+			return nullptr;
+		}
+		break;
+	}
+	default:
+		LOG(ERROR) << "GetVecArray only support Vec2,Vec3,Vec4";
+		return nullptr;
+	}
+
+
+
+	auto fnGetDouble = [&](const uint8_t* pCurElement) {
+		switch (accessor.componentType)
+		{
+		case fx::gltf::Accessor::ComponentType::Byte:
+		{
+			int8_t nVal = *((int8_t*)(pCurElement));
+			return double(nVal);
+		}
+		case fx::gltf::Accessor::ComponentType::UnsignedByte:
+		{
+			uint8_t nVal = *((uint8_t*)(pCurElement));
+			return double(nVal);
+		}
+		case fx::gltf::Accessor::ComponentType::Short:
+		{
+			int16_t nVal = *((int16_t*)(pCurElement));
+			return double(nVal);
+		}
+		case fx::gltf::Accessor::ComponentType::UnsignedShort:
+		{
+			uint16_t nVal = *((uint16_t*)(pCurElement));
+			return double(nVal);
+		}
+		case fx::gltf::Accessor::ComponentType::UnsignedInt:
+		{
+			uint32_t nVal = *((uint32_t*)(pCurElement));
+			return double(nVal);
+		}
+		case fx::gltf::Accessor::ComponentType::Float:
+		{
+			float nVal = *((float*)(pCurElement));
+			return double(nVal);
+		}
+		default:
+			return 0.0;
+		}
+	};
+
+
+}
+
+osg::ref_ptr<osg::DrawElements> BaseObject::GetDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
+{
+	osg::ref_ptr<osg::Array> pArr = GetOSGArray(gltfObject, gltfObject->accessors[primitive.indices]);
+	if (pArr == nullptr)
+	{
+		return nullptr;
+	}
+
+	auto fnGetOSGPrimitiveType = [&]()
+	{
+		switch (primitive.mode)
+		{
+		case fx::gltf::Primitive::Mode::Points:
+			return osg::PrimitiveSet::POINTS;
+		case fx::gltf::Primitive::Mode::Lines:
+			return osg::PrimitiveSet::LINES;
+		case fx::gltf::Primitive::Mode::LineLoop:
+			return osg::PrimitiveSet::LINE_LOOP;
+		case fx::gltf::Primitive::Mode::LineStrip:
+			return osg::PrimitiveSet::LINE_STRIP;
+		case fx::gltf::Primitive::Mode::Triangles:
+			return osg::PrimitiveSet::TRIANGLES;
+		case fx::gltf::Primitive::Mode::TriangleStrip:
+			return osg::PrimitiveSet::TRIANGLE_STRIP;
+		case fx::gltf::Primitive::Mode::TriangleFan:
+			return osg::PrimitiveSet::TRIANGLE_FAN;
+		default:
+			return osg::PrimitiveSet::POINTS;
+		}
+	};
+
+	switch (pArr->getType())
+	{
+	case osg::Array::Type::ByteArrayType:
+	case osg::Array::Type::UByteArrayType:
+		return new osg::DrawElementsUByte(fnGetOSGPrimitiveType(), pArr->getNumElements(), (const GLubyte*)(pArr->getDataPointer()));
+	case osg::Array::Type::ShortArrayType:
+	case osg::Array::Type::UShortArrayType:
+		return new osg::DrawElementsUShort(fnGetOSGPrimitiveType(), pArr->getNumElements(), (const GLushort*)(pArr->getDataPointer()));
+	case osg::Array::Type::UIntArrayType:
+	case osg::Array::Type::FloatArrayType:
+		return new osg::DrawElementsUInt(fnGetOSGPrimitiveType(), pArr->getNumElements(), (const GLuint*)(pArr->getDataPointer()));
+	default:
+		return nullptr;
+	}
 }
 
 void BaseObject::LoadTSRFromMatrix()
@@ -691,88 +710,67 @@ bool BaseObject::ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, cons
 
 osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
 {
-#pragma region LOAD_ATTRIBUTE
+	osg::ref_ptr<osg::DrawElements> ptrDrawElements = GetDrawElements(gltfObject, primitive);
+	if (ptrDrawElements == nullptr)
+	{
+		return nullptr;
+	}
+
+	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
+	ptrRet->addPrimitiveSet(ptrDrawElements);
+
 	for (const std::pair<std::string, uint32_t>& attribute : primitive.attributes)
 	{
+		if (!(gltfObject->accessors.size() > attribute.second&& attribute.second >= 0))
+		{
+			continue;
+		}
+
 		if (attribute.first == "POSITION")
 		{
-			m_vertex = GetVec4Array(gltfObject, gltfObject->accessors[attribute.second]);
+			osg::ref_ptr<osg::Array> pVertex = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (pVertex)
+			{
+				ptrRet->setVertexArray(pVertex);
+			}
 		}
 		else if (attribute.first == "NORMAL")
 		{
-			m_normal = GetVec4Array(gltfObject, gltfObject->accessors[attribute.second]);
+			osg::ref_ptr<osg::Array> pNormal = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (pNormal)
+			{
+				ptrRet->setNormalArray(pNormal);
+			}
 		}
 		else if (attribute.first == "TANGENT")
 		{
-			//m_tangentBuffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+			osg::ref_ptr<osg::Array> pTangent = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (pTangent)
+			{
+				// TODO
+			}
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{
-			//m_texCoord0Buffer = GetRawBufferInfo(gltfObject, gltfObject->accessors[attribute.second]);
+			osg::ref_ptr<osg::Array> pTexCoord0 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (pTexCoord0)
+			{
+				ptrRet->setTexCoordArray(0, pTexCoord0);
+			}
 		}
-	}
-#pragma endregion LOAD_ATTRIBUTE
-	m_indexl = GetNumArray(gltfObject, gltfObject->accessors[primitive.indices]);
-#pragma region ATTRIBUTE_TO_OSG_OBJECT
-	// TODO
-#pragma endregion ATTRIBUTE_TO_OSG_OBJECT
-
-	if (primitive.material >= 0)
-	{
-		assert(gltfObject->materials.size() > primitive.material&& primitive.material >= 0);
-		ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
-	}
-
-	auto fnGetOSGPrimitiveType = [&]()
-	{
-		switch (primitive.mode)
+		else if (attribute.first == "TEXCOORD_1")
 		{
-		case fx::gltf::Primitive::Mode::Points:
-			return osg::PrimitiveSet::POINTS;
-		case fx::gltf::Primitive::Mode::Lines:
-			return osg::PrimitiveSet::LINES;
-		case fx::gltf::Primitive::Mode::LineLoop:
-			return osg::PrimitiveSet::LINE_LOOP;
-		case fx::gltf::Primitive::Mode::LineStrip:
-			return osg::PrimitiveSet::LINE_STRIP;
-		case fx::gltf::Primitive::Mode::Triangles:
-			return osg::PrimitiveSet::TRIANGLES;
-		case fx::gltf::Primitive::Mode::TriangleStrip:
-			return osg::PrimitiveSet::TRIANGLE_STRIP;
-		case fx::gltf::Primitive::Mode::TriangleFan:
-			return osg::PrimitiveSet::TRIANGLE_FAN;
-		default:
-			return osg::PrimitiveSet::POINTS;
+			osg::ref_ptr<osg::Array> pTexCoord1 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (pTexCoord1)
+			{
+				ptrRet->setTexCoordArray(1, pTexCoord1);
+			}
 		}
-	};
-
-	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
-
-	auto ptrPrimitiveSet = new osg::DrawElementsUInt(fnGetOSGPrimitiveType());
-	for (auto index : m_indexl)
-	{
-		ptrPrimitiveSet->push_back(unsigned int(index));
 	}
 
-	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
-	ptrRet->setVertexArray(m_vertex);
-	ptrRet->setNormalArray(m_normal);
-
-	osg::Vec4dArray* pColor = new osg::Vec4dArray();
-	pColor->push_back(osg::Vec4(255, 0, 0, 255));
-
-	ptrRet->setColorArray(pColor, osg::Array::Binding::BIND_OVERALL);
-	if (m_texCoord0)
+	if (gltfObject->materials.size() > primitive.material&& primitive.material >= 0)
 	{
-		ptrRet->setTexCoordArray(0, m_texCoord0);
-	}
-	if (m_texCoord1)
-	{
-		ptrRet->setTexCoordArray(1, m_texCoord1);
-	}
-	if (m_texCoord2)
-	{
-		ptrRet->setTexCoordArray(2, m_texCoord2);
+		ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
 	}
 
 	return ptrRet;
@@ -785,12 +783,57 @@ bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::s
 
 bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material)
 {
+	if (material.pbrMetallicRoughness.empty())
+	{
+		return false;
+	}
 
-	return false;
+	osg::Texture2D* pTexture = new osg::Texture2D();
+
+	if (!material.pbrMetallicRoughness.baseColorTexture.empty())
+	{
+		int idx = material.pbrMetallicRoughness.baseColorTexture.index;
+		if (idx >= 0 && idx < gltfObject->textures.size())
+		{
+			const fx::gltf::Texture& bct = gltfObject->textures[idx];
+			int idxSampler = bct.sampler;
+			if (gltfObject->samplers.size() > idxSampler&& idxSampler >= 0)
+			{
+				const fx::gltf::Sampler& sampler = gltfObject->samplers[idxSampler];
+
+				if (m_mapWrapMode.find(sampler.wrapS) != m_mapWrapMode.end())
+				{
+					pTexture->setWrap(osg::Texture::WRAP_S, m_mapWrapMode[sampler.wrapS]);
+				}
+				if (m_mapWrapMode.find(sampler.wrapT) != m_mapWrapMode.end())
+				{
+					pTexture->setWrap(osg::Texture::WRAP_T, m_mapWrapMode[sampler.wrapT]);
+				}
+				if (m_mapMagFilter.find(sampler.magFilter) != m_mapMagFilter.end())
+				{
+					pTexture->setFilter(osg::Texture::MAG_FILTER, m_mapMagFilter[sampler.magFilter]);
+				}
+				if (m_mapMinFilter.find(sampler.minFilter) != m_mapMinFilter.end())
+				{
+					pTexture->setFilter(osg::Texture::MIN_FILTER, m_mapMinFilter[sampler.minFilter]);
+				}
+			}
+
+			int idxImage = bct.source;
+			if (gltfObject->images.size() > idxImage&& idxImage >= 0)
+			{
+				const fx::gltf::Image& img = gltfObject->images[idxImage];
+
+				osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
+			}
+		}
+
+	}
 }
 
 bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material)
 {
+	Material.normalTexture.empty();
 	return false;
 }
 
@@ -813,48 +856,4 @@ bool BaseObject::ParseParams(const nlohmann::json::value_type& params)
 	assert(params.size() == m_formulas.size());
 
 	return true;
-}
-
-uint32_t BaseObject::GetElementSize(const fx::gltf::Accessor& accessor)
-{
-	uint32_t elementSize = 0;
-	switch (accessor.componentType)
-	{
-	case fx::gltf::Accessor::ComponentType::Byte:
-	case fx::gltf::Accessor::ComponentType::UnsignedByte:
-		elementSize = 1;
-		break;
-	case fx::gltf::Accessor::ComponentType::Short:
-	case fx::gltf::Accessor::ComponentType::UnsignedShort:
-		elementSize = 2;
-		break;
-	case fx::gltf::Accessor::ComponentType::UnsignedInt:
-	case fx::gltf::Accessor::ComponentType::Float:
-		elementSize = 4;
-		break;
-	default:
-		break;
-	}
-
-	switch (accessor.type)
-	{
-	case fx::gltf::Accessor::Type::Scalar:
-		return elementSize;
-	case fx::gltf::Accessor::Type::Vec2:
-		return elementSize * 2;
-	case fx::gltf::Accessor::Type::Vec3:
-		return elementSize * 3;
-	case fx::gltf::Accessor::Type::Vec4:
-		return elementSize * 4;
-	case fx::gltf::Accessor::Type::Mat2:
-		return elementSize * 4;
-	case fx::gltf::Accessor::Type::Mat3:
-		return elementSize * 9;
-	case fx::gltf::Accessor::Type::Mat4:
-		return elementSize * 16;
-	default:
-		break;
-	}
-
-	return 0;
 }

@@ -10,16 +10,6 @@
 
 #include <fx/gltf.h>
 
-struct RawBufferInfo 
-{
-	const fx::gltf::Accessor* accessor = nullptr;
-	const uint8_t* data = nullptr;
-	uint32_t dataStride = 0;
-	uint32_t totalSize = 0;
-	
-	bool Valid() const noexcept { return data != nullptr; }
-};
-
 class BaseObject : public osg::MatrixTransform
 {
 public:
@@ -32,7 +22,7 @@ public:
 	osg::ref_ptr<BaseObject> GetParent() { return m_parent; }
 
 	const std::map<std::wstring, std::wstring>& GetFormulas() { return m_formulas; }
-	
+
 	bool ReInitParser();
 	bool SetParentFormulars();
 	bool UpdateFormulas();
@@ -49,16 +39,18 @@ public:
 	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject);
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
-	static std::shared_ptr<RawBufferInfo> GetRawBufferInfo(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+	static osg::ref_ptr<osg::Array> GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
 
-	static osg::ref_ptr<osg::Vec4dArray> GetVec4Array(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-	static std::vector<double>	GetNumArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-	
-	static uint32_t GetElementSize(const fx::gltf::Accessor& accessor);
+	template<class ArrayType, class ItemType, class ElementType, size_t itemSize, size_t elementSize>
+	static osg::ref_ptr<osg::Array> _GetOSGVecArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+	template<class ArrayType, class ItemType, size_t itemSize>
+	static osg::ref_ptr<osg::Array> _GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+
+	osg::ref_ptr<osg::DrawElements> GetDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 
 	void	LoadTSRFromMatrix();
 	void	InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject);
-	void	InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject,const fx::gltf::Node& curNode);
+	void	InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& curNode);
 	int		GetClassType(const fx::gltf::Node& node);
 
 	void	RetsetMatrixFromTSR();
@@ -102,10 +94,32 @@ private:
 	osg::ref_ptr<BaseObject>	m_parent;
 	std::shared_ptr<mup::ParserX>	m_parser;
 
-	osg::ref_ptr<osg::Vec4dArray> m_vertex;
-	osg::ref_ptr<osg::Vec4dArray> m_normal;
-	std::vector<double>				m_indexl;
-	osg::ref_ptr<osg::Vec4dArray> m_texCoord0;
-	osg::ref_ptr<osg::Vec4dArray> m_texCoord1;
-	osg::ref_ptr<osg::Vec4dArray> m_texCoord2;
+	osg::ref_ptr<osg::Array>	m_vertex;
+	osg::ref_ptr<osg::Array>	m_normal;
+	osg::ref_ptr<osg::UShortArray>	m_indexl;
+	osg::ref_ptr<osg::Array>	m_texCoord0;
+	osg::ref_ptr<osg::Array>	m_texCoord1;
+
+
+	std::map<fx::gltf::Sampler::WrappingMode, osg::Texture::WrapMode>	m_mapWrapMode{
+		{fx::gltf::Sampler::WrappingMode::ClampToEdge, osg::Texture::WrapMode::CLAMP_TO_EDGE},
+		{fx::gltf::Sampler::WrappingMode::MirroredRepeat, osg::Texture::WrapMode::MIRROR},
+		{fx::gltf::Sampler::WrappingMode::Repeat, osg::Texture::WrapMode::REPEAT},
+	};
+
+	std::map<fx::gltf::Sampler::MagFilter, osg::Texture::FilterMode>	m_mapMagFilter{
+		//{fx::gltf::Sampler::MagFilter::None, osg::Texture::FilterMode::None},
+		{fx::gltf::Sampler::MagFilter::Nearest, osg::Texture::FilterMode::NEAREST},
+		{fx::gltf::Sampler::MagFilter::Linear, osg::Texture::FilterMode::LINEAR},
+	};
+
+	std::map<fx::gltf::Sampler::MinFilter, osg::Texture::FilterMode>	m_mapMinFilter{
+		//{fx::gltf::Sampler::MinFilter::None, osg::Texture::FilterMode::None},
+		{fx::gltf::Sampler::MinFilter::Nearest, osg::Texture::FilterMode::NEAREST},
+		{fx::gltf::Sampler::MinFilter::Linear, osg::Texture::FilterMode::LINEAR},
+		{fx::gltf::Sampler::MinFilter::NearestMipMapNearest, osg::Texture::FilterMode::NEAREST_MIPMAP_NEAREST},
+		{fx::gltf::Sampler::MinFilter::LinearMipMapNearest, osg::Texture::FilterMode::LINEAR_MIPMAP_NEAREST},
+		{fx::gltf::Sampler::MinFilter::NearestMipMapLinear, osg::Texture::FilterMode::NEAREST_MIPMAP_LINEAR},
+		{fx::gltf::Sampler::MinFilter::LinearMipMapLinear, osg::Texture::FilterMode::LINEAR_MIPMAP_LINEAR},
+	};
 };
