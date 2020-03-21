@@ -40,11 +40,10 @@ public:
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
 	static osg::ref_ptr<osg::Array> GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-
-	template<class ArrayType, class ItemType, class ElementType, size_t itemSize, size_t elementSize>
-	static osg::ref_ptr<osg::Array> _GetOSGVecArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-	template<class ArrayType, class ItemType, size_t itemSize>
-	static osg::ref_ptr<osg::Array> _GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+	template<class ArrayType>
+	static osg::ref_ptr<osg::Array> GetOSGVecArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
+	template<class ArrayType>
+	static osg::ref_ptr<osg::Array> GetOSGArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
 
 	osg::ref_ptr<osg::DrawElements> GetDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 
