@@ -2,7 +2,7 @@
 #include "UtilsExport.h"
 #include <string>
 
-class IParamsConverter
+class UTILS_API IParamsConverter
 {
 public:
 	static bool Decode(const std::string& src, std::string& target);

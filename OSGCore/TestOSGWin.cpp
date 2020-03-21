@@ -15,6 +15,9 @@ void TestOSGWin::Run(const std::string& path)
 
 	configureShaders(scene->getOrCreateStateSet());
 
+	osg::Camera* cam = viewer.getCamera();
+	cam->setProjectionMatrix(osg::Matrix::perspective(30., (double)800 / (double)600, 1., 100.));
+
 	osgViewer::Viewer::Windows windows;
 	viewer.getWindows(windows);
 	for (osgViewer::Viewer::Windows::iterator itr = windows.begin();
@@ -35,7 +38,7 @@ void TestOSGWin::Run(const std::string& path)
 void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 {
 	const std::string vertexSource =
-		"#version 130 \n"
+		"#version 330 \n"
 		" \n"
 		"uniform mat4 osg_ModelViewProjectionMatrix; \n"
 		"uniform mat3 osg_NormalMatrix; \n"
@@ -56,7 +59,7 @@ void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, vertexSource);
 
 	const std::string fragmentSource =
-		"#version 130 \n"
+		"#version 330 \n"
 		" \n"
 		"in vec4 color; \n"
 		"out vec4 fragData; \n"

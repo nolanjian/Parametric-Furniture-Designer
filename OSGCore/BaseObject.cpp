@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "BaseObject.h"
 #include "../Utils/IDGenerater.h"
+#include "../Utils/IParamsConverter.h"
 #include "../easyloggingpp/easylogging++.h"
 #include "ObjectFactory.h"
 
@@ -630,24 +631,24 @@ bool BaseObject::ImportParams(const fx::gltf::Node& node)
 	}
 
 	const nlohmann::json::value_type& params = node.extensionsAndExtras["params"];
-	if (!params.is_array())
+	if (params.is_string())
 	{
-
-		LOG(ERROR) << "params is not array";
-		// TODO LOG
-		return false;
-	}
-	for (const auto& item : params)
-	{
-		if (item.is_object() && item.contains("name") && item.contains("formula"))
+		std::string	str = params.get<std::string>();
+		std::string decodeStr;
+		if (IParamsConverter::Decode(str, decodeStr))
 		{
-			m_formulas[L"name"] = item["name"].get<std::wstring>();
-			m_formulas[L"formula"] = item["formula"].get<std::wstring>();
+			nlohmann::json	paramsJson;
+			std::stringstream	ss;
+			ss << decodeStr;
+			paramsJson << ss;
+			return ParseParams(paramsJson);
+		}
+		else
+		{
+			return false;
 		}
 	}
-	assert(params.size() == m_formulas.size());
-
-	return true;
+	return ParseParams(params);
 }
 
 bool BaseObject::ExportParams(fx::gltf::Node& node)
@@ -779,6 +780,27 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive)
 {
 	return false;
+}
+
+bool BaseObject::ParseParams(const nlohmann::json::value_type& params)
+{
+	if (!params.is_array())
+	{
+		LOG(ERROR) << "params is not array";
+		// TODO LOG
+		return false;
+	}
+	for (const auto& item : params)
+	{
+		if (item.is_object() && item.contains("name") && item.contains("formula"))
+		{
+			m_formulas[L"name"] = item["name"].get<std::wstring>();
+			m_formulas[L"formula"] = item["formula"].get<std::wstring>();
+		}
+	}
+	assert(params.size() == m_formulas.size());
+
+	return true;
 }
 
 uint32_t BaseObject::GetElementSize(const fx::gltf::Accessor& accessor)

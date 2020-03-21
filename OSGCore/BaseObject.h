@@ -81,6 +81,8 @@ protected:
 	osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	bool ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive);
 
+	bool ParseParams(const nlohmann::json::value_type& params);
+
 	osg::Vec4	vRotation;
 	osg::Vec3	vScale;
 	osg::Vec3	vTranslation;
