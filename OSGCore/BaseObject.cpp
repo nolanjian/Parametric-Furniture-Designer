@@ -546,19 +546,33 @@ void BaseObject::LoadTSRFromMatrix()
 	vTranslation = mat.getTrans();
 }
 
+void BaseObject::LoadAsset(const fx::gltf::Asset& asset)
+{
+	// TODO
+	// Load order info and something else
+}
+
 void BaseObject::InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject)
 {
+	LoadAsset(gltfObject->asset);
 	// Scene level
 	if (gltfObject.get() && gltfObject->scenes.size() > 0 && (gltfObject->scenes[0]).nodes.size() > 0)
 	{
 		const fx::gltf::Node& curNode = gltfObject->nodes[gltfObject->scenes[0].nodes[0]];
 		InitFromNode(gltfObject, curNode);
 	}
+
+	// TODO if necessary
+	//std::vector<std::string> extensionsUsed{};
+	//std::vector<std::string> extensionsRequired{};
 }
 
 void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& curNode)
 {
 	m_name = curNode.name;
+
+	getOrCreateStateSet();
+
 #pragma region LOAD_MATRIX
 	if (ImportMatrix(curNode))
 	{
@@ -576,6 +590,11 @@ void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, co
 
 	ImportParams(curNode.extensionsAndExtras);
 	ImportMesh(gltfObject, curNode);
+
+	// TODO
+	//int32_t camera{ -1 };
+	//int32_t skin{ -1 };
+	//std::vector<float> weights{};
 
 #pragma region UPDATE_CHILDREN
 	for (auto childID : curNode.children)
@@ -782,7 +801,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 			m_normal = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
 			if (m_normal)
 			{
-				ptrRet->setNormalArray(m_normal);
+				ptrRet->setNormalArray(m_normal, osg::Array::Binding::BIND_PER_VERTEX);
 			}
 		}
 		else if (attribute.first == "TANGENT")
@@ -798,7 +817,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 			m_texCoord0 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
 			if (m_texCoord0)
 			{
-				ptrRet->setTexCoordArray(0, m_texCoord0);
+				ptrRet->setTexCoordArray(0, m_texCoord0, osg::Array::Binding::BIND_PER_VERTEX);
 			}
 		}
 		else if (attribute.first == "TEXCOORD_1")
@@ -806,7 +825,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 			m_texCoord1 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
 			if (m_texCoord1)
 			{
-				ptrRet->setTexCoordArray(1, m_texCoord1);
+				ptrRet->setTexCoordArray(1, m_texCoord1, osg::Array::Binding::BIND_PER_VERTEX);
 			}
 		}
 		else if (attribute.first == "JOINTS_0")
@@ -825,8 +844,11 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 
 	if (gltfObject->materials.size() > primitive.material&& primitive.material >= 0)
 	{
-		ImportMaterial(gltfObject, gltfObject->materials[primitive.material], ptrRet);
+		ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
 	}
+
+	// TODO 
+	// std::vector<Attributes> targets{};
 
 	return ptrRet;
 }
@@ -836,85 +858,27 @@ bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::s
 	return false;
 }
 
-bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material, osg::ref_ptr<osg::Geometry> ptrGeometry)
+bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material)
 {
-	if (material.pbrMetallicRoughness.empty())
-	{
-		return false;
-	}
+	bool bRet = 
+		LoadPBRTexture(gltfObject, material.pbrMetallicRoughness) ||
+		LoadNormalTexture(gltfObject, material.normalTexture) ||
+		LoadOcclusionTexture(gltfObject, material.occlusionTexture) ||
+		LoadImageTexture(gltfObject, material.emissiveTexture);
 
-	osg::Texture2D* pTexture = new osg::Texture2D();
+	// TODO
+	//float alphaCutoff{ defaults::MaterialAlphaCutoff };
+	//AlphaMode alphaMode{ AlphaMode::Opaque };
 
-	if (!material.pbrMetallicRoughness.baseColorTexture.empty())
-	{
-		int idx = material.pbrMetallicRoughness.baseColorTexture.index;
-		if (idx >= 0 && idx < gltfObject->textures.size())
-		{
-			const fx::gltf::Texture& bct = gltfObject->textures[idx];
-			int idxSampler = bct.sampler;
-			if (gltfObject->samplers.size() > idxSampler&& idxSampler >= 0)
-			{
-				const fx::gltf::Sampler& sampler = gltfObject->samplers[idxSampler];
+	//bool doubleSided{ defaults::MaterialDoubleSided };
 
-				if (m_mapWrapMode.find(sampler.wrapS) != m_mapWrapMode.end())
-				{
-					pTexture->setWrap(osg::Texture::WRAP_S, m_mapWrapMode[sampler.wrapS]);
-				}
-				if (m_mapWrapMode.find(sampler.wrapT) != m_mapWrapMode.end())
-				{
-					pTexture->setWrap(osg::Texture::WRAP_T, m_mapWrapMode[sampler.wrapT]);
-				}
-				if (m_mapMagFilter.find(sampler.magFilter) != m_mapMagFilter.end())
-				{
-					pTexture->setFilter(osg::Texture::MAG_FILTER, m_mapMagFilter[sampler.magFilter]);
-				}
-				if (m_mapMinFilter.find(sampler.minFilter) != m_mapMinFilter.end())
-				{
-					pTexture->setFilter(osg::Texture::MIN_FILTER, m_mapMinFilter[sampler.minFilter]);
-				}
-			}
+	//Texture emissiveTexture;
+	//std::array<float, 3> emissiveFactor = { defaults::NullVec3 };
 
-			int idxImage = bct.source;
-			if (gltfObject->images.size() > idxImage&& idxImage >= 0)
-			{
-				try
-				{
-					const fx::gltf::Image& img = gltfObject->images[idxImage];
-					std::vector<uint8_t>	imgData;
-					img.MaterializeData(imgData);
-					
-					int width, height, nrChannels;
-					unsigned char* imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
-
-					osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
-					osgIMG->setImage(width, height, 1, nrChannels, nrChannels, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_NEW_DELETE);
-
-					osg::StateSet* stateSet = getOrCreateStateSet();
-					stateSet->setTextureAttributeAndModes(material.pbrMetallicRoughness.baseColorTexture.texCoord, pTexture);
-				}
-				catch (const std::exception& e)
-				{
-					LOG(ERROR) << e.what();
-				}
-			}
-		}
-
-	}
-	else
-	{
-		const std::array<float, 4>& bcf = material.pbrMetallicRoughness.baseColorFactor;
-		osg::ref_ptr<osg::FloatArray> fArr = new osg::FloatArray();
-		fArr->push_back(bcf[0]);
-		fArr->push_back(bcf[1]);
-		fArr->push_back(bcf[2]);
-		fArr->push_back(bcf[3]);
-		ptrGeometry->setColorArray(fArr, osg::Array::Binding::BIND_PER_VERTEX);
-	}
-
-	return true;
+	return bRet;
 }
 
-bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material, osg::ref_ptr<osg::Geometry> ptrGeometry)
+bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material)
 {
 	Material.normalTexture.empty();
 	return false;
@@ -939,4 +903,132 @@ bool BaseObject::ParseParams(const nlohmann::json::value_type& params)
 	assert(params.size() == m_formulas.size());
 
 	return true;
+}
+
+bool BaseObject::LoadColorTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const std::array<float, 4>& baseColorFactor)
+{
+	if (fx::gltf::defaults::IdentityVec4 == baseColorFactor)
+	{
+		return false;
+	}
+
+	osg::ref_ptr<osg::Image> image = new osg::Image;
+	image->allocateImage(1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE);
+	image->setColor(osg::Vec4(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]), 0, 0, 0);
+	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D(image);
+	getOrCreateStateSet()->setTextureAttributeAndModes(0, texture);
+
+	return true;
+}
+
+bool BaseObject::LoadImageTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::Texture& texture)
+{
+	if (texture.empty())
+	{
+		return false;
+	}
+
+	osg::ref_ptr<osg::Texture2D> pTexture = new osg::Texture2D();
+
+	const fx::gltf::Texture& bct = gltfObject->textures[texture.index];
+	int idxSampler = bct.sampler;
+	if (gltfObject->samplers.size() > idxSampler&& idxSampler >= 0)
+	{
+		const fx::gltf::Sampler& sampler = gltfObject->samplers[idxSampler];
+
+		if (m_mapWrapMode.find(sampler.wrapS) != m_mapWrapMode.end())
+		{
+			pTexture->setWrap(osg::Texture::WRAP_S, m_mapWrapMode[sampler.wrapS]);
+		}
+		if (m_mapWrapMode.find(sampler.wrapT) != m_mapWrapMode.end())
+		{
+			pTexture->setWrap(osg::Texture::WRAP_T, m_mapWrapMode[sampler.wrapT]);
+		}
+		if (m_mapMagFilter.find(sampler.magFilter) != m_mapMagFilter.end())
+		{
+			pTexture->setFilter(osg::Texture::MAG_FILTER, m_mapMagFilter[sampler.magFilter]);
+		}
+		if (m_mapMinFilter.find(sampler.minFilter) != m_mapMinFilter.end())
+		{
+			pTexture->setFilter(osg::Texture::MIN_FILTER, m_mapMinFilter[sampler.minFilter]);
+		}
+	}
+
+	int idxImage = bct.source;
+	if (gltfObject->images.size() > idxImage&& idxImage >= 0)
+	{
+		try
+		{
+			const fx::gltf::Image& img = gltfObject->images[idxImage];
+			std::vector<uint8_t>	imgData;
+			img.MaterializeData(imgData);
+
+			int width, height, nrChannels;
+			unsigned char* imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
+
+			osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
+			osgIMG->setImage(width, height, 1, nrChannels, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_NEW_DELETE, 1);
+			if (!osgIMG->valid())
+			{
+				return false;
+			}
+			getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
+		}
+		catch (const std::exception & e)
+		{
+			LOG(ERROR) << e.what();
+			return false;
+		}
+	}
+
+	return true;
+}
+
+bool BaseObject::LoadPBRTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial)
+{
+	if (pbrMaterial.empty())
+	{
+		return false;
+	}
+
+	bool bRet = 
+		LoadColorTexture(gltfObject, pbrMaterial.baseColorFactor) ||
+		LoadImageTexture(gltfObject, pbrMaterial.baseColorTexture) ||
+		LoadImageTexture(gltfObject, pbrMaterial.metallicRoughnessTexture);
+
+	// TODO
+	//float roughnessFactor{ defaults::IdentityScalar };
+	//float metallicFactor{ defaults::IdentityScalar };
+
+	return bRet;
+}
+
+bool BaseObject::LoadNormalTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::NormalTexture& normalTexture)
+{
+	auto fn = [&]()
+	{
+		return false;
+	};
+
+	bool bRet = LoadImageTexture(gltfObject, normalTexture) && fn();
+
+	// TODO
+	// float scale{ defaults::IdentityScalar };
+
+	return bRet;
+}
+
+bool BaseObject::LoadOcclusionTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::OcclusionTexture& occlusionTexture)
+{
+	auto fn = [&]()
+	{
+		return false;
+	};
+
+	bool bRet = LoadImageTexture(gltfObject, occlusionTexture) && fn();
+
+	// TODO
+	// float strength{ defaults::IdentityScalar };
+
+	return bRet;
 }
