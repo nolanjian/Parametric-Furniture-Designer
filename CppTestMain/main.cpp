@@ -5,7 +5,9 @@
 int main()
 {
 	OSGCore::InterfaceOSG* ptr = new OSGCore::InterfaceOSG();
-	ptr->OpenSceneInNewWindow("D:\\Library\\glTF-Sample-Models\\2.0\\BoxTextured\\glTF-Embedded\\BoxTextured.gltf");
+	std::string strPath("D:\\glTF-Sample-Models-master\\2.0\\Box\\glTF-Embedded\\Box.gltf");
+	
+	ptr->OpenSceneInNewWindow(strPath);
 	delete ptr;
 	return 0;
 }
