@@ -45,7 +45,9 @@ public:
 	template<class ArrayType>
 	static osg::ref_ptr<osg::Array> GetOSGArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
 
-	osg::ref_ptr<osg::DrawElements> GetDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
+
+	osg::ref_ptr<osg::PrimitiveSet> GetIndicesDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
+	osg::ref_ptr<osg::PrimitiveSet> GetPrimitiveSet(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 
 	void	LoadTSRFromMatrix();
 	void	InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject);
@@ -71,8 +73,8 @@ protected:
 	bool ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
 	osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	bool ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive);
-	bool ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& Material);
-	bool ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material);
+	bool ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& Material, osg::ref_ptr<osg::Geometry> ptrGeometry);
+	bool ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material, osg::ref_ptr<osg::Geometry> ptrGeometry);
 	bool ParseParams(const nlohmann::json::value_type& params);
 
 	osg::Vec4	vRotation;
@@ -95,7 +97,7 @@ private:
 
 	osg::ref_ptr<osg::Array>	m_vertex;
 	osg::ref_ptr<osg::Array>	m_normal;
-	osg::ref_ptr<osg::UShortArray>	m_indexl;
+	osg::ref_ptr<osg::Array>	m_indexl;
 	osg::ref_ptr<osg::Array>	m_texCoord0;
 	osg::ref_ptr<osg::Array>	m_texCoord1;
 
@@ -120,5 +122,15 @@ private:
 		{fx::gltf::Sampler::MinFilter::LinearMipMapNearest, osg::Texture::FilterMode::LINEAR_MIPMAP_NEAREST},
 		{fx::gltf::Sampler::MinFilter::NearestMipMapLinear, osg::Texture::FilterMode::NEAREST_MIPMAP_LINEAR},
 		{fx::gltf::Sampler::MinFilter::LinearMipMapLinear, osg::Texture::FilterMode::LINEAR_MIPMAP_LINEAR},
+	};
+
+	std::map<fx::gltf::Primitive::Mode, osg::PrimitiveSet::Mode>	m_mapPrimitives = {
+		{fx::gltf::Primitive::Mode::Points, osg::PrimitiveSet::POINTS},
+		{fx::gltf::Primitive::Mode::Lines, osg::PrimitiveSet::LINES},
+		{fx::gltf::Primitive::Mode::LineLoop, osg::PrimitiveSet::LINE_LOOP},
+		{fx::gltf::Primitive::Mode::LineStrip, osg::PrimitiveSet::LINE_STRIP},
+		{fx::gltf::Primitive::Mode::Triangles, osg::PrimitiveSet::TRIANGLES},
+		{fx::gltf::Primitive::Mode::TriangleStrip, osg::PrimitiveSet::TRIANGLE_STRIP},
+		{fx::gltf::Primitive::Mode::TriangleFan, osg::PrimitiveSet::TRIANGLE_FAN},
 	};
 };

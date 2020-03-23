@@ -9,11 +9,12 @@ void TestOSGWin::Run(const std::string& path)
 	viewer.setUpViewInWindow(100, 100, 800, 600);
 
 	auto scene = BaseObject::LoadSceneFromJsonFile(path);
-
-	osgUtil::Optimizer optimizer;
-	optimizer.optimize(scene.get(), osgUtil::Optimizer::ALL_OPTIMIZATIONS | osgUtil::Optimizer::TESSELLATE_GEOMETRY);
-
-	configureShaders(scene->getOrCreateStateSet());
+	if (scene)
+	{
+		osgUtil::Optimizer optimizer;
+		optimizer.optimize(scene.get(), osgUtil::Optimizer::ALL_OPTIMIZATIONS | osgUtil::Optimizer::TESSELLATE_GEOMETRY);
+		configureShaders(scene->getOrCreateStateSet());
+	}
 
 	osg::Camera* cam = viewer.getCamera();
 	cam->setProjectionMatrix(osg::Matrix::perspective(30., (double)800 / (double)600, 1., 100.));

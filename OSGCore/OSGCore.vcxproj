@@ -109,6 +109,7 @@
     <ClInclude Include="ParametricComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="STLIncluding.h" />
     <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>

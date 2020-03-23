@@ -66,6 +66,7 @@
     </ClInclude>
     <ClInclude Include="OSGIncluding.h" />
     <ClInclude Include="STLIncluding.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">

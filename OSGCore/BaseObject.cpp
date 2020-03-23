@@ -5,6 +5,9 @@
 #include "../easyloggingpp/easylogging++.h"
 #include "ObjectFactory.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 BaseObject::BaseObject()
 	:osg::MatrixTransform()
 {
@@ -229,7 +232,15 @@ osg::ref_ptr<osg::Group> BaseObject::LoadSceneFromJsonFile(const std::string& st
 {
 	try
 	{
-		std::shared_ptr<fx::gltf::Document>	ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(strPath));
+		std::shared_ptr<fx::gltf::Document>	ptrDOC;
+		if (strPath.find(".glb") == std::string::npos)
+		{
+			ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(strPath));
+		}
+		else
+		{
+			ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromBinary(strPath));
+		}
 		return GLTF2OSG(ptrDOC);
 	}
 	catch (const std::exception & e)
@@ -264,27 +275,42 @@ std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject
 template<typename ArrayType>
 osg::ref_ptr<osg::Array> BaseObject::GetOSGArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
 {
-	ArrayType* pRet = new ArrayType();
+	osg::ref_ptr<ArrayType>	pRet = new ArrayType();
 
 	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
 	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
 	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
 	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+	if (!pData)
+	{
+		return nullptr;
+	}
 
 	size_t itemSize = sizeof(typename ArrayType::ElementDataType);
-
 	size_t totalSize = itemSize * accessor.count;
+
 	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
+	if (!pBuf)
+	{
+		return nullptr;
+	}
+	
 	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
 
 	for (size_t ii = 0; ii < accessor.count; ++ii)
 	{
 		const uint8_t* pCurItem = pBuf + itemSize * ii;
+		if (!pCurItem)
+		{
+			continue;
+		}
 
 		typename ArrayType::ElementDataType	item;
 		item = *((typename ArrayType::ElementDataType*)(pCurItem));
 		pRet->push_back(item);
 	}
+
+	free(pBuf);
 
 	return pRet;
 }
@@ -292,32 +318,50 @@ osg::ref_ptr<osg::Array> BaseObject::GetOSGArrayImp(std::shared_ptr<fx::gltf::Do
 template<typename ArrayType>
 osg::ref_ptr<osg::Array> BaseObject::GetOSGVecArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
 {
-	ArrayType* pRet = new ArrayType();
+	osg::ref_ptr<ArrayType> pRet = new ArrayType();
 
 	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
 	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
 	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
 	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+	if (!pData)
+	{
+		return nullptr;
+	}
 
 	size_t itemSize = ArrayType::ElementDataType::num_components;
 	size_t elementSize = sizeof(ArrayType::ElementDataType::value_type);
 
 	size_t totalSize = itemSize * elementSize * accessor.count;
 	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
+	if (!pBuf)
+	{
+		return nullptr;
+	}
 	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
 
 	for (size_t ii = 0; ii < accessor.count; ++ii)
 	{
 		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
+		if (!pCurItem)
+		{
+			continue;
+		}
 
 		typename ArrayType::ElementDataType	item;
 		for (size_t jj = 0; jj < itemSize; ++jj)
 		{
 			const uint8_t* pCurElement = pCurItem + elementSize * jj;
+			if (!pCurElement)
+			{
+				continue;
+			}
 			item[jj] = *((typename ArrayType::ElementDataType::value_type*)(pCurElement));
 		}
 		pRet->push_back(item);
 	}
+
+	free(pBuf);
 
 	return pRet;
 }
@@ -458,50 +502,40 @@ osg::ref_ptr<osg::Array> BaseObject::GetOSGArray(std::shared_ptr<fx::gltf::Docum
 
 }
 
-osg::ref_ptr<osg::DrawElements> BaseObject::GetDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
+osg::ref_ptr<osg::PrimitiveSet> BaseObject::GetIndicesDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
 {
+	assert(primitive.indices >= 0);
 	osg::ref_ptr<osg::Array> pArr = GetOSGArray(gltfObject, gltfObject->accessors[primitive.indices]);
 	if (pArr == nullptr)
 	{
 		return nullptr;
 	}
 
-	auto fnGetOSGPrimitiveType = [&]()
-	{
-		switch (primitive.mode)
-		{
-		case fx::gltf::Primitive::Mode::Points:
-			return osg::PrimitiveSet::POINTS;
-		case fx::gltf::Primitive::Mode::Lines:
-			return osg::PrimitiveSet::LINES;
-		case fx::gltf::Primitive::Mode::LineLoop:
-			return osg::PrimitiveSet::LINE_LOOP;
-		case fx::gltf::Primitive::Mode::LineStrip:
-			return osg::PrimitiveSet::LINE_STRIP;
-		case fx::gltf::Primitive::Mode::Triangles:
-			return osg::PrimitiveSet::TRIANGLES;
-		case fx::gltf::Primitive::Mode::TriangleStrip:
-			return osg::PrimitiveSet::TRIANGLE_STRIP;
-		case fx::gltf::Primitive::Mode::TriangleFan:
-			return osg::PrimitiveSet::TRIANGLE_FAN;
-		default:
-			return osg::PrimitiveSet::POINTS;
-		}
-	};
-
 	switch (pArr->getType())
 	{
 	case osg::Array::Type::ByteArrayType:
 	case osg::Array::Type::UByteArrayType:
-		return new osg::DrawElementsUByte(fnGetOSGPrimitiveType(), pArr->getNumElements(), (const GLubyte*)(pArr->getDataPointer()));
+		return new osg::DrawElementsUByte(m_mapPrimitives[primitive.mode], pArr->getNumElements(), (const GLubyte*)(pArr->getDataPointer()));
 	case osg::Array::Type::ShortArrayType:
 	case osg::Array::Type::UShortArrayType:
-		return new osg::DrawElementsUShort(fnGetOSGPrimitiveType(), pArr->getNumElements(), (const GLushort*)(pArr->getDataPointer()));
+		return new osg::DrawElementsUShort(m_mapPrimitives[primitive.mode], pArr->getNumElements(), (const GLushort*)(pArr->getDataPointer()));
 	case osg::Array::Type::UIntArrayType:
 	case osg::Array::Type::FloatArrayType:
-		return new osg::DrawElementsUInt(fnGetOSGPrimitiveType(), pArr->getNumElements(), (const GLuint*)(pArr->getDataPointer()));
+		return new osg::DrawElementsUInt(m_mapPrimitives[primitive.mode], pArr->getNumElements(), (const GLuint*)(pArr->getDataPointer()));
 	default:
 		return nullptr;
+	}
+}
+
+osg::ref_ptr<osg::PrimitiveSet> BaseObject::GetPrimitiveSet(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
+{
+	if (primitive.indices >= 0)
+	{
+		return GetIndicesDrawElements(gltfObject, primitive);
+	}
+	else
+	{
+		return new osg::DrawArrays(m_mapPrimitives[primitive.mode]);
 	}
 }
 
@@ -717,14 +751,16 @@ bool BaseObject::ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, cons
 
 osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
 {
-	osg::ref_ptr<osg::DrawElements> ptrDrawElements = GetDrawElements(gltfObject, primitive);
-	if (ptrDrawElements == nullptr)
+	osg::ref_ptr<osg::PrimitiveSet> ptrPrimitiveSet = GetPrimitiveSet(gltfObject, primitive);
+	if (ptrPrimitiveSet == nullptr)
 	{
 		return nullptr;
 	}
 
+	getOrCreateStateSet();
+
 	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
-	ptrRet->addPrimitiveSet(ptrDrawElements);
+	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
 
 	for (const std::pair<std::string, uint32_t>& attribute : primitive.attributes)
 	{
@@ -735,18 +771,18 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 
 		if (attribute.first == "POSITION")
 		{
-			osg::ref_ptr<osg::Array> pVertex = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
-			if (pVertex)
+			m_vertex = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (m_vertex)
 			{
-				ptrRet->setVertexArray(pVertex);
+				ptrRet->setVertexArray(m_vertex);
 			}
 		}
 		else if (attribute.first == "NORMAL")
 		{
-			osg::ref_ptr<osg::Array> pNormal = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
-			if (pNormal)
+			m_normal = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (m_normal)
 			{
-				ptrRet->setNormalArray(pNormal);
+				ptrRet->setNormalArray(m_normal);
 			}
 		}
 		else if (attribute.first == "TANGENT")
@@ -759,25 +795,37 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{
-			//osg::ref_ptr<osg::Array> pTexCoord0 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
-			//if (pTexCoord0)
-			//{
-			//	ptrRet->setTexCoordArray(0, pTexCoord0);
-			//}
+			m_texCoord0 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (m_texCoord0)
+			{
+				ptrRet->setTexCoordArray(0, m_texCoord0);
+			}
 		}
 		else if (attribute.first == "TEXCOORD_1")
 		{
-			//osg::ref_ptr<osg::Array> pTexCoord1 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
-			//if (pTexCoord1)
-			//{
-			//	ptrRet->setTexCoordArray(1, pTexCoord1);
-			//}
+			m_texCoord1 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			if (m_texCoord1)
+			{
+				ptrRet->setTexCoordArray(1, m_texCoord1);
+			}
+		}
+		else if (attribute.first == "JOINTS_0")
+		{
+			continue;
+		}
+		else if (attribute.first == "WEIGHTS_0")
+		{
+			continue;
+		}
+		else
+		{
+			assert(false);
 		}
 	}
 
 	if (gltfObject->materials.size() > primitive.material&& primitive.material >= 0)
 	{
-		ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
+		ImportMaterial(gltfObject, gltfObject->materials[primitive.material], ptrRet);
 	}
 
 	return ptrRet;
@@ -788,7 +836,7 @@ bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::s
 	return false;
 }
 
-bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material)
+bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material, osg::ref_ptr<osg::Geometry> ptrGeometry)
 {
 	if (material.pbrMetallicRoughness.empty())
 	{
@@ -829,16 +877,44 @@ bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, 
 			int idxImage = bct.source;
 			if (gltfObject->images.size() > idxImage&& idxImage >= 0)
 			{
-				const fx::gltf::Image& img = gltfObject->images[idxImage];
+				try
+				{
+					const fx::gltf::Image& img = gltfObject->images[idxImage];
+					std::vector<uint8_t>	imgData;
+					img.MaterializeData(imgData);
+					
+					int width, height, nrChannels;
+					unsigned char* imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
 
-				osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
+					osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
+					osgIMG->setImage(width, height, 1, nrChannels, nrChannels, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_NEW_DELETE);
+
+					osg::StateSet* stateSet = getOrCreateStateSet();
+					stateSet->setTextureAttributeAndModes(material.pbrMetallicRoughness.baseColorTexture.texCoord, pTexture);
+				}
+				catch (const std::exception& e)
+				{
+					LOG(ERROR) << e.what();
+				}
 			}
 		}
 
 	}
+	else
+	{
+		const std::array<float, 4>& bcf = material.pbrMetallicRoughness.baseColorFactor;
+		osg::ref_ptr<osg::FloatArray> fArr = new osg::FloatArray();
+		fArr->push_back(bcf[0]);
+		fArr->push_back(bcf[1]);
+		fArr->push_back(bcf[2]);
+		fArr->push_back(bcf[3]);
+		ptrGeometry->setColorArray(fArr, osg::Array::Binding::BIND_PER_VERTEX);
+	}
+
+	return true;
 }
 
-bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material)
+bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material, osg::ref_ptr<osg::Geometry> ptrGeometry)
 {
 	Material.normalTexture.empty();
 	return false;
