@@ -5,7 +5,7 @@
 int main()
 {
 	OSGCore::InterfaceOSG* ptr = new OSGCore::InterfaceOSG();
-	std::string strPath("D:\\glTF-Sample-Models-master\\2.0\\Box\\glTF-Embedded\\Box.gltf");
+	std::string strPath("D:\\glTF-Sample-Models\\2.0\\UnlitTest\\glTF\\UnlitTest.gltf");
 	
 	ptr->OpenSceneInNewWindow(strPath);
 	delete ptr;

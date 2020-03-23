@@ -558,8 +558,14 @@ void BaseObject::InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject
 	// Scene level
 	if (gltfObject.get() && gltfObject->scenes.size() > 0 && (gltfObject->scenes[0]).nodes.size() > 0)
 	{
-		const fx::gltf::Node& curNode = gltfObject->nodes[gltfObject->scenes[0].nodes[0]];
-		InitFromNode(gltfObject, curNode);
+		const fx::gltf::Scene& scene = gltfObject->scenes[0];
+
+		std::vector<int32_t>	nodes;
+		for (auto id : scene.nodes)
+		{
+			nodes.push_back(static_cast<int32_t>(id));
+		}
+		AddNodes(gltfObject, nodes);
 	}
 
 	// TODO if necessary
@@ -596,8 +602,12 @@ void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, co
 	//int32_t skin{ -1 };
 	//std::vector<float> weights{};
 
-#pragma region UPDATE_CHILDREN
-	for (auto childID : curNode.children)
+	AddNodes(gltfObject, curNode.children);
+}
+
+void BaseObject::AddNodes(std::shared_ptr<fx::gltf::Document> gltfObject, const std::vector<int32_t>& nodes)
+{
+	for (int32_t childID : nodes)
 	{
 		const fx::gltf::Node& childNode = gltfObject->nodes[childID];
 		osg::ref_ptr<BaseObject> pChild = ObjectFactory::CreateObject((ObjectFactory::CLASS_TYPE)GetClassType(childNode));
@@ -608,7 +618,6 @@ void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, co
 		pChild->InitFromNode(gltfObject, childNode);
 		addChild(pChild);
 	}
-#pragma endregion UPDATE_CHILDREN
 }
 
 int BaseObject::GetClassType(const fx::gltf::Node& node)

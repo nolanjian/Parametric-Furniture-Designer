@@ -53,6 +53,7 @@ public:
 	void	LoadAsset(const fx::gltf::Asset& asset);
 	void	InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject);
 	void	InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& curNode);
+	void	AddNodes(std::shared_ptr<fx::gltf::Document> gltfObject, const std::vector<int32_t>& nodes);
 	int		GetClassType(const fx::gltf::Node& node);
 
 	void	RetsetMatrixFromTSR();
