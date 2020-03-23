@@ -36,7 +36,7 @@ public:
 	static std::string OSG2JSON(osg::ref_ptr<BaseObject> pObj);
 	// GLTF MEMORY MODEL OBJECT
 	static osg::ref_ptr<Group>	LoadSceneFromJsonFile(const std::string& strPath);
-	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject);
+	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject, const std::string& strPath);
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
 	static osg::ref_ptr<osg::Array> GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
@@ -59,6 +59,7 @@ public:
 	void	RetsetMatrixFromTSR();
 
 	std::string	m_name;
+	std::string	m_gltfPath;
 
 protected:
 	bool ImportRotation(const fx::gltf::Node& node);
@@ -108,6 +109,8 @@ private:
 	osg::ref_ptr<osg::Array>	m_indexl;
 	osg::ref_ptr<osg::Array>	m_texCoord0;
 	osg::ref_ptr<osg::Array>	m_texCoord1;
+
+	
 
 
 	std::map<fx::gltf::Sampler::WrappingMode, osg::Texture::WrapMode>	m_mapWrapMode{

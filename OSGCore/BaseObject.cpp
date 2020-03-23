@@ -206,8 +206,8 @@ osg::ref_ptr<BaseObject> BaseObject::JSON2OSG(const std::string& str)
 	{
 		std::stringstream	ss;
 		ss << str;
-		std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(ss, std::filesystem::current_path().u8string()));
-		return GLTF2OSG(ptrObj);
+		std::shared_ptr<fx::gltf::Document>	ptrObj = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromText(ss, fx::gltf::detail::GetDocumentRootPath(str)));
+		return GLTF2OSG(ptrObj, std::filesystem::current_path().string());
 	}
 	catch (const std::exception & e)
 	{
@@ -241,7 +241,7 @@ osg::ref_ptr<osg::Group> BaseObject::LoadSceneFromJsonFile(const std::string& st
 		{
 			ptrDOC = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromBinary(strPath));
 		}
-		return GLTF2OSG(ptrDOC);
+		return GLTF2OSG(ptrDOC, strPath);
 	}
 	catch (const std::exception & e)
 	{
@@ -254,9 +254,11 @@ osg::ref_ptr<osg::Group> BaseObject::LoadSceneFromJsonFile(const std::string& st
 	return nullptr;
 }
 
-osg::ref_ptr<BaseObject> BaseObject::GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject)
+osg::ref_ptr<BaseObject> BaseObject::GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject, const std::string& strPath)
 {
 	osg::ref_ptr<BaseObject> ptrScene = ObjectFactory::CreateObject(ObjectFactory::SCENE);
+	gltfObject->extensionsAndExtras["LocalPath"] = strPath;;
+
 	ptrScene->InitFromDocument(gltfObject);
 	return ptrScene;
 }
@@ -869,11 +871,11 @@ bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::s
 
 bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material)
 {
-	bool bRet = 
-		LoadPBRTexture(gltfObject, material.pbrMetallicRoughness) ||
-		LoadNormalTexture(gltfObject, material.normalTexture) ||
-		LoadOcclusionTexture(gltfObject, material.occlusionTexture) ||
-		LoadImageTexture(gltfObject, material.emissiveTexture);
+	
+	bool bRet1 = LoadPBRTexture(gltfObject, material.pbrMetallicRoughness);
+	bool bRet2 = LoadNormalTexture(gltfObject, material.normalTexture);
+	bool bRet3 = LoadOcclusionTexture(gltfObject, material.occlusionTexture);
+	bool bRet4 = LoadImageTexture(gltfObject, material.emissiveTexture);
 
 	// TODO
 	//float alphaCutoff{ defaults::MaterialAlphaCutoff };
@@ -884,7 +886,7 @@ bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, 
 	//Texture emissiveTexture;
 	//std::array<float, 3> emissiveFactor = { defaults::NullVec3 };
 
-	return bRet;
+	return bRet1 || bRet2 || bRet3 || bRet4;
 }
 
 bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material)
@@ -968,12 +970,29 @@ bool BaseObject::LoadImageTexture(std::shared_ptr<fx::gltf::Document> gltfObject
 	{
 		try
 		{
-			const fx::gltf::Image& img = gltfObject->images[idxImage];
-			std::vector<uint8_t>	imgData;
-			img.MaterializeData(imgData);
-
 			int width, height, nrChannels;
-			unsigned char* imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
+			unsigned char* imgObj = nullptr;
+			const fx::gltf::Image& img = gltfObject->images[idxImage];
+			if (img.IsEmbeddedResource())
+			{
+				std::vector<uint8_t>	imgData;
+				img.MaterializeData(imgData);
+				if (imgData.empty())
+				{
+					return false;
+				}
+				imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
+			}
+			else
+			{
+				std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(gltfObject->extensionsAndExtras["LocalPath"]), img.uri);
+				imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
+			}
+
+			if (!imgObj)
+			{
+				return false;
+			}
 
 			osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
 			osgIMG->setImage(width, height, 1, nrChannels, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_NEW_DELETE, 1);
@@ -1000,16 +1019,15 @@ bool BaseObject::LoadPBRTexture(std::shared_ptr<fx::gltf::Document> gltfObject, 
 		return false;
 	}
 
-	bool bRet = 
-		LoadColorTexture(gltfObject, pbrMaterial.baseColorFactor) ||
-		LoadImageTexture(gltfObject, pbrMaterial.baseColorTexture) ||
-		LoadImageTexture(gltfObject, pbrMaterial.metallicRoughnessTexture);
+	bool bRet1 = LoadColorTexture(gltfObject, pbrMaterial.baseColorFactor);
+	bool bRet2 = LoadImageTexture(gltfObject, pbrMaterial.baseColorTexture);
+	bool bRet3 = LoadImageTexture(gltfObject, pbrMaterial.metallicRoughnessTexture);
 
 	// TODO
 	//float roughnessFactor{ defaults::IdentityScalar };
 	//float metallicFactor{ defaults::IdentityScalar };
 
-	return bRet;
+	return bRet1 || bRet2 || bRet3;
 }
 
 bool BaseObject::LoadNormalTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::NormalTexture& normalTexture)
