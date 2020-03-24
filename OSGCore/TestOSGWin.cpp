@@ -47,13 +47,14 @@ void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 		" \n"
 		"in vec4 osg_Vertex; \n"
 		"in vec3 osg_Normal; \n"
-		"out vec4 color; \n"
+		"out vec2 texcoord;\n"
 		" \n"
 		"void main() \n"
 		"{ \n"
 		"    vec3 ecNormal = normalize( osg_NormalMatrix * osg_Normal ); \n"
 		"    float diffuse = max( dot( ecLightDir, ecNormal ), 0. ); \n"
-		"    color = vec4( vec3( diffuse ), 1. ); \n"
+		"    //color = vec4( vec3( diffuse ), 1. ); \n"
+		"    texcoord = gl_MultiTexCoord0.xy;	\n"
 		" \n"
 		"    gl_Position = osg_ModelViewProjectionMatrix * osg_Vertex; \n"
 		"} \n";
@@ -62,12 +63,12 @@ void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 	const std::string fragmentSource =
 		"#version 330 \n"
 		" \n"
-		"in vec4 color; \n"
-		"out vec4 fragData; \n"
+		"uniform sampler2D baseTexture; \n"
+		"in vec2 texcoord;\n"
 		" \n"
 		"void main() \n"
 		"{ \n"
-		"    fragData = color; \n"
+		"    gl_FragColor = texture2D( baseTexture, texcoord); \n"
 		"} \n";
 	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, fragmentSource);
 

@@ -847,6 +847,10 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		{
 			continue;
 		}
+		else if (attribute.first == "COLOR_0")
+		{
+			continue;
+		}
 		else
 		{
 			assert(false);
@@ -929,6 +933,9 @@ bool BaseObject::LoadColorTexture(std::shared_ptr<fx::gltf::Document> gltfObject
 	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D(image);
 	getOrCreateStateSet()->setTextureAttributeAndModes(0, texture);
 
+	osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", 0);
+	getOrCreateStateSet()->addUniform(baseTextureSampler);
+
 	return true;
 }
 
@@ -994,13 +1001,29 @@ bool BaseObject::LoadImageTexture(std::shared_ptr<fx::gltf::Document> gltfObject
 				return false;
 			}
 
+			//auto tt = std::array<float, 4>();
+			//tt[0] = 0.1f;
+			//tt[1] = 0.9f;
+			//tt[2] = 0.1f;
+			//tt[3] = 1.0f;
+			//LoadColorTexture(gltfObject, tt);
+			//return true;
+
+			//osg::ref_ptr<osg::Image> osgIMG = osgDB::readRefImageFile("D:\\glTF-Sample-Models-master\\2.0\\MorphPrimitivesTest\\glTF\\uv_texture.jpg");
+
 			osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
-			osgIMG->setImage(width, height, 1, nrChannels, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_NEW_DELETE, 1);
+			//osgIMG->allocateImage(width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE);
+			osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_BYTE, imgObj, osg::Image::USE_NEW_DELETE);
 			if (!osgIMG->valid())
 			{
 				return false;
 			}
+
+			pTexture->setImage(osgIMG);
+
 			getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
+			osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", texture.texCoord);
+			getOrCreateStateSet()->addUniform(baseTextureSampler);
 		}
 		catch (const std::exception & e)
 		{
