@@ -922,21 +922,12 @@ bool BaseObject::ParseParams(const nlohmann::json::value_type& params)
 
 bool BaseObject::LoadColorTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const std::array<float, 4>& baseColorFactor)
 {
-	if (fx::gltf::defaults::IdentityVec4 == baseColorFactor)
-	{
-		return false;
-	}
-
-	osg::ref_ptr<osg::Image> image = new osg::Image;
-	image->allocateImage(1, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE);
-	image->setColor(osg::Vec4(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]), 0, 0, 0);
-	osg::ref_ptr<osg::Texture2D> texture = new osg::Texture2D(image);
-	getOrCreateStateSet()->setTextureAttributeAndModes(0, texture);
-
-	osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", 0);
+	osg::Uniform* baseTextureSampler = new osg::Uniform("baseColorFactor", osg::Vec4(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]));
+	osg::Uniform* useBaseColorFactor = new osg::Uniform("useBaseColorFactor", fx::gltf::defaults::IdentityVec4 != baseColorFactor ? 1 : 0);
+	getOrCreateStateSet()->addUniform(useBaseColorFactor);
 	getOrCreateStateSet()->addUniform(baseTextureSampler);
 
-	return true;
+	return fx::gltf::defaults::IdentityVec4 != baseColorFactor;
 }
 
 bool BaseObject::LoadImageTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::Texture& texture)
