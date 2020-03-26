@@ -101,6 +101,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Hard.h" />
+    <ClInclude Include="ArrayHelper.h" />
     <ClInclude Include="ImplementOSGCore.h" />
     <ClInclude Include="InterfaceOSGCore.h" />
     <ClInclude Include="Model.h" />
@@ -111,11 +112,13 @@
     <ClInclude Include="ParametricComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="STLIncluding.h" />
     <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArrayHelper.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FrameGroup.cpp" />
@@ -130,6 +133,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="TestOSGWin.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

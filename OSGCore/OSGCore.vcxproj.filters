@@ -76,6 +76,12 @@
     <ClInclude Include="OSGIncluding.h" />
     <ClInclude Include="STLIncluding.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="ArrayHelper.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneMgr.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
@@ -114,5 +120,9 @@
     <ClCompile Include="TestOSGWin.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="ArrayHelper.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneMgr.cpp" />
   </ItemGroup>
 </Project>
