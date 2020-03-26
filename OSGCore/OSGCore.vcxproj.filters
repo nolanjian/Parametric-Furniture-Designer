@@ -14,9 +14,18 @@
     <Filter Include="Test">
       <UniqueIdentifier>{d037e87d-8c28-48e5-8430-e39fa7c65f00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{ddc49634-85e8-4144-892a-574168c35e83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="FRAGMENT.glsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="VERTEX.glsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h">
