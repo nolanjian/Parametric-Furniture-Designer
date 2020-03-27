@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TestOSGWin.h"
 #include "BaseObject.h"
+#include "STLIncluding.h"
 
 
 void TestOSGWin::Run(const std::string& path)
@@ -37,52 +38,18 @@ void TestOSGWin::Run(const std::string& path)
 	viewer.run();
 }
 
+std::string LoadString(const std::string& path)
+{
+	std::ifstream	fs(path);
+	std::stringstream	ss;
+	ss << fs.rdbuf();
+	return ss.str();
+}
+
 void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 {
-	const std::string vertexSource =
-		"#version 330 \n"
-		" \n"
-		"uniform mat4 osg_ModelViewProjectionMatrix; \n"
-		"uniform mat3 osg_NormalMatrix; \n"
-		"uniform vec3 ecLightDir; \n"
-		"uniform int useBaseColorFactor; \n"
-		"uniform vec4 baseColorFactor; \n"
-		" \n"
-		"in vec4 osg_Vertex; \n"
-		"in vec3 osg_Normal; \n"
-		"out vec2 texcoord;\n"
-		" \n"
-		"void main() \n"
-		"{ \n"
-		"    vec3 ecNormal = normalize( osg_NormalMatrix * osg_Normal ); \n"
-		"    float diffuse = max( dot( ecLightDir, ecNormal ), 0. ); \n"
-		"    //color = vec4( vec3( diffuse ), 1. ); \n"
-		"    texcoord = gl_MultiTexCoord0.xy;	\n"
-		" \n"
-		"    gl_Position = osg_ModelViewProjectionMatrix * osg_Vertex; \n"
-		"} \n";
-	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, vertexSource);
-
-	const std::string fragmentSource =
-		"#version 330 \n"
-		" \n"
-		"uniform sampler2D baseTexture; \n"
-		"in vec2 texcoord;\n"
-		"uniform int useBaseColorFactor; \n"
-		"uniform vec4 baseColorFactor; \n"
-		" \n"
-		"void main() \n"
-		"{ \n"
-		"	 if (useBaseColorFactor == 1)"
-		"	 {"
-		"		gl_FragColor = baseColorFactor";
-		"	 }"
-		"	 else"
-		"	 {"
-		"		gl_FragColor = texture2D( baseTexture, texcoord); \n"
-		"	 }"
-		"} \n";
-	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, fragmentSource);
+	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\VERTEX.glsl"));
+	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\FRAGMENT.glsl"));
 
 	osg::Program* program = new osg::Program;
 	program->addShader(vShader);

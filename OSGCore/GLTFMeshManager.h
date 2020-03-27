@@ -24,8 +24,7 @@ protected:
 	bool LoadOcclusionTexture(const fx::gltf::Material::OcclusionTexture& occlusionTexture, osg::ref_ptr<osg::Geometry> pGeometry);
 private:
 	//GLTFMeshManager() {}
-	std::string	m_strGLTFPath;
-	std::shared_ptr<fx::gltf::Document> m_gltfObject;
+
 	std::map<size_t, osg::ref_ptr<osg::Geode>>	mapGeode;
 
 	const std::map<fx::gltf::Primitive::Mode, osg::PrimitiveSet::Mode>	m_mapPrimitives = {
