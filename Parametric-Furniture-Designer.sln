@@ -22,6 +22,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utils", "Utils\Utils.vcxproj", "{4C373EF8-D960-4678-82B9-C07BE60EF3DA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppTestMain", "CppTestMain\CppTestMain.vcxproj", "{F0B83B6A-9A04-4915-8C3C-12E554D100F8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F8CBF05-B2B2-46AF-A329-3EBD4F8DF4B3} = {0F8CBF05-B2B2-46AF-A329-3EBD4F8DF4B3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

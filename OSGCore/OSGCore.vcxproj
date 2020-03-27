@@ -99,11 +99,15 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="FrameGroup.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="GLTFMaterialsManager.h" />
+    <ClInclude Include="GLTFTextureManager.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Hard.h" />
-    <ClInclude Include="ArrayHelper.h" />
+    <ClInclude Include="GLTFArrayHelper.h" />
+    <ClInclude Include="IGLTFResourceManager.h" />
     <ClInclude Include="ImplementOSGCore.h" />
     <ClInclude Include="InterfaceOSGCore.h" />
+    <ClInclude Include="GLTFMeshManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="OSGCoreExport.h" />
@@ -118,12 +122,16 @@
     <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ArrayHelper.cpp" />
+    <ClCompile Include="GLTFArrayHelper.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FrameGroup.cpp" />
+    <ClCompile Include="GLTFMaterialsManager.cpp" />
+    <ClCompile Include="GLTFMeshManager.cpp" />
+    <ClCompile Include="GLTFTextureManager.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Hard.cpp" />
+    <ClCompile Include="IGLTFResourceManager.cpp" />
     <ClCompile Include="ImplementOSGCore.cpp" />
     <ClCompile Include="InterfaceOSGCore.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />

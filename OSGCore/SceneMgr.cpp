@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SceneMgr.h"
+#include "GLTFArrayHelper.h"
 
 SceneMgr& SceneMgr::GetInstance()
 {
@@ -10,6 +11,6 @@ SceneMgr& SceneMgr::GetInstance()
 void SceneMgr::SetGLTF(std::shared_ptr<fx::gltf::Document> gltfObject)
 {
 	m_gltfObject = gltfObject;
-	m_ArrayHelper = std::make_shared<ArrayHelper>(m_gltfObject);
-	m_ArrayHelper->Init();
+	GLTFArrayHelper::GetInstance().SetGLTF(gltfObject);
+	GLTFArrayHelper::GetInstance().Load();
 }

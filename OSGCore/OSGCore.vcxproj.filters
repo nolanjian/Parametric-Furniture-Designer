@@ -17,6 +17,9 @@
     <Filter Include="shader">
       <UniqueIdentifier>{ddc49634-85e8-4144-892a-574168c35e83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{5278cd0a-ad43-4880-9c95-87b75ee83da4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -76,11 +79,23 @@
     <ClInclude Include="OSGIncluding.h" />
     <ClInclude Include="STLIncluding.h" />
     <ClInclude Include="stb_image.h" />
-    <ClInclude Include="ArrayHelper.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="SceneMgr.h">
-      <Filter>Component</Filter>
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFMaterialsManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFMeshManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFTextureManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="IGLTFResourceManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFArrayHelper.h">
+      <Filter>ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,9 +135,23 @@
     <ClCompile Include="TestOSGWin.cpp">
       <Filter>Test</Filter>
     </ClCompile>
-    <ClCompile Include="ArrayHelper.cpp">
-      <Filter>Component</Filter>
+    <ClCompile Include="GLTFMeshManager.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="GLTFTextureManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="IGLTFResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFMaterialsManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneMgr.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFArrayHelper.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,26 +1,31 @@
 #include "pch.h"
-#include "ArrayHelper.h"
+#include "GLTFArrayHelper.h"
 #include "../easyloggingpp/easylogging++.h"
 
-ArrayHelper::ArrayHelper(std::shared_ptr<fx::gltf::Document> gltfObject)
-	:m_gltfObject(gltfObject)
+GLTFArrayHelper& GLTFArrayHelper::GetInstance()
 {
+	static GLTFArrayHelper s_GLTFArrayHelper;
+	return s_GLTFArrayHelper;
 }
 
-void ArrayHelper::Init()
+void GLTFArrayHelper::Load()
 {
+	if (m_gltfObject == nullptr)
+	{
+		return;
+	}
 	for (size_t ii = 0; ii < m_gltfObject->accessors.size(); ++ii)
 	{
 		mapArray[ii] = GetOSGArray(m_gltfObject->accessors[ii]);
 	}
 }
 
-osg::ref_ptr<osg::Array> ArrayHelper::GetArray(size_t index)
+osg::ref_ptr<osg::Array> GLTFArrayHelper::GetArray(size_t index)
 {
 	return mapArray[index];
 }
 
-osg::ref_ptr<osg::Array> ArrayHelper::GetOSGArray(const fx::gltf::Accessor& accessor)
+osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGArray(const fx::gltf::Accessor& accessor)
 {
 	switch (accessor.type)
 	{
@@ -115,7 +120,7 @@ osg::ref_ptr<osg::Array> ArrayHelper::GetOSGArray(const fx::gltf::Accessor& acce
 }
 
 template<class ArrayType>
-inline osg::ref_ptr<osg::Array> ArrayHelper::GetOSGVecArrayImp(const fx::gltf::Accessor& accessor)
+inline osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGVecArrayImp(const fx::gltf::Accessor& accessor)
 {
 	osg::ref_ptr<ArrayType> pRet = new ArrayType();
 
@@ -166,7 +171,7 @@ inline osg::ref_ptr<osg::Array> ArrayHelper::GetOSGVecArrayImp(const fx::gltf::A
 }
 
 template<class ArrayType>
-inline osg::ref_ptr<osg::Array> ArrayHelper::GetOSGArrayImp(const fx::gltf::Accessor& accessor)
+inline osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGArrayImp(const fx::gltf::Accessor& accessor)
 {
 	osg::ref_ptr<ArrayType>	pRet = new ArrayType();
 
