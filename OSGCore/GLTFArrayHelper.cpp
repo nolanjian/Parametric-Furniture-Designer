@@ -16,13 +16,49 @@ void GLTFArrayHelper::Load()
 	}
 	for (size_t ii = 0; ii < m_gltfObject->accessors.size(); ++ii)
 	{
-		mapArray[ii] = GetOSGArray(m_gltfObject->accessors[ii]);
+		const fx::gltf::Accessor& accessors = m_gltfObject->accessors[ii];
+		osg::ref_ptr<osg::Array> pArr = GetOSGArray(accessors);
+		if (pArr)
+		{
+			mapArray[ii] = pArr;
+			continue;
+		}
+		osg::ref_ptr<osg::RefMatrix> mat = GetOSGMatrix(accessors);
+		if (mat)
+		{
+			mapMatrix[ii] = mat;
+			continue;
+		}
+
+		LOG(WARNING) << "accessors " + std::to_string(ii) + "unhandled";
 	}
 }
 
 osg::ref_ptr<osg::Array> GLTFArrayHelper::GetArray(size_t index)
 {
 	return mapArray[index];
+}
+
+osg::ref_ptr<osg::RefMatrix> GLTFArrayHelper::GetOSGMatrix(const fx::gltf::Accessor& accessor)
+{
+	if (accessor.type != fx::gltf::Accessor::Type::Mat4 && accessor.componentType == fx::gltf::Accessor::ComponentType::Float)
+	{
+		LOG(WARNING) << "GetOSGMatrix only support Mat4 and Float";
+		return nullptr;
+	}
+
+	fx::gltf::BufferView const& bufferView = m_gltfObject->bufferViews[accessor.bufferView];
+	fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
+	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
+	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
+	if (!pData)
+	{
+		return nullptr;
+	}
+
+	osg::ref_ptr<osg::RefMatrix> mat = new osg::RefMatrix();
+	mat->set(static_cast<float*>((void*)pData));
+	return mat;
 }
 
 osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGArray(const fx::gltf::Accessor& accessor)
@@ -114,7 +150,7 @@ osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGArray(const fx::gltf::Accessor& 
 		break;
 	}
 	default:
-		LOG(ERROR) << "GetVecArray only support Vec2,Vec3,Vec4";
+		LOG(WARNING) << "GetVecArray only support Vec2,Vec3,Vec4";
 		return nullptr;
 	}
 }
