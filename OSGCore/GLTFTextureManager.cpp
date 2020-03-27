@@ -43,7 +43,7 @@ osg::ref_ptr<osg::Texture> GLTFTextureManager::GetTexture(size_t index)
 
 void GLTFTextureManager::LoadSampler(osg::ref_ptr<osg::Texture2D> pTexture, const fx::gltf::Sampler& sampler)
 {
-	if (pTexture == nullptr)
+	if (pTexture == nullptr || sampler.empty())
 	{
 		return;
 	}

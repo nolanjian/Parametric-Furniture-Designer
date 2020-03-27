@@ -39,9 +39,6 @@ public:
 	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject, const std::string& strPath);
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
-	osg::ref_ptr<osg::PrimitiveSet> GetIndicesDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
-	osg::ref_ptr<osg::PrimitiveSet> GetPrimitiveSet(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
-
 	void	LoadTSRFromMatrix();
 	void	LoadAsset(const fx::gltf::Asset& asset);
 	void	InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject);
@@ -67,7 +64,7 @@ protected:
 	bool ExportParams(fx::gltf::Node& node);
 	bool ImportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
 	bool ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
-	osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
+	//osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	bool ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive);
 	bool ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& Material);
 	bool ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material);

@@ -9,4 +9,5 @@ GLTFMaterialsManager& GLTFMaterialsManager::GetInstance()
 
 void GLTFMaterialsManager::Load()
 {
+
 }

@@ -275,43 +275,6 @@ std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject
 	return ptrDOC;
 }
 
-osg::ref_ptr<osg::PrimitiveSet> BaseObject::GetIndicesDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
-{
-	assert(primitive.indices >= 0);
-	osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(primitive.indices);
-	if (pArr == nullptr)
-	{
-		return nullptr;
-	}
-
-	switch (pArr->getType())
-	{
-	case osg::Array::Type::ByteArrayType:
-	case osg::Array::Type::UByteArrayType:
-		return new osg::DrawElementsUByte(m_mapPrimitives[primitive.mode], pArr->getNumElements(), (const GLubyte*)(pArr->getDataPointer()));
-	case osg::Array::Type::ShortArrayType:
-	case osg::Array::Type::UShortArrayType:
-		return new osg::DrawElementsUShort(m_mapPrimitives[primitive.mode], pArr->getNumElements(), (const GLushort*)(pArr->getDataPointer()));
-	case osg::Array::Type::UIntArrayType:
-	case osg::Array::Type::FloatArrayType:
-		return new osg::DrawElementsUInt(m_mapPrimitives[primitive.mode], pArr->getNumElements(), (const GLuint*)(pArr->getDataPointer()));
-	default:
-		return nullptr;
-	}
-}
-
-osg::ref_ptr<osg::PrimitiveSet> BaseObject::GetPrimitiveSet(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
-{
-	if (primitive.indices >= 0)
-	{
-		return GetIndicesDrawElements(gltfObject, primitive);
-	}
-	else
-	{
-		return new osg::DrawArrays(m_mapPrimitives[primitive.mode]);
-	}
-}
-
 void BaseObject::LoadTSRFromMatrix()
 {
 	vRotation = mat.getRotate().asVec4();
@@ -350,7 +313,7 @@ void BaseObject::InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject
 
 void BaseObject::InitFromNode(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& curNode)
 {
-	m_name = curNode.name;
+	setName(curNode.name);
 
 	getOrCreateStateSet();
 
@@ -535,110 +498,17 @@ bool BaseObject::ImportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, cons
 		return true;
 	}
 
-	const fx::gltf::Mesh& mesh = gltfObject->meshes[node.mesh];
-	osg::ref_ptr<osg::Geode>	geo = new osg::Geode();
-	addChild(geo);
-
-	for (const fx::gltf::Primitive& primitive : mesh.primitives)
+	osg::ref_ptr<osg::Geode> geo = SceneMgr::GetInstance().GetMeshManager().GetInstance().GetMesh(node.mesh);
+	if (geo)
 	{
-		geo->addDrawable(ImportPrimitive(gltfObject, primitive));
+		addChild(geo);
 	}
-
 	return true;
 }
 
 bool BaseObject::ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node)
 {
 	return false;
-}
-
-osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
-{
-	osg::ref_ptr<osg::PrimitiveSet> ptrPrimitiveSet = GetPrimitiveSet(gltfObject, primitive);
-	if (ptrPrimitiveSet == nullptr)
-	{
-		return nullptr;
-	}
-
-	getOrCreateStateSet();
-
-	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
-	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
-
-	for (const std::pair<std::string, uint32_t>& attribute : primitive.attributes)
-	{
-		if (!(gltfObject->accessors.size() > attribute.second&& attribute.second >= 0))
-		{
-			continue;
-		}
-
-		if (attribute.first == "POSITION")
-		{
-			m_vertex = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
-			if (m_vertex)
-			{
-				ptrRet->setVertexArray(m_vertex);
-			}
-		}
-		else if (attribute.first == "NORMAL")
-		{
-			m_normal = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
-			if (m_normal)
-			{
-				ptrRet->setNormalArray(m_normal, osg::Array::Binding::BIND_PER_VERTEX);
-			}
-		}
-		else if (attribute.first == "TANGENT")
-		{
-			osg::ref_ptr<osg::Array> pTangent = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
-			if (pTangent)
-			{
-				// TODO
-			}
-		}
-		else if (attribute.first == "TEXCOORD_0")
-		{
-			m_texCoord0 = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
-			if (m_texCoord0)
-			{
-				ptrRet->setTexCoordArray(0, m_texCoord0, osg::Array::Binding::BIND_PER_VERTEX);
-			}
-		}
-		else if (attribute.first == "TEXCOORD_1")
-		{
-			m_texCoord1 = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
-			if (m_texCoord1)
-			{
-				ptrRet->setTexCoordArray(1, m_texCoord1, osg::Array::Binding::BIND_PER_VERTEX);
-			}
-		}
-		else if (attribute.first == "JOINTS_0")
-		{
-			continue;
-		}
-		else if (attribute.first == "WEIGHTS_0")
-		{
-			continue;
-		}
-		else if (attribute.first == "COLOR_0")
-		{
-			continue;
-		}
-		else
-		{
-			assert(false);
-		}
-	}
-
-	if (gltfObject->materials.size() > primitive.material&& primitive.material >= 0)
-	{
-		ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
-	}
-
-	// TODO 
-	// std::vector<Attributes> targets{};
-
-	return ptrRet;
 }
 
 bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive)
