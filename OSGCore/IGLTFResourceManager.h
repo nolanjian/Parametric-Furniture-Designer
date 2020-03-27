@@ -6,6 +6,7 @@
 class IGLTFResourceManager
 {
 public:
+	IGLTFResourceManager() {}
 	IGLTFResourceManager(const IGLTFResourceManager&) = delete;
 	IGLTFResourceManager(const IGLTFResourceManager&&) = delete;
 	IGLTFResourceManager& operator= (const IGLTFResourceManager&) = delete;

@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "SceneMgr.h"
 #include "GLTFArrayHelper.h"
+#include "GLTFTextureManager.h"
+#include "GLTFMaterialsManager.h"
+#include "GLTFMeshManager.h"
 
 SceneMgr& SceneMgr::GetInstance()
 {
@@ -11,6 +14,13 @@ SceneMgr& SceneMgr::GetInstance()
 void SceneMgr::SetGLTF(std::shared_ptr<fx::gltf::Document> gltfObject)
 {
 	m_gltfObject = gltfObject;
+	// Run in fix order, must be
 	GLTFArrayHelper::GetInstance().SetGLTF(gltfObject);
 	GLTFArrayHelper::GetInstance().Load();
+	GLTFTextureManager::GetInstance().SetGLTF(gltfObject);
+	GLTFTextureManager::GetInstance().Load();
+	GLTFMaterialsManager::GetInstance().SetGLTF(gltfObject);
+	GLTFMaterialsManager::GetInstance().Load();
+	GLTFMeshManager::GetInstance().SetGLTF(gltfObject);
+	GLTFMeshManager::GetInstance().Load();
 }

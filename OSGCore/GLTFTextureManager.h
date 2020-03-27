@@ -15,7 +15,7 @@ protected:
 	void LoadSampler(osg::ref_ptr<osg::Texture2D> pTexture, const fx::gltf::Sampler& sampler);
 	void LoadImage(osg::ref_ptr<osg::Texture2D> pTexture, const fx::gltf::Image& image);
 private:
-	GLTFTextureManager();
+	//GLTFTextureManager() {}
 
 
 	std::map<size_t, osg::ref_ptr<osg::Texture>>	mapTexture;

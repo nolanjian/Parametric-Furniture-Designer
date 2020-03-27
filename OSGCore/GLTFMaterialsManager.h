@@ -4,12 +4,12 @@
 #include "fx/gltf.h"
 #include "IGLTFResourceManager.h"
 
-class GLTFMaterialsManager : IGLTFResourceManager
+class GLTFMaterialsManager : public IGLTFResourceManager
 {
 public:
 	static GLTFMaterialsManager& GetInstance();
 	virtual void Load() override;
 protected:
 private:
-	GLTFMaterialsManager();
+	//GLTFMaterialsManager() {}
 };

@@ -18,6 +18,6 @@ protected:
 	template<class ArrayType>
 	osg::ref_ptr<osg::Array> GetOSGArrayImp(const fx::gltf::Accessor& accessor);
 private:
-	GLTFArrayHelper();
+	//GLTFArrayHelper() {}
 	std::map<size_t, osg::ref_ptr<osg::Array>>	mapArray;
 };

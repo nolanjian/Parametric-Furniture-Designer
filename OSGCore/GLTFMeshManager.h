@@ -12,6 +12,7 @@ public:
 	virtual void Load() override;
 protected:
 private:
+	//GLTFMeshManager() {}
 	std::string	m_strGLTFPath;
 	std::shared_ptr<fx::gltf::Document> m_gltfObject;
 };
