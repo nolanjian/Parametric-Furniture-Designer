@@ -4,6 +4,7 @@
 #include "../Utils/IParamsConverter.h"
 #include "../easyloggingpp/easylogging++.h"
 #include "ObjectFactory.h"
+#include "SceneMgr.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -274,240 +275,10 @@ std::shared_ptr<fx::gltf::Document> BaseObject::OSG2GLTF(osg::ref_ptr<BaseObject
 	return ptrDOC;
 }
 
-template<typename ArrayType>
-osg::ref_ptr<osg::Array> BaseObject::GetOSGArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
-{
-	osg::ref_ptr<ArrayType>	pRet = new ArrayType();
-
-	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
-	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
-	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
-	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
-	if (!pData)
-	{
-		return nullptr;
-	}
-
-	size_t itemSize = sizeof(typename ArrayType::ElementDataType);
-	size_t totalSize = itemSize * accessor.count;
-
-	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
-	if (!pBuf)
-	{
-		return nullptr;
-	}
-	
-	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
-
-	for (size_t ii = 0; ii < accessor.count; ++ii)
-	{
-		const uint8_t* pCurItem = pBuf + itemSize * ii;
-		if (!pCurItem)
-		{
-			continue;
-		}
-
-		typename ArrayType::ElementDataType	item;
-		item = *((typename ArrayType::ElementDataType*)(pCurItem));
-		pRet->push_back(item);
-	}
-
-	free(pBuf);
-
-	return pRet;
-}
-
-template<typename ArrayType>
-osg::ref_ptr<osg::Array> BaseObject::GetOSGVecArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
-{
-	osg::ref_ptr<ArrayType> pRet = new ArrayType();
-
-	fx::gltf::BufferView const& bufferView = gltfObject->bufferViews[accessor.bufferView];
-	fx::gltf::Buffer const& buffer = gltfObject->buffers[bufferView.buffer];
-	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
-	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
-	if (!pData)
-	{
-		return nullptr;
-	}
-
-	size_t itemSize = ArrayType::ElementDataType::num_components;
-	size_t elementSize = sizeof(ArrayType::ElementDataType::value_type);
-
-	size_t totalSize = itemSize * elementSize * accessor.count;
-	uint8_t* pBuf = (uint8_t*)malloc(totalSize * sizeof(uint8_t));
-	if (!pBuf)
-	{
-		return nullptr;
-	}
-	memcpy(pBuf, pData, totalSize * sizeof(uint8_t));
-
-	for (size_t ii = 0; ii < accessor.count; ++ii)
-	{
-		const uint8_t* pCurItem = pBuf + itemSize * elementSize * ii;
-		if (!pCurItem)
-		{
-			continue;
-		}
-
-		typename ArrayType::ElementDataType	item;
-		for (size_t jj = 0; jj < itemSize; ++jj)
-		{
-			const uint8_t* pCurElement = pCurItem + elementSize * jj;
-			if (!pCurElement)
-			{
-				continue;
-			}
-			item[jj] = *((typename ArrayType::ElementDataType::value_type*)(pCurElement));
-		}
-		pRet->push_back(item);
-	}
-
-	free(pBuf);
-
-	return pRet;
-}
-
-osg::ref_ptr<osg::Array> BaseObject::GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor)
-{
-	switch (accessor.type)
-	{
-	case fx::gltf::Accessor::Type::Scalar:
-	{
-		switch (accessor.componentType)
-		{
-		case fx::gltf::Accessor::ComponentType::Byte:
-			return GetOSGArrayImp<osg::ByteArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedByte:
-			return GetOSGArrayImp<osg::UByteArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Short:
-			return GetOSGArrayImp<osg::ShortArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedShort:
-			return GetOSGArrayImp<osg::UShortArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedInt:
-			return GetOSGArrayImp<osg::UIntArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Float:
-			return GetOSGArrayImp<osg::FloatArray>(gltfObject, accessor);
-		default:
-			return nullptr;
-		}
-		break;
-	}
-	case fx::gltf::Accessor::Type::Vec2:
-	{
-		switch (accessor.componentType)
-		{
-		case fx::gltf::Accessor::ComponentType::Byte:
-			return GetOSGVecArrayImp<osg::Vec2bArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedByte:
-			return GetOSGVecArrayImp<osg::Vec2ubArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Short:
-			return GetOSGVecArrayImp<osg::Vec2sArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedShort:
-			return GetOSGVecArrayImp<osg::Vec2usArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedInt:
-			return GetOSGVecArrayImp<osg::Vec2uiArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Float:
-			return GetOSGVecArrayImp<osg::Vec2Array>(gltfObject, accessor);
-		default:
-			return nullptr;
-		}
-		break;
-	}
-	case fx::gltf::Accessor::Type::Vec3:
-	{
-		switch (accessor.componentType)
-		{
-		case fx::gltf::Accessor::ComponentType::Byte:
-			return GetOSGVecArrayImp<osg::Vec3bArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedByte:
-			return GetOSGVecArrayImp<osg::Vec3ubArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Short:
-			return GetOSGVecArrayImp<osg::Vec3sArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedShort:
-			return GetOSGVecArrayImp<osg::Vec3usArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedInt:
-			return GetOSGVecArrayImp<osg::Vec3uiArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Float:
-			return GetOSGVecArrayImp<osg::Vec3Array>(gltfObject, accessor);
-		default:
-			return nullptr;
-		}
-		break;
-	}
-	case fx::gltf::Accessor::Type::Vec4:
-	{
-		switch (accessor.componentType)
-		{
-		case fx::gltf::Accessor::ComponentType::Byte:
-			return GetOSGVecArrayImp<osg::Vec4bArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedByte:
-			return GetOSGVecArrayImp<osg::Vec4ubArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Short:
-			return GetOSGVecArrayImp<osg::Vec4sArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedShort:
-			return GetOSGVecArrayImp<osg::Vec4usArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::UnsignedInt:
-			return GetOSGVecArrayImp<osg::Vec4uiArray>(gltfObject, accessor);
-		case fx::gltf::Accessor::ComponentType::Float:
-			return GetOSGVecArrayImp<osg::Vec4Array>(gltfObject, accessor);
-		default:
-			return nullptr;
-		}
-		break;
-	}
-	default:
-		LOG(ERROR) << "GetVecArray only support Vec2,Vec3,Vec4";
-		return nullptr;
-	}
-
-
-
-	auto fnGetDouble = [&](const uint8_t* pCurElement) {
-		switch (accessor.componentType)
-		{
-		case fx::gltf::Accessor::ComponentType::Byte:
-		{
-			int8_t nVal = *((int8_t*)(pCurElement));
-			return double(nVal);
-		}
-		case fx::gltf::Accessor::ComponentType::UnsignedByte:
-		{
-			uint8_t nVal = *((uint8_t*)(pCurElement));
-			return double(nVal);
-		}
-		case fx::gltf::Accessor::ComponentType::Short:
-		{
-			int16_t nVal = *((int16_t*)(pCurElement));
-			return double(nVal);
-		}
-		case fx::gltf::Accessor::ComponentType::UnsignedShort:
-		{
-			uint16_t nVal = *((uint16_t*)(pCurElement));
-			return double(nVal);
-		}
-		case fx::gltf::Accessor::ComponentType::UnsignedInt:
-		{
-			uint32_t nVal = *((uint32_t*)(pCurElement));
-			return double(nVal);
-		}
-		case fx::gltf::Accessor::ComponentType::Float:
-		{
-			float nVal = *((float*)(pCurElement));
-			return double(nVal);
-		}
-		default:
-			return 0.0;
-		}
-	};
-
-
-}
-
 osg::ref_ptr<osg::PrimitiveSet> BaseObject::GetIndicesDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive)
 {
 	assert(primitive.indices >= 0);
-	osg::ref_ptr<osg::Array> pArr = GetOSGArray(gltfObject, gltfObject->accessors[primitive.indices]);
+	osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(primitive.indices);
 	if (pArr == nullptr)
 	{
 		return nullptr;
@@ -556,6 +327,8 @@ void BaseObject::LoadAsset(const fx::gltf::Asset& asset)
 
 void BaseObject::InitFromDocument(std::shared_ptr<fx::gltf::Document> gltfObject)
 {
+	SceneMgr::GetInstance().SetGLTF(gltfObject);
+
 	LoadAsset(gltfObject->asset);
 	// Scene level
 	if (gltfObject.get() && gltfObject->scenes.size() > 0 && (gltfObject->scenes[0]).nodes.size() > 0)
@@ -801,7 +574,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 
 		if (attribute.first == "POSITION")
 		{
-			m_vertex = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			m_vertex = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
 			if (m_vertex)
 			{
 				ptrRet->setVertexArray(m_vertex);
@@ -809,7 +582,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		}
 		else if (attribute.first == "NORMAL")
 		{
-			m_normal = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			m_normal = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
 			if (m_normal)
 			{
 				ptrRet->setNormalArray(m_normal, osg::Array::Binding::BIND_PER_VERTEX);
@@ -817,7 +590,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		}
 		else if (attribute.first == "TANGENT")
 		{
-			osg::ref_ptr<osg::Array> pTangent = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			osg::ref_ptr<osg::Array> pTangent = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
 			if (pTangent)
 			{
 				// TODO
@@ -825,7 +598,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{
-			m_texCoord0 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			m_texCoord0 = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
 			if (m_texCoord0)
 			{
 				ptrRet->setTexCoordArray(0, m_texCoord0, osg::Array::Binding::BIND_PER_VERTEX);
@@ -833,7 +606,7 @@ osg::ref_ptr<osg::Drawable> BaseObject::ImportPrimitive(std::shared_ptr<fx::gltf
 		}
 		else if (attribute.first == "TEXCOORD_1")
 		{
-			m_texCoord1 = GetOSGArray(gltfObject, gltfObject->accessors[attribute.second]);
+			m_texCoord1 = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
 			if (m_texCoord1)
 			{
 				ptrRet->setTexCoordArray(1, m_texCoord1, osg::Array::Binding::BIND_PER_VERTEX);
@@ -936,94 +709,15 @@ bool BaseObject::LoadImageTexture(std::shared_ptr<fx::gltf::Document> gltfObject
 	{
 		return false;
 	}
-
-	osg::ref_ptr<osg::Texture2D> pTexture = new osg::Texture2D();
-
-	const fx::gltf::Texture& bct = gltfObject->textures[texture.index];
-	int idxSampler = bct.sampler;
-	if (gltfObject->samplers.size() > idxSampler&& idxSampler >= 0)
+	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(texture.index);
+	if (pTexture)
 	{
-		const fx::gltf::Sampler& sampler = gltfObject->samplers[idxSampler];
-
-		if (m_mapWrapMode.find(sampler.wrapS) != m_mapWrapMode.end())
-		{
-			pTexture->setWrap(osg::Texture::WRAP_S, m_mapWrapMode[sampler.wrapS]);
-		}
-		if (m_mapWrapMode.find(sampler.wrapT) != m_mapWrapMode.end())
-		{
-			pTexture->setWrap(osg::Texture::WRAP_T, m_mapWrapMode[sampler.wrapT]);
-		}
-		if (m_mapMagFilter.find(sampler.magFilter) != m_mapMagFilter.end())
-		{
-			pTexture->setFilter(osg::Texture::MAG_FILTER, m_mapMagFilter[sampler.magFilter]);
-		}
-		if (m_mapMinFilter.find(sampler.minFilter) != m_mapMinFilter.end())
-		{
-			pTexture->setFilter(osg::Texture::MIN_FILTER, m_mapMinFilter[sampler.minFilter]);
-		}
+		getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
+		osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", texture.texCoord);
+		getOrCreateStateSet()->addUniform(baseTextureSampler);
+		return true;
 	}
-
-	int idxImage = bct.source;
-	if (gltfObject->images.size() > idxImage&& idxImage >= 0)
-	{
-		try
-		{
-			int width, height, nrChannels;
-			unsigned char* imgObj = nullptr;
-			const fx::gltf::Image& img = gltfObject->images[idxImage];
-			if (img.IsEmbeddedResource())
-			{
-				std::vector<uint8_t>	imgData;
-				img.MaterializeData(imgData);
-				if (imgData.empty())
-				{
-					return false;
-				}
-				imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
-			}
-			else
-			{
-				std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(gltfObject->extensionsAndExtras["LocalPath"]), img.uri);
-				imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
-			}
-
-			if (!imgObj)
-			{
-				return false;
-			}
-
-			//auto tt = std::array<float, 4>();
-			//tt[0] = 0.1f;
-			//tt[1] = 0.9f;
-			//tt[2] = 0.1f;
-			//tt[3] = 1.0f;
-			//LoadColorTexture(gltfObject, tt);
-			//return true;
-
-			//osg::ref_ptr<osg::Image> osgIMG = osgDB::readRefImageFile("D:\\glTF-Sample-Models-master\\2.0\\MorphPrimitivesTest\\glTF\\uv_texture.jpg");
-
-			osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
-			//osgIMG->allocateImage(width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE);
-			osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_BYTE, imgObj, osg::Image::USE_NEW_DELETE);
-			if (!osgIMG->valid())
-			{
-				return false;
-			}
-
-			pTexture->setImage(osgIMG);
-
-			getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
-			osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", texture.texCoord);
-			getOrCreateStateSet()->addUniform(baseTextureSampler);
-		}
-		catch (const std::exception & e)
-		{
-			LOG(ERROR) << e.what();
-			return false;
-		}
-	}
-
-	return true;
+	return false;
 }
 
 bool BaseObject::LoadPBRTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial)

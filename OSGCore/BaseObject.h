@@ -39,13 +39,6 @@ public:
 	static osg::ref_ptr<BaseObject> GLTF2OSG(std::shared_ptr<fx::gltf::Document> gltfObject, const std::string& strPath);
 	static std::shared_ptr<fx::gltf::Document> OSG2GLTF(osg::ref_ptr<BaseObject> pObj);
 
-	static osg::ref_ptr<osg::Array> GetOSGArray(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-	template<class ArrayType>
-	static osg::ref_ptr<osg::Array> GetOSGVecArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-	template<class ArrayType>
-	static osg::ref_ptr<osg::Array> GetOSGArrayImp(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Accessor& accessor);
-
-
 	osg::ref_ptr<osg::PrimitiveSet> GetIndicesDrawElements(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	osg::ref_ptr<osg::PrimitiveSet> GetPrimitiveSet(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 
@@ -109,31 +102,6 @@ private:
 	osg::ref_ptr<osg::Array>	m_indexl;
 	osg::ref_ptr<osg::Array>	m_texCoord0;
 	osg::ref_ptr<osg::Array>	m_texCoord1;
-
-	
-
-
-	std::map<fx::gltf::Sampler::WrappingMode, osg::Texture::WrapMode>	m_mapWrapMode{
-		{fx::gltf::Sampler::WrappingMode::ClampToEdge, osg::Texture::WrapMode::CLAMP_TO_EDGE},
-		{fx::gltf::Sampler::WrappingMode::MirroredRepeat, osg::Texture::WrapMode::MIRROR},
-		{fx::gltf::Sampler::WrappingMode::Repeat, osg::Texture::WrapMode::REPEAT},
-	};
-
-	std::map<fx::gltf::Sampler::MagFilter, osg::Texture::FilterMode>	m_mapMagFilter{
-		//{fx::gltf::Sampler::MagFilter::None, osg::Texture::FilterMode::None},
-		{fx::gltf::Sampler::MagFilter::Nearest, osg::Texture::FilterMode::NEAREST},
-		{fx::gltf::Sampler::MagFilter::Linear, osg::Texture::FilterMode::LINEAR},
-	};
-
-	std::map<fx::gltf::Sampler::MinFilter, osg::Texture::FilterMode>	m_mapMinFilter{
-		//{fx::gltf::Sampler::MinFilter::None, osg::Texture::FilterMode::None},
-		{fx::gltf::Sampler::MinFilter::Nearest, osg::Texture::FilterMode::NEAREST},
-		{fx::gltf::Sampler::MinFilter::Linear, osg::Texture::FilterMode::LINEAR},
-		{fx::gltf::Sampler::MinFilter::NearestMipMapNearest, osg::Texture::FilterMode::NEAREST_MIPMAP_NEAREST},
-		{fx::gltf::Sampler::MinFilter::LinearMipMapNearest, osg::Texture::FilterMode::LINEAR_MIPMAP_NEAREST},
-		{fx::gltf::Sampler::MinFilter::NearestMipMapLinear, osg::Texture::FilterMode::NEAREST_MIPMAP_LINEAR},
-		{fx::gltf::Sampler::MinFilter::LinearMipMapLinear, osg::Texture::FilterMode::LINEAR_MIPMAP_LINEAR},
-	};
 
 	std::map<fx::gltf::Primitive::Mode, osg::PrimitiveSet::Mode>	m_mapPrimitives = {
 		{fx::gltf::Primitive::Mode::Points, osg::PrimitiveSet::POINTS},

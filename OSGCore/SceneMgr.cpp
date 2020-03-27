@@ -1,9 +1,5 @@
 #include "pch.h"
 #include "SceneMgr.h"
-#include "GLTFArrayHelper.h"
-#include "GLTFTextureManager.h"
-#include "GLTFMaterialsManager.h"
-#include "GLTFMeshManager.h"
 
 SceneMgr& SceneMgr::GetInstance()
 {
