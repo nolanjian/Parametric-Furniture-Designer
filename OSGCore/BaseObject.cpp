@@ -516,26 +516,6 @@ bool BaseObject::ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::s
 	return false;
 }
 
-bool BaseObject::ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& material)
-{
-	
-	bool bRet1 = LoadPBRTexture(gltfObject, material.pbrMetallicRoughness);
-	bool bRet2 = LoadNormalTexture(gltfObject, material.normalTexture);
-	bool bRet3 = LoadOcclusionTexture(gltfObject, material.occlusionTexture);
-	bool bRet4 = LoadImageTexture(gltfObject, material.emissiveTexture);
-
-	// TODO
-	//float alphaCutoff{ defaults::MaterialAlphaCutoff };
-	//AlphaMode alphaMode{ AlphaMode::Opaque };
-
-	//bool doubleSided{ defaults::MaterialDoubleSided };
-
-	//Texture emissiveTexture;
-	//std::array<float, 3> emissiveFactor = { defaults::NullVec3 };
-
-	return bRet1 || bRet2 || bRet3 || bRet4;
-}
-
 bool BaseObject::ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material)
 {
 	Material.normalTexture.empty();
@@ -561,79 +541,4 @@ bool BaseObject::ParseParams(const nlohmann::json::value_type& params)
 	assert(params.size() == m_formulas.size());
 
 	return true;
-}
-
-bool BaseObject::LoadColorTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const std::array<float, 4>& baseColorFactor)
-{
-	osg::Uniform* baseTextureSampler = new osg::Uniform("baseColorFactor", osg::Vec4(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]));
-	osg::Uniform* useBaseColorFactor = new osg::Uniform("useBaseColorFactor", fx::gltf::defaults::IdentityVec4 != baseColorFactor ? 1 : 0);
-	getOrCreateStateSet()->addUniform(useBaseColorFactor);
-	getOrCreateStateSet()->addUniform(baseTextureSampler);
-
-	return fx::gltf::defaults::IdentityVec4 != baseColorFactor;
-}
-
-bool BaseObject::LoadImageTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::Texture& texture)
-{
-	if (texture.empty())
-	{
-		return false;
-	}
-	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(texture.index);
-	if (pTexture)
-	{
-		getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
-		osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", texture.texCoord);
-		getOrCreateStateSet()->addUniform(baseTextureSampler);
-		return true;
-	}
-	return false;
-}
-
-bool BaseObject::LoadPBRTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial)
-{
-	if (pbrMaterial.empty())
-	{
-		return false;
-	}
-
-	bool bRet1 = LoadColorTexture(gltfObject, pbrMaterial.baseColorFactor);
-	bool bRet2 = LoadImageTexture(gltfObject, pbrMaterial.baseColorTexture);
-	bool bRet3 = LoadImageTexture(gltfObject, pbrMaterial.metallicRoughnessTexture);
-
-	// TODO
-	//float roughnessFactor{ defaults::IdentityScalar };
-	//float metallicFactor{ defaults::IdentityScalar };
-
-	return bRet1 || bRet2 || bRet3;
-}
-
-bool BaseObject::LoadNormalTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::NormalTexture& normalTexture)
-{
-	auto fn = [&]()
-	{
-		return false;
-	};
-
-	bool bRet = LoadImageTexture(gltfObject, normalTexture) && fn();
-
-	// TODO
-	// float scale{ defaults::IdentityScalar };
-
-	return bRet;
-}
-
-bool BaseObject::LoadOcclusionTexture(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material::OcclusionTexture& occlusionTexture)
-{
-	auto fn = [&]()
-	{
-		return false;
-	};
-
-	bool bRet = LoadImageTexture(gltfObject, occlusionTexture) && fn();
-
-	// TODO
-	// float strength{ defaults::IdentityScalar };
-
-	return bRet;
 }

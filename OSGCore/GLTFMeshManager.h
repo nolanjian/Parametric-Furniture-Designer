@@ -15,6 +15,13 @@ protected:
 	osg::ref_ptr<osg::Drawable>	LoadDrawable(const fx::gltf::Primitive& primitive);
 	osg::ref_ptr<osg::PrimitiveSet> LoadPrimitiveSet(const fx::gltf::Primitive& primitive);
 	osg::ref_ptr<osg::DrawElements> LoadDrawElements(const fx::gltf::Primitive& primitive);
+
+	bool LoadMaterial(const fx::gltf::Material& material, osg::ref_ptr<osg::Geometry> pGeometry);
+	bool LoadColorTexture(const std::array<float, 4>& baseColorFactor, osg::ref_ptr<osg::Geometry> pGeometry);
+	bool LoadImageTexture(const fx::gltf::Material::Texture& texture, osg::ref_ptr<osg::Geometry> pGeometry);
+	bool LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial, osg::ref_ptr<osg::Geometry> pGeometry);
+	bool LoadNormalTexture(const fx::gltf::Material::NormalTexture& normalTexture, osg::ref_ptr<osg::Geometry> pGeometry);
+	bool LoadOcclusionTexture(const fx::gltf::Material::OcclusionTexture& occlusionTexture, osg::ref_ptr<osg::Geometry> pGeometry);
 private:
 	//GLTFMeshManager() {}
 	std::string	m_strGLTFPath;

@@ -53,6 +53,12 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			if (pArr)
 			{
 				ptrRet->setVertexArray(pArr);
+				osg::DrawArrays* pDrawArrays = dynamic_cast<osg::DrawArrays*>(ptrPrimitiveSet.get());
+				if (pDrawArrays)
+				{
+					pDrawArrays->setFirst(0);
+					pDrawArrays->setCount(pArr->getNumElements());
+				}
 			}
 		}
 		else if (attribute.first == "NORMAL")
@@ -108,7 +114,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
 			if (pArr)
 			{
-				// TODO
+				ptrRet->setColorArray(pArr, osg::Array::Binding::BIND_PER_VERTEX);
 			}
 		}
 		else
@@ -116,13 +122,10 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			assert(false);
 		}
 	}
-
-	//SceneMgr::GetInstance().GetMaterialsManager().GetInstance()
-
-	//if (gltfObject->materials.size() > primitive.material&& primitive.material >= 0)
-	//{
-	//	ImportMaterial(gltfObject, gltfObject->materials[primitive.material]);
-	//}
+	if (m_gltfObject->materials.size() > primitive.material && primitive.material >= 0)
+	{
+		LoadMaterial(m_gltfObject->materials[primitive.material], ptrRet);
+	}
 
 	// TODO 
 	// std::vector<Attributes> targets{};
@@ -181,4 +184,97 @@ osg::ref_ptr<osg::DrawElements> GLTFMeshManager::LoadDrawElements(const fx::gltf
 	default:
 		return nullptr;
 	}
+}
+
+bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_ptr<osg::Geometry> pGeometry)
+{
+	bool bRet1 = LoadPBRTexture(material.pbrMetallicRoughness, pGeometry);
+	bool bRet2 = LoadNormalTexture(material.normalTexture, pGeometry);
+	bool bRet3 = LoadOcclusionTexture(material.occlusionTexture, pGeometry);
+	bool bRet4 = LoadImageTexture(material.emissiveTexture, pGeometry);
+
+	// TODO
+	//float alphaCutoff{ defaults::MaterialAlphaCutoff };
+	//AlphaMode alphaMode{ AlphaMode::Opaque };
+
+	//bool doubleSided{ defaults::MaterialDoubleSided };
+
+	//Texture emissiveTexture;
+	//std::array<float, 3> emissiveFactor = { defaults::NullVec3 };
+	return bRet1 || bRet2 || bRet3 || bRet4;
+}
+
+bool GLTFMeshManager::LoadColorTexture(const std::array<float, 4>& baseColorFactor, osg::ref_ptr<osg::Geometry> pGeometry)
+{
+	osg::Uniform* baseTextureSampler = new osg::Uniform("baseColorFactor", osg::Vec4(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]));
+	osg::Uniform* useBaseColorFactor = new osg::Uniform("useBaseColorFactor", fx::gltf::defaults::IdentityVec4 != baseColorFactor ? 1 : 0);
+	pGeometry->getOrCreateStateSet()->addUniform(useBaseColorFactor);
+	pGeometry->getOrCreateStateSet()->addUniform(baseTextureSampler);
+
+	return fx::gltf::defaults::IdentityVec4 != baseColorFactor;
+}
+
+bool GLTFMeshManager::LoadImageTexture(const fx::gltf::Material::Texture& texture, osg::ref_ptr<osg::Geometry> pGeometry)
+{
+	if (texture.empty())
+	{
+		return false;
+	}
+	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(texture.index);
+	if (pTexture)
+	{
+		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
+		osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", texture.texCoord);
+		pGeometry->getOrCreateStateSet()->addUniform(baseTextureSampler);
+		return true;
+	}
+	return false;
+}
+
+bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial, osg::ref_ptr<osg::Geometry> pGeometry)
+{
+	if (pbrMaterial.empty())
+	{
+		return false;
+	}
+
+	bool bRet1 = LoadColorTexture(pbrMaterial.baseColorFactor, pGeometry);
+	bool bRet2 = LoadImageTexture(pbrMaterial.baseColorTexture, pGeometry);
+	bool bRet3 = LoadImageTexture(pbrMaterial.metallicRoughnessTexture, pGeometry);
+
+	// TODO
+	//float roughnessFactor{ defaults::IdentityScalar };
+	//float metallicFactor{ defaults::IdentityScalar };
+
+	return bRet1 || bRet2 || bRet3;
+}
+
+bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture& normalTexture, osg::ref_ptr<osg::Geometry> pGeometry)
+{
+	auto fn = [&]()
+	{
+		return false;
+	};
+
+	bool bRet = LoadImageTexture(normalTexture, pGeometry) && fn();
+
+	// TODO
+	// float scale{ defaults::IdentityScalar };
+
+	return bRet;
+}
+
+bool GLTFMeshManager::LoadOcclusionTexture(const fx::gltf::Material::OcclusionTexture& occlusionTexture, osg::ref_ptr<osg::Geometry> pGeometry)
+{
+	auto fn = [&]()
+	{
+		return false;
+	};
+
+	bool bRet = LoadImageTexture(occlusionTexture, pGeometry) && fn();
+
+	// TODO
+	// float strength{ defaults::IdentityScalar };
+
+	return bRet;
 }
