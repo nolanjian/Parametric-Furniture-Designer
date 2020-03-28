@@ -4,6 +4,9 @@ uniform mat4 osg_ModelViewProjectionMatrix;
 uniform mat3 osg_NormalMatrix; 
 uniform vec3 ecLightDir; 
 uniform int useVertexColor;
+
+uniform bool enableAlphaCutoff;
+uniform float alphaCutoff
  
 in vec4 osg_Vertex; 
 in vec3 osg_Normal; 

@@ -205,11 +205,25 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 	bool bRet3 = LoadOcclusionTexture(material.occlusionTexture, pGeometry);
 	bool bRet4 = LoadImageTexture(material.emissiveTexture, pGeometry);
 
-	// TODO
-	//float alphaCutoff{ defaults::MaterialAlphaCutoff };
-	//AlphaMode alphaMode{ AlphaMode::Opaque };
+	switch (material.alphaMode)
+	{
+	case  fx::gltf::Material::AlphaMode::Opaque:
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("enableAlphaCutoff", false));
+		break;
+	case  fx::gltf::Material::AlphaMode::Mask:
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("enableAlphaCutoff", true));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("alphaCutoff", material.alphaCutoff));
+		pGeometry->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON);
+		break;
+	case  fx::gltf::Material::AlphaMode::Blend:
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("enableAlphaCutoff", false));
+		pGeometry->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON);
+		break;
+	default:
+		break;
+	}
 
-	//bool doubleSided{ defaults::MaterialDoubleSided };
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("MaterialDoubleSided", material.doubleSided));
 
 	//Texture emissiveTexture;
 	//std::array<float, 3> emissiveFactor = { defaults::NullVec3 };

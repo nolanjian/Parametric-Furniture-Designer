@@ -32,7 +32,6 @@ void TestOSGWin::Run(const std::string& path)
 		s->setUseVertexAttributeAliasing(true);
 	}
 
-	//viewer.addEventHandler(new KeyboardEventHandler(tessInnerU, tessOuterU));
 	viewer.addEventHandler(new osgViewer::StatsHandler);
 	viewer.setSceneData(scene.get());
 	viewer.run();
