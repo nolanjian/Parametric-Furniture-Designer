@@ -2,6 +2,7 @@
 #include "TestOSGWin.h"
 #include "BaseObject.h"
 #include "STLIncluding.h"
+#include "../easyloggingpp/easylogging++.h"
 
 
 void TestOSGWin::Run(const std::string& path)
@@ -43,7 +44,9 @@ std::string LoadString(const std::string& path)
 	std::ifstream	fs(path);
 	std::stringstream	ss;
 	ss << fs.rdbuf();
-	return ss.str();
+	std::string source = ss.str();
+	LOG(INFO) << source;
+	return source;
 }
 
 void TestOSGWin::configureShaders(osg::StateSet* stateSet)

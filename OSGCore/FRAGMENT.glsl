@@ -4,14 +4,14 @@ uniform sampler2D baseTexture;
 in vec2 texcoord;
 out vec4 fColor;
 
-uniform int useBaseColorFactor;
-uniform vec4 baseColorFactor;
+uniform int useVertexColor;
+in vec4 osg_Color_f;
  
 void main() 
 { 
-	 if (useBaseColorFactor == 1)
+	 if (useVertexColor == 1)
 	 {
-		 fColor = baseColorFactor;
+		 fColor = osg_Color_f;
 	 }
 	 else
 	 {

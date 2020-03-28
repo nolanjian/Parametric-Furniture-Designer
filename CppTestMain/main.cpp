@@ -4,6 +4,11 @@
 
 int main()
 {
+#ifdef _DEBUG
+	std::filesystem::current_path("D:\\Library\\Parametric-Furniture-Designer\\");
+#endif // _DEBUG
+	std::string strCur = std::filesystem::current_path().string();
+
 	while (1)
 	{
 		std::string strPath;

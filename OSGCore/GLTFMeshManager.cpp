@@ -122,10 +122,22 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			assert(false);
 		}
 	}
+
 	if (m_gltfObject->materials.size() > primitive.material && primitive.material >= 0)
 	{
 		LoadMaterial(m_gltfObject->materials[primitive.material], ptrRet);
 	}
+
+	int useVertexColor = 0;
+	if (ptrRet->getColorArray())
+	{
+		auto numColor = ptrRet->getColorArray()->getNumElements();
+		if (numColor > 0)
+		{
+			useVertexColor = 1;
+		}
+	}
+	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform("useVertexColor", useVertexColor));
 
 	// TODO 
 	// std::vector<Attributes> targets{};
@@ -206,12 +218,17 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 
 bool GLTFMeshManager::LoadColorTexture(const std::array<float, 4>& baseColorFactor, osg::ref_ptr<osg::Geometry> pGeometry)
 {
-	osg::Uniform* baseTextureSampler = new osg::Uniform("baseColorFactor", osg::Vec4(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]));
-	osg::Uniform* useBaseColorFactor = new osg::Uniform("useBaseColorFactor", fx::gltf::defaults::IdentityVec4 != baseColorFactor ? 1 : 0);
-	pGeometry->getOrCreateStateSet()->addUniform(useBaseColorFactor);
-	pGeometry->getOrCreateStateSet()->addUniform(baseTextureSampler);
+	osg::Vec4 objectColor(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]);
 
-	return fx::gltf::defaults::IdentityVec4 != baseColorFactor;
+	bool buseBaseColorFactor = fx::gltf::defaults::IdentityVec4 != baseColorFactor;
+	if (buseBaseColorFactor)
+	{
+		osg::Vec4Array* pArr = new osg::Vec4Array;
+		pArr->push_back(objectColor);
+		pGeometry->setColorArray(pArr, osg::Array::Binding::BIND_OVERALL);
+	}
+
+	return buseBaseColorFactor;
 }
 
 bool GLTFMeshManager::LoadImageTexture(const fx::gltf::Material::Texture& texture, osg::ref_ptr<osg::Geometry> pGeometry)
@@ -233,6 +250,8 @@ bool GLTFMeshManager::LoadImageTexture(const fx::gltf::Material::Texture& textur
 
 bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial, osg::ref_ptr<osg::Geometry> pGeometry)
 {
+	// TODO work better with COLOR_O
+
 	if (pbrMaterial.empty())
 	{
 		return false;
