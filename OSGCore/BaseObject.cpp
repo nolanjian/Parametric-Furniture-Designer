@@ -2,11 +2,11 @@
 #include "BaseObject.h"
 #include "../Utils/IDGenerater.h"
 #include "../Utils/IParamsConverter.h"
-#include "../easyloggingpp/easylogging++.h"
 #include "ObjectFactory.h"
 #include "SceneMgr.h"
-
+#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
+#endif
 #include "stb_image.h"
 
 BaseObject::BaseObject()

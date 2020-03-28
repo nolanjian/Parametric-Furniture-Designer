@@ -1,10 +1,8 @@
 #include "pch.h"
 #include "ImplementOSGCore.h"
 #include "BaseObject.h"
-
 #include "TestOSGWin.h"
 #include "../Utils/Utils.h"
-//#include "../easyloggingpp/easylogging++.h"
 
 OSGCore::ImplementOSGCore::ImplementOSGCore()
 {

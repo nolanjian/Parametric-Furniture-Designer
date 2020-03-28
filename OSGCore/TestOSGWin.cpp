@@ -1,8 +1,7 @@
 #include "pch.h"
+#include "STLIncluding.h"
 #include "TestOSGWin.h"
 #include "BaseObject.h"
-#include "STLIncluding.h"
-#include "../easyloggingpp/easylogging++.h"
 
 
 void TestOSGWin::Run(const std::string& path)

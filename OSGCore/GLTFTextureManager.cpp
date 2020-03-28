@@ -1,10 +1,7 @@
 #include "pch.h"
 #include "SceneMgr.h"
 #include "GLTFTextureManager.h"
-#include "../easyloggingpp/easylogging++.h"
 
-//#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
 
 GLTFTextureManager& GLTFTextureManager::GetInstance()
 {
@@ -88,25 +85,22 @@ void GLTFTextureManager::LoadImage(osg::ref_ptr<osg::Texture2D> pTexture, const 
 			}
 			imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
 		}
+		else if (image.bufferView > 0)
+		{
+			const fx::gltf::BufferView bufferView = m_gltfObject->bufferViews[image.bufferView];
+			fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
+			auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset);
+			const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset)];
+			if (!pData)
+			{
+				return;
+			}
+			imgObj = stbi_load_from_memory(pData, bufferView.byteLength, &width, &height, &nrChannels, STBI_rgb_alpha);
+		}
 		else
 		{
-			if (image.bufferView > 0)
-			{
-				const fx::gltf::BufferView bufferView = m_gltfObject->bufferViews[image.bufferView];
-				fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
-				auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset);
-				const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset)];
-				if (!pData)
-				{
-					return;
-				}
-				imgObj = stbi_load_from_memory(pData, bufferView.byteLength, &width, &height, &nrChannels, STBI_rgb_alpha);
-			}
-			else
-			{
-				std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(m_strGLTFPath), image.uri);
-				imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
-			}
+			std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(m_strGLTFPath), image.uri);
+			imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 		}
 
 		if (!imgObj)
@@ -122,12 +116,12 @@ void GLTFTextureManager::LoadImage(osg::ref_ptr<osg::Texture2D> pTexture, const 
 		}
 
 		pTexture->setImage(osgIMG);
-		
+
 		// OSG Image will release it auto
 		//stbi_image_free(imgObj);
 		//imgObj = nullptr;
 	}
-	catch (const std::exception & e)
+	catch (const std::exception& e)
 	{
 		LOG(ERROR) << e.what();
 		return;

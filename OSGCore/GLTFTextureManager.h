@@ -1,8 +1,10 @@
 #pragma once
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
-#include "fx/gltf.h"
 #include "IGLTFResourceManager.h"
+#include <fx/gltf.h>
+#include "../easyloggingpp/easylogging++.h"
+#include "stb_image.h"
 
 class GLTFTextureManager : public IGLTFResourceManager
 {

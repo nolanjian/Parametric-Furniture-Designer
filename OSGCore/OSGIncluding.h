@@ -9,10 +9,12 @@
 #include <osg/PrimitiveSet>
 #include <osg/PatchParameter>
 #include <osg/ShapeDrawable>
+#include <osg/State>
+#include <osg/Texture2D>
+#include <osg/Texture3D>
+#include <osgDB/ReadFile>
+#include <osgGA/TrackballManipulator>
 #include <osgViewer/Viewer>
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgGA/TrackballManipulator>
-#include <osgDB/ReadFile>
-#include <osg/Texture2D>
-#include <osg/Texture3D>
+#include <osgUtil/Optimizer>

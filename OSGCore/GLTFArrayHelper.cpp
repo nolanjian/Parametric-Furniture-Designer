@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "GLTFArrayHelper.h"
-#include "../easyloggingpp/easylogging++.h"
 
 GLTFArrayHelper& GLTFArrayHelper::GetInstance()
 {

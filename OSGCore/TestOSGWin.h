@@ -1,11 +1,10 @@
 #pragma once
 
-#include <osgViewer/Viewer>
-#include <osgViewer/ViewerEventHandlers>
-#include <osg/State>
-#include <osgUtil/Optimizer>
-
-#include <string>
+#include "OSGIncluding.h"
+#include "STLIncluding.h"
+#include <fx/gltf.h>
+#include "../easyloggingpp/easylogging++.h"
+#include "stb_image.h"
 
 
 class TestOSGWin

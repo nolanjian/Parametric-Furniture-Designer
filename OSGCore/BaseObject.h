@@ -1,14 +1,12 @@
 #pragma once
 
-
-
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
+#include <fx/gltf.h>
+#include "../easyloggingpp/easylogging++.h"
 #include "../muparserx/mpParser.h"
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"
-
-#include <fx/gltf.h>
 
 class BaseObject : public osg::MatrixTransform
 {
