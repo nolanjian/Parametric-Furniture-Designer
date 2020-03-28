@@ -49,7 +49,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 	{
 		if (attribute.first == "POSITION")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				ptrRet->setVertexArray(pArr);
@@ -63,7 +63,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "NORMAL")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				ptrRet->setNormalArray(pArr, osg::Array::Binding::BIND_PER_VERTEX);
@@ -71,7 +71,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "TANGENT")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				// TODO
@@ -79,7 +79,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				ptrRet->setTexCoordArray(0, pArr, osg::Array::Binding::BIND_PER_VERTEX);
@@ -87,7 +87,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "TEXCOORD_1")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				ptrRet->setTexCoordArray(1, pArr, osg::Array::Binding::BIND_PER_VERTEX);
@@ -95,7 +95,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "JOINTS_0")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				// TODO
@@ -103,7 +103,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "WEIGHTS_0")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				// TODO
@@ -111,7 +111,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "COLOR_0")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(attribute.second);
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
 				ptrRet->setColorArray(pArr, osg::Array::Binding::BIND_PER_VERTEX);
@@ -169,7 +169,7 @@ osg::ref_ptr<osg::DrawElements> GLTFMeshManager::LoadDrawElements(const fx::gltf
 		return nullptr;
 	}
 
-	osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArray(primitive.indices);
+	osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(primitive.indices);
 	if (pArr == nullptr)
 	{
 		return nullptr;

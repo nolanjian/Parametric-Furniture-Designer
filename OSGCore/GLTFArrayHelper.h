@@ -10,7 +10,7 @@ public:
 	static GLTFArrayHelper& GetInstance();
 	virtual void Load() override;
 
-	osg::ref_ptr<osg::Array> GetArray(size_t index);
+	osg::ref_ptr<osg::Array> GetArrayByAccessorIndex(size_t index);
 protected:
 	osg::ref_ptr<osg::RefMatrix> GetOSGMatrix(const fx::gltf::Accessor& accessor);
 	osg::ref_ptr<osg::Array> GetOSGArray(const fx::gltf::Accessor& accessor);

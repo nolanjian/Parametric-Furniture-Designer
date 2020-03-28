@@ -34,7 +34,7 @@ void GLTFArrayHelper::Load()
 	}
 }
 
-osg::ref_ptr<osg::Array> GLTFArrayHelper::GetArray(size_t index)
+osg::ref_ptr<osg::Array> GLTFArrayHelper::GetArrayByAccessorIndex(size_t index)
 {
 	return mapArray[index];
 }

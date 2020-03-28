@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "SceneMgr.h"
 #include "GLTFTextureManager.h"
 #include "../easyloggingpp/easylogging++.h"
 
@@ -89,8 +90,23 @@ void GLTFTextureManager::LoadImage(osg::ref_ptr<osg::Texture2D> pTexture, const 
 		}
 		else
 		{
-			std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(m_strGLTFPath), image.uri);
-			imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
+			if (image.bufferView > 0)
+			{
+				const fx::gltf::BufferView bufferView = m_gltfObject->bufferViews[image.bufferView];
+				fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
+				auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset);
+				const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset)];
+				if (!pData)
+				{
+					return;
+				}
+				imgObj = stbi_load_from_memory(pData, bufferView.byteLength, &width, &height, &nrChannels, STBI_rgb_alpha);
+			}
+			else
+			{
+				std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(m_strGLTFPath), image.uri);
+				imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
+			}
 		}
 
 		if (!imgObj)
@@ -99,14 +115,17 @@ void GLTFTextureManager::LoadImage(osg::ref_ptr<osg::Texture2D> pTexture, const 
 		}
 
 		osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
-		osgIMG->allocateImage(width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE);
-		osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_BYTE, imgObj, osg::Image::USE_NEW_DELETE);
+		osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_MALLOC_FREE);
 		if (!osgIMG->valid())
 		{
 			return;
 		}
 
 		pTexture->setImage(osgIMG);
+		
+		// OSG Image will release it auto
+		//stbi_image_free(imgObj);
+		//imgObj = nullptr;
 	}
 	catch (const std::exception & e)
 	{
