@@ -20,6 +20,9 @@
     <Filter Include="ResourceManager">
       <UniqueIdentifier>{5278cd0a-ad43-4880-9c95-87b75ee83da4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="EvenHandler">
+      <UniqueIdentifier>{f37e1a9d-6cab-4817-bbe1-1a765ce6f14b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -97,6 +100,9 @@
     <ClInclude Include="GLTFArrayHelper.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>
+    <ClInclude Include="PickEventHandler.h">
+      <Filter>EvenHandler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
@@ -153,5 +159,6 @@
     <ClCompile Include="GLTFArrayHelper.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
+    <ClCompile Include="PickEventHandler.cpp" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "STLIncluding.h"
 #include "TestOSGWin.h"
 #include "BaseObject.h"
+#include "PickEventHandler.h"
 
 
 void TestOSGWin::Run(const std::string& path)
@@ -32,6 +33,7 @@ void TestOSGWin::Run(const std::string& path)
 		s->setUseVertexAttributeAliasing(true);
 	}
 
+	viewer.addEventHandler(new PickEventHandler(scene));
 	viewer.addEventHandler(new osgViewer::StatsHandler);
 	viewer.setSceneData(scene.get());
 	viewer.run();

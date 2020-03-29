@@ -115,6 +115,7 @@
     <ClInclude Include="Panel.h" />
     <ClInclude Include="ParametricComponent.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="PickEventHandler.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="stb_image.h" />
@@ -140,6 +141,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="PickEventHandler.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="TestOSGWin.cpp" />
