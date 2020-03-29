@@ -225,8 +225,21 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 
 	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("MaterialDoubleSided", material.doubleSided));
 
-	//Texture emissiveTexture;
-	//std::array<float, 3> emissiveFactor = { defaults::NullVec3 };
+	bool useEmissiveTexture = false;
+	if (!material.emissiveTexture.empty() && material.emissiveFactor != fx::gltf::defaults::NullVec3)
+	{
+		osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(material.emissiveTexture.index);
+		if (pTexture)
+		{
+			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(material.emissiveTexture.texCoord, pTexture);
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("emissiveTexture", material.emissiveTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("emissiveFactor", 
+				osg::Vec3f(material.emissiveFactor[0], material.emissiveFactor[1], material.emissiveFactor[2])));
+			useEmissiveTexture = true;
+		}
+	}
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useEmissiveTexture", useEmissiveTexture));
+
 	return bRet1 || bRet2 || bRet3 || bRet4;
 }
 
@@ -275,9 +288,8 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 	bool bRet2 = LoadImageTexture(pbrMaterial.baseColorTexture, pGeometry);
 	bool bRet3 = LoadImageTexture(pbrMaterial.metallicRoughnessTexture, pGeometry);
 
-	// TODO
-	//float roughnessFactor{ defaults::IdentityScalar };
-	//float metallicFactor{ defaults::IdentityScalar };
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("roughnessFactor", pbrMaterial.roughnessFactor));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("metallicFactor", pbrMaterial.metallicFactor));
 
 	return bRet1 || bRet2 || bRet3;
 }
@@ -305,15 +317,21 @@ bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture&
 
 bool GLTFMeshManager::LoadOcclusionTexture(const fx::gltf::Material::OcclusionTexture& occlusionTexture, osg::ref_ptr<osg::Geometry> pGeometry)
 {
-	auto fn = [&]()
+	if (occlusionTexture.empty())
 	{
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useOcclusionTexture", false));
 		return false;
-	};
+	}
+	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(occlusionTexture.index);
+	if (pTexture)
+	{
+		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(occlusionTexture.texCoord, pTexture);
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("occlusionTexture", occlusionTexture.texCoord));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("occlusionTextureStrength", occlusionTexture.strength));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useOcclusionTexture", true));
+		return true;
+	}
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useOcclusionTexture", false));
 
-	bool bRet = LoadImageTexture(occlusionTexture, pGeometry) && fn();
-
-	// TODO
-	// float strength{ defaults::IdentityScalar };
-
-	return bRet;
+	return false;
 }

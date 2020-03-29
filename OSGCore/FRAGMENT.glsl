@@ -14,6 +14,17 @@ uniform bool useNormalTexture;
 uniform float normalTextureScale;
 uniform sampler2D normalTexture;
 
+uniform bool useOcclusionTexture;
+uniform float occlusionTextureStrength;
+uniform sampler2D occlusionTexture;
+
+uniform bool useEmissiveTexture;
+uniform vec3 emissiveFactor;
+uniform sampler2D emissiveTexture;
+
+uniform float metallicFactor;
+uniform float roughnessFactor;
+
 uniform bool MaterialDoubleSided;
  
 void main() 
