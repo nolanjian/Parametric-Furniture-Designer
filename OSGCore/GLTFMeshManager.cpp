@@ -286,12 +286,48 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 
 	bool bRet1 = LoadColorTexture(pbrMaterial.baseColorFactor, pGeometry);
 	bool bRet2 = LoadImageTexture(pbrMaterial.baseColorTexture, pGeometry);
-	bool bRet3 = LoadImageTexture(pbrMaterial.metallicRoughnessTexture, pGeometry);
+
+	bool useBaseColorFactor = false;
+	if (pbrMaterial.baseColorFactor != fx::gltf::defaults::IdentityVec4)
+	{
+		osg::Vec4 objectColor(pbrMaterial.baseColorFactor[0], pbrMaterial.baseColorFactor[1],
+			pbrMaterial.baseColorFactor[2], pbrMaterial.baseColorFactor[3]);
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("baseColorFactor", objectColor));
+		useBaseColorFactor = true;
+		
+	}
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useBaseColorFactor", useBaseColorFactor));
+
+	bool useBaseColorTexture = false;
+	if (!pbrMaterial.baseColorTexture.empty())
+	{
+		osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(pbrMaterial.baseColorTexture.index);
+		if (pTexture)
+		{
+			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(pbrMaterial.baseColorTexture.texCoord, pTexture);
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("baseColorTexture", pbrMaterial.baseColorTexture.texCoord));
+			useBaseColorTexture = true;
+		}
+	}
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useBaseColorTexture", useBaseColorTexture));
+
+	bool useMetallicRoughnessTexture = false;
+	if (!pbrMaterial.metallicRoughnessTexture.empty())
+	{
+		osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(pbrMaterial.metallicRoughnessTexture.index);
+		if (pTexture)
+		{
+			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(pbrMaterial.metallicRoughnessTexture.texCoord, pTexture);
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("metallicRoughnessTexture", pbrMaterial.metallicRoughnessTexture.texCoord));
+			useMetallicRoughnessTexture = true;
+		}
+	}
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useMetallicRoughnessTexture", useMetallicRoughnessTexture));
 
 	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("roughnessFactor", pbrMaterial.roughnessFactor));
 	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("metallicFactor", pbrMaterial.metallicFactor));
 
-	return bRet1 || bRet2 || bRet3;
+	return bRet1 || bRet2 || useBaseColorFactor || useBaseColorTexture || useMetallicRoughnessTexture;
 }
 
 bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture& normalTexture, osg::ref_ptr<osg::Geometry> pGeometry)

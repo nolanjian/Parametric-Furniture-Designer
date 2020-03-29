@@ -7,6 +7,15 @@ out vec4 fColor;
 uniform int useVertexColor;
 in vec4 osg_Color_f;
 
+uniform bool useBaseColorFactor;
+uniform vec4 baseColorFactor;
+
+uniform bool useBaseColorTexture;
+uniform sampler2D baseColorTexture;
+
+uniform bool useMetallicRoughnessTexture;
+uniform sampler2D metallicRoughnessTexture;
+
 uniform bool enableAlphaCutoff;
 uniform float alphaCutoff;
 

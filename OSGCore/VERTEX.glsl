@@ -8,6 +8,15 @@ uniform int useVertexColor;
 uniform bool enableAlphaCutoff;
 uniform float alphaCutoff;
 
+uniform bool useBaseColorFactor;
+uniform vec4 baseColorFactor;
+
+uniform bool useBaseColorTexture;
+uniform sampler2D baseColorTexture;
+
+uniform bool useMetallicRoughnessTexture;
+uniform sampler2D metallicRoughnessTexture;
+
 uniform bool useNormalTexture;
 uniform float normalTextureScale;
 uniform sampler2D normalTexture;

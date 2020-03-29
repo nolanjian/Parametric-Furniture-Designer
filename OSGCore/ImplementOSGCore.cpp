@@ -8,12 +8,14 @@ OSGCore::ImplementOSGCore::ImplementOSGCore()
 {
 	InitLogger();
 
-	LOG(INFO) << "ImplementOSGCore";
+	LOG(INFO) << "ImplementOSGCore()";
 }
 
 OSGCore::ImplementOSGCore::~ImplementOSGCore()
 {
 	Destory();
+
+	LOG(INFO) << "~ImplementOSGCore()";
 }
 
 bool OSGCore::ImplementOSGCore::Render(HWND hwnd)

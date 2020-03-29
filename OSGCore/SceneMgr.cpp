@@ -20,3 +20,8 @@ void SceneMgr::SetGLTF(std::shared_ptr<fx::gltf::Document> gltfObject)
 	GLTFMeshManager::GetInstance().SetGLTF(gltfObject);
 	GLTFMeshManager::GetInstance().Load();
 }
+
+void SceneMgr::Release()
+{
+	SetGLTF(nullptr);
+}
