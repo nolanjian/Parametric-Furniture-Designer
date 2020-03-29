@@ -7,7 +7,13 @@ uniform int useVertexColor;
 
 uniform bool enableAlphaCutoff;
 uniform float alphaCutoff;
+
+uniform bool useNormalTexture;
+uniform float normalTextureScale;
+uniform sampler2D normalTexture;
  
+uniform bool MaterialDoubleSided;
+
 in vec4 osg_Vertex; 
 in vec3 osg_Normal; 
 in vec4 osg_Color;

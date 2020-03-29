@@ -284,17 +284,23 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 
 bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture& normalTexture, osg::ref_ptr<osg::Geometry> pGeometry)
 {
-	auto fn = [&]()
+	if (normalTexture.empty())
 	{
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useNormalTexture", false));
 		return false;
-	};
+	}
+	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(normalTexture.index);
+	if (pTexture)
+	{
+		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(normalTexture.texCoord, pTexture);
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("normalTexture", normalTexture.texCoord));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("normalTextureScale", normalTexture.scale));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useNormalTexture", true));
+		return true;
+	}
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useNormalTexture", false));
 
-	bool bRet = LoadImageTexture(normalTexture, pGeometry) && fn();
-
-	// TODO
-	// float scale{ defaults::IdentityScalar };
-
-	return bRet;
+	return false;
 }
 
 bool GLTFMeshManager::LoadOcclusionTexture(const fx::gltf::Material::OcclusionTexture& occlusionTexture, osg::ref_ptr<osg::Geometry> pGeometry)

@@ -10,6 +10,10 @@ in vec4 osg_Color_f;
 uniform bool enableAlphaCutoff;
 uniform float alphaCutoff;
 
+uniform bool useNormalTexture;
+uniform float normalTextureScale;
+uniform sampler2D normalTexture;
+
 uniform bool MaterialDoubleSided;
  
 void main() 
