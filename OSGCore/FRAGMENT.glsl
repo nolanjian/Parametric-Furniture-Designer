@@ -8,7 +8,7 @@ uniform int useVertexColor;
 in vec4 osg_Color_f;
 
 uniform bool enableAlphaCutoff;
-uniform float alphaCutoff
+uniform float alphaCutoff;
 
 uniform bool MaterialDoubleSided;
  
