@@ -27,12 +27,12 @@ bool PickEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIAction
 	case osgGA::GUIEventAdapter::KEYDOWN:
 		if (m_scene)
 		{
-			osg::ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE);
-			m_scene->getOrCreateStateSet()->setAttribute(
-				pm, osg::StateAttribute::OVERRIDE | osg::StateAttribute::ON);
+			//osg::ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE);
+			//m_scene->getOrCreateStateSet()->setAttribute(
+			//	pm, osg::StateAttribute::OVERRIDE | osg::StateAttribute::ON);
 
 
-			m_scene->getOrCreateStateSet()->setMode(GL_DEPTH_TEST, osg::StateAttribute::ON);
+			//m_scene->getOrCreateStateSet()->setMode(GL_DEPTH_TEST, osg::StateAttribute::ON);
 		}
 	default:
 		break;

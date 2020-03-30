@@ -40,6 +40,8 @@ in vec4 osg_Color;
 out vec4 osg_Color_f;
 out vec2 texcoord;
 
+layout(location = 15) in vec4 tangent;  // fix pos
+
 void main() 
 {
     vec3 ecNormal = normalize( osg_NormalMatrix * osg_Normal ); 

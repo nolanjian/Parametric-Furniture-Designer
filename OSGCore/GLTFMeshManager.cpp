@@ -45,6 +45,8 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 	osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
 	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
 
+	bool useTangent = false;
+
 	for (const std::pair<std::string, uint32_t>& attribute : primitive.attributes)
 	{
 		if (attribute.first == "POSITION")
@@ -74,7 +76,8 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
-				// TODO
+				ptrRet->setVertexAttribArray(15, pArr, osg::Array::Binding::BIND_PER_VERTEX);
+				useTangent = true;
 			}
 		}
 		else if (attribute.first == "TEXCOORD_0")
@@ -98,7 +101,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
 			if (pArr)
 			{
-				// TODO
+				
 			}
 		}
 		else if (attribute.first == "WEIGHTS_0")
@@ -122,6 +125,8 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			assert(false);
 		}
 	}
+
+	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform("useTangent", useTangent));
 
 	if (m_gltfObject->materials.size() > primitive.material && primitive.material >= 0)
 	{

@@ -34,7 +34,7 @@ void TestOSGWin::Run(const std::string& path)
 	}
 
 	viewer.addEventHandler(new PickEventHandler(scene));
-	viewer.addEventHandler(new osgViewer::StatsHandler);
+	//viewer.addEventHandler(new osgViewer::StatsHandler);
 	viewer.setSceneData(scene.get());
 	viewer.run();
 }
