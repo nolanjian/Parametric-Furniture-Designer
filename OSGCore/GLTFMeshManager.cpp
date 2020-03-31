@@ -133,13 +133,13 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		LoadMaterial(m_gltfObject->materials[primitive.material], ptrRet);
 	}
 
-	int useVertexColor = 0;
+	bool useVertexColor = false;
 	if (ptrRet->getColorArray())
 	{
 		auto numColor = ptrRet->getColorArray()->getNumElements();
 		if (numColor > 0)
 		{
-			useVertexColor = 1;
+			useVertexColor = true;
 		}
 	}
 	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform("useVertexColor", useVertexColor));
@@ -208,7 +208,6 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 	bool bRet1 = LoadPBRTexture(material.pbrMetallicRoughness, pGeometry);
 	bool bRet2 = LoadNormalTexture(material.normalTexture, pGeometry);
 	bool bRet3 = LoadOcclusionTexture(material.occlusionTexture, pGeometry);
-	bool bRet4 = LoadImageTexture(material.emissiveTexture, pGeometry);
 
 	switch (material.alphaMode)
 	{
@@ -245,7 +244,7 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 	}
 	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useEmissiveTexture", useEmissiveTexture));
 
-	return bRet1 || bRet2 || bRet3 || bRet4;
+	return bRet1 || bRet2 || bRet3;
 }
 
 bool GLTFMeshManager::LoadColorTexture(const std::array<float, 4>& baseColorFactor, osg::ref_ptr<osg::Geometry> pGeometry)
@@ -263,34 +262,12 @@ bool GLTFMeshManager::LoadColorTexture(const std::array<float, 4>& baseColorFact
 	return buseBaseColorFactor;
 }
 
-bool GLTFMeshManager::LoadImageTexture(const fx::gltf::Material::Texture& texture, osg::ref_ptr<osg::Geometry> pGeometry)
-{
-	if (texture.empty())
-	{
-		return false;
-	}
-	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(texture.index);
-	if (pTexture)
-	{
-		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(texture.texCoord, pTexture);
-		osg::Uniform* baseTextureSampler = new osg::Uniform("baseTexture", texture.texCoord);
-		pGeometry->getOrCreateStateSet()->addUniform(baseTextureSampler);
-		return true;
-	}
-	return false;
-}
-
 bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial, osg::ref_ptr<osg::Geometry> pGeometry)
 {
-	// TODO work better with COLOR_O
-
 	if (pbrMaterial.empty())
 	{
 		return false;
 	}
-
-	bool bRet1 = LoadColorTexture(pbrMaterial.baseColorFactor, pGeometry);
-	bool bRet2 = LoadImageTexture(pbrMaterial.baseColorTexture, pGeometry);
 
 	bool useBaseColorFactor = false;
 	if (pbrMaterial.baseColorFactor != fx::gltf::defaults::IdentityVec4)
@@ -332,7 +309,7 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("roughnessFactor", pbrMaterial.roughnessFactor));
 	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("metallicFactor", pbrMaterial.metallicFactor));
 
-	return bRet1 || bRet2 || useBaseColorFactor || useBaseColorTexture || useMetallicRoughnessTexture;
+	return useBaseColorFactor || useBaseColorTexture || useMetallicRoughnessTexture;
 }
 
 bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture& normalTexture, osg::ref_ptr<osg::Geometry> pGeometry)

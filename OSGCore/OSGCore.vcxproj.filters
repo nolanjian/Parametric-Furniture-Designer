@@ -26,10 +26,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
-    <None Include="FRAGMENT.glsl">
+    <None Include="FRAGMENT.frag">
       <Filter>shader</Filter>
     </None>
-    <None Include="VERTEX.glsl">
+    <None Include="VERTEX.vert">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

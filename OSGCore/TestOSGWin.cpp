@@ -51,8 +51,8 @@ std::string LoadString(const std::string& path)
 
 void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 {
-	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\VERTEX.glsl"));
-	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\FRAGMENT.glsl"));
+	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\VERTEX.vert"));
+	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\FRAGMENT.frag"));
 
 	osg::Program* program = new osg::Program;
 	program->addShader(vShader);

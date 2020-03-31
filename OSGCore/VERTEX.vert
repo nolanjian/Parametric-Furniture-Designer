@@ -1,11 +1,12 @@
-#version 330 
- 
-uniform sampler2D baseTexture; 
-in vec2 texcoord;
-out vec4 fColor;
+#version 330
 
-uniform int useVertexColor;
-in vec4 osg_Color_f;
+uniform mat4 osg_ModelViewProjectionMatrix; 
+uniform mat3 osg_NormalMatrix; 
+uniform vec3 ecLightDir; 
+uniform bool useVertexColor;
+
+uniform bool enableAlphaCutoff;
+uniform float alphaCutoff;
 
 uniform bool useBaseColorFactor;
 uniform vec4 baseColorFactor;
@@ -15,9 +16,6 @@ uniform sampler2D baseColorTexture;
 
 uniform bool useMetallicRoughnessTexture;
 uniform sampler2D metallicRoughnessTexture;
-
-uniform bool enableAlphaCutoff;
-uniform float alphaCutoff;
 
 uniform bool useNormalTexture;
 uniform float normalTextureScale;
@@ -35,15 +33,23 @@ uniform float metallicFactor;
 uniform float roughnessFactor;
 
 uniform bool MaterialDoubleSided;
- 
+
+in vec4 osg_Vertex; 
+in vec3 osg_Normal; 
+in vec4 osg_Color;
+out vec4 osg_Color_f;
+out vec2 texcoord;
+
+layout(location = 15) in vec4 tangent;  // fix pos
+
+
+
 void main() 
-{ 
-	 if (useVertexColor == 1)
-	 {
-		 fColor = osg_Color_f;
-	 }
-	 else
-	 {
-		 fColor = texture2D( baseTexture, texcoord);
-	 }
+{
+    vec3 ecNormal = normalize( osg_NormalMatrix * osg_Normal ); 
+    float diffuse = max( dot( ecLightDir, ecNormal ), 0. ); 
+    
+    osg_Color_f = osg_Color;
+    texcoord = gl_MultiTexCoord0.xy;
+    gl_Position = osg_ModelViewProjectionMatrix * osg_Vertex; 
 }

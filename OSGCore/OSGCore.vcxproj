@@ -93,8 +93,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
-    <None Include="FRAGMENT.glsl" />
-    <None Include="VERTEX.glsl" />
+    <None Include="FRAGMENT.frag" />
+    <None Include="VERTEX.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseObject.h" />
