@@ -73,12 +73,12 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "TANGENT")
 		{
-			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
-			if (pArr)
-			{
-				ptrRet->setVertexAttribArray(15, pArr, osg::Array::Binding::BIND_PER_VERTEX);
-				useTangent = true;
-			}
+			//osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
+			//if (pArr)
+			//{
+			//	ptrRet->setVertexAttribArray(15, pArr, osg::Array::Binding::BIND_PER_VERTEX);
+			//	useTangent = true;
+			//}
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{
