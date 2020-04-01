@@ -44,28 +44,31 @@ void get_color()
 {
     if (useBaseColorTexture)
     {
-        vec4 bct = texture2D(baseColorTexture, texcoord);
+        fColor = texture2D(baseColorTexture, texcoord);
         if (useBaseColorFactor)
         {
-            vec4 tmp = vec4(bct.x * baseColorFactor.x,
-                            bct.y * baseColorFactor.y,
-                            bct.z * baseColorFactor.z,
-                            bct.w * baseColorFactor.w);
-            fColor = tmp;
+            fColor = vec4(fColor.x * baseColorFactor.x,
+                            fColor.y * baseColorFactor.y,
+                            fColor.z * baseColorFactor.z,
+                            fColor.w * baseColorFactor.w);
         }
-        else
+    }
+    else if (useVertexColor)
+    {
+        fColor = osg_Color_f;
+        if (useBaseColorFactor)
         {
-            fColor = bct;
+            fColor = vec4(fColor.x * baseColorFactor.x,
+                            fColor.y * baseColorFactor.y,
+                            fColor.z * baseColorFactor.z,
+                            fColor.w * baseColorFactor.w);
         }
     }
     else if (useBaseColorFactor)
     {
         fColor = baseColorFactor;
     }
-    else if (useVertexColor)
-    {
-        fColor = osg_Color_f;
-    }
+    
 }
 
 vec3 get_normal()
