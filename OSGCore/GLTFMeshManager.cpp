@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GLTFMeshManager.h"
 #include "SceneMgr.h"
+#include "ShadingPreDefine.h"
 
 GLTFMeshManager& GLTFMeshManager::GetInstance()
 {
@@ -73,12 +74,12 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 		else if (attribute.first == "TANGENT")
 		{
-			//osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
-			//if (pArr)
-			//{
-			//	ptrRet->setVertexAttribArray(15, pArr, osg::Array::Binding::BIND_PER_VERTEX);
-			//	useTangent = true;
-			//}
+			osg::ref_ptr<osg::Array> pArr = SceneMgr::GetInstance().GetArrayHelper().GetInstance().GetArrayByAccessorIndex(attribute.second);
+			if (pArr)
+			{
+				ptrRet->setVertexAttribArray(TANGENT_INDEX, pArr, osg::Array::Binding::BIND_PER_VERTEX);
+				useTangent = true;
+			}
 		}
 		else if (attribute.first == "TEXCOORD_0")
 		{

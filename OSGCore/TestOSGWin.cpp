@@ -3,6 +3,7 @@
 #include "TestOSGWin.h"
 #include "BaseObject.h"
 #include "PickEventHandler.h"
+#include "ShadingPreDefine.h"
 
 
 void TestOSGWin::Run(const std::string& path)
@@ -57,6 +58,7 @@ void TestOSGWin::configureShaders(osg::StateSet* stateSet)
 	osg::Program* program = new osg::Program;
 	program->addShader(vShader);
 	program->addShader(fShader);
+	program->addBindAttribLocation(TANGENT, TANGENT_INDEX);
 	stateSet->setAttribute(program);
 
 	osg::Vec3f lightDir(0., 0.5, 1.);

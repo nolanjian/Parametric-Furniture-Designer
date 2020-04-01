@@ -103,6 +103,9 @@
     <ClInclude Include="PickEventHandler.h">
       <Filter>EvenHandler</Filter>
     </ClInclude>
+    <ClInclude Include="ShadingPreDefine.h">
+      <Filter>shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
