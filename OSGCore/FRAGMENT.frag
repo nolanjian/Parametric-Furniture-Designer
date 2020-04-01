@@ -1,8 +1,12 @@
 #version 330 
- 
-uniform sampler2D baseTexture; 
+
+uniform mat4 osg_ModelViewProjectionMatrix; 
+uniform mat3 osg_NormalMatrix;
+
 in vec2 texcoord;
 out vec4 fColor;
+
+in vec3 aosg_Normal;
 
 uniform bool useVertexColor;
 in vec4 osg_Color_f;
@@ -40,7 +44,7 @@ void get_color()
 {
     if (useBaseColorTexture)
     {
-        vec4 bct = texture2D( baseTexture, texcoord);
+        vec4 bct = texture2D(baseColorTexture, texcoord);
         if (useBaseColorFactor)
         {
             vec4 tmp = vec4(bct.x * baseColorFactor.x,
@@ -64,7 +68,32 @@ void get_color()
     }
 }
 
+vec3 get_normal()
+{
+    if (useNormalTexture)
+    {
+        vec3 normal = texture2D(normalTexture, texcoord).xyz;
+        normal = normal * 2 - 1;
+        vec3 tmp = normalize( osg_NormalMatrix * normal ); 
+        return tmp;
+    }
+    else
+    {
+        vec3 tmp = normalize( osg_NormalMatrix * aosg_Normal ); 
+        return tmp;
+    }
+}
+
 void main() 
 {
 	get_color();
+    if (enableAlphaCutoff)
+    {
+        if (fColor.a < alphaCutoff)
+        {
+            discard;
+        }
+    }
+
+    vec3 curNormal = get_normal();
 }

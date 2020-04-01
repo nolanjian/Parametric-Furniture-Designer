@@ -35,10 +35,12 @@ uniform float roughnessFactor;
 uniform bool MaterialDoubleSided;
 
 in vec4 osg_Vertex; 
-in vec3 osg_Normal; 
 in vec4 osg_Color;
 out vec4 osg_Color_f;
 out vec2 texcoord;
+
+in vec3 osg_Normal; 
+out vec3 aosg_Normal;
 
 layout(location = 15) in vec4 tangent;  // fix pos
 
