@@ -236,31 +236,16 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 		osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(material.emissiveTexture.index);
 		if (pTexture)
 		{
-			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(material.emissiveTexture.texCoord, pTexture);
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("emissiveTexture", material.emissiveTexture.texCoord));
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("emissiveFactor", 
+			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(EMISSIVE_TEXTURE_INDEX, pTexture);
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(EMISSIVE_TEXTURE, material.emissiveTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(EMISSIVE_FACTOR,
 				osg::Vec3f(material.emissiveFactor[0], material.emissiveFactor[1], material.emissiveFactor[2])));
 			useEmissiveTexture = true;
 		}
 	}
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useEmissiveTexture", useEmissiveTexture));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_EMISSIVE_TEXTURE, useEmissiveTexture));
 
 	return bRet1 || bRet2 || bRet3;
-}
-
-bool GLTFMeshManager::LoadColorTexture(const std::array<float, 4>& baseColorFactor, osg::ref_ptr<osg::Geometry> pGeometry)
-{
-	osg::Vec4 objectColor(baseColorFactor[0], baseColorFactor[1], baseColorFactor[2], baseColorFactor[3]);
-
-	bool buseBaseColorFactor = fx::gltf::defaults::IdentityVec4 != baseColorFactor;
-	if (buseBaseColorFactor)
-	{
-		osg::Vec4Array* pArr = new osg::Vec4Array;
-		pArr->push_back(objectColor);
-		pGeometry->setColorArray(pArr, osg::Array::Binding::BIND_OVERALL);
-	}
-
-	return buseBaseColorFactor;
 }
 
 bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughness& pbrMaterial, osg::ref_ptr<osg::Geometry> pGeometry)
@@ -275,11 +260,11 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 	{
 		osg::Vec4 objectColor(pbrMaterial.baseColorFactor[0], pbrMaterial.baseColorFactor[1],
 			pbrMaterial.baseColorFactor[2], pbrMaterial.baseColorFactor[3]);
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("baseColorFactor", objectColor));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(BASE_COLOR_FACTOR, objectColor));
 		useBaseColorFactor = true;
 		
 	}
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useBaseColorFactor", useBaseColorFactor));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_BASE_COLOR_FACTOR, useBaseColorFactor));
 
 	bool useBaseColorTexture = false;
 	if (!pbrMaterial.baseColorTexture.empty())
@@ -287,12 +272,12 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 		osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(pbrMaterial.baseColorTexture.index);
 		if (pTexture)
 		{
-			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(pbrMaterial.baseColorTexture.texCoord, pTexture);
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("baseColorTexture", pbrMaterial.baseColorTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(BASE_COLOR_TEXTURE_INDEX, pTexture);
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(BASE_COLOR_TEXTURE, pbrMaterial.baseColorTexture.texCoord));
 			useBaseColorTexture = true;
 		}
 	}
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useBaseColorTexture", useBaseColorTexture));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_BASE_COLOR_TEXTURE, useBaseColorTexture));
 
 	bool useMetallicRoughnessTexture = false;
 	if (!pbrMaterial.metallicRoughnessTexture.empty())
@@ -300,15 +285,15 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 		osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(pbrMaterial.metallicRoughnessTexture.index);
 		if (pTexture)
 		{
-			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(pbrMaterial.metallicRoughnessTexture.texCoord, pTexture);
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("metallicRoughnessTexture", pbrMaterial.metallicRoughnessTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(METALLIC_ROUGHNESS_TEXTURE_INDEX, pTexture);
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(METALLIC_ROUGHNESS_TEXTURE, pbrMaterial.metallicRoughnessTexture.texCoord));
 			useMetallicRoughnessTexture = true;
 		}
 	}
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useMetallicRoughnessTexture", useMetallicRoughnessTexture));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_METALLIC_ROUGHNESS_TEXTURE, useMetallicRoughnessTexture));
 
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("roughnessFactor", pbrMaterial.roughnessFactor));
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("metallicFactor", pbrMaterial.metallicFactor));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(ROUGHNESS_FACTOR, pbrMaterial.roughnessFactor));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(METALLIC_FACTOR, pbrMaterial.metallicFactor));
 
 	return useBaseColorFactor || useBaseColorTexture || useMetallicRoughnessTexture;
 }
@@ -317,19 +302,19 @@ bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture&
 {
 	if (normalTexture.empty())
 	{
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useNormalTexture", false));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_NORMAL_TEXTURE, false));
 		return false;
 	}
 	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(normalTexture.index);
 	if (pTexture)
 	{
-		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(normalTexture.texCoord, pTexture);
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("normalTexture", normalTexture.texCoord));
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("normalTextureScale", normalTexture.scale));
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useNormalTexture", true));
+		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(NORMAL_TEXTURE_INDEX, pTexture);
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(NORMAL_TEXTURE, normalTexture.texCoord));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(NORMAL_TEXTURE_SCALE, normalTexture.scale));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_NORMAL_TEXTURE, true));
 		return true;
 	}
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useNormalTexture", false));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_NORMAL_TEXTURE, false));
 
 	return false;
 }
@@ -338,19 +323,19 @@ bool GLTFMeshManager::LoadOcclusionTexture(const fx::gltf::Material::OcclusionTe
 {
 	if (occlusionTexture.empty())
 	{
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useOcclusionTexture", false));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_OCCLUSION_TEXTURE, false));
 		return false;
 	}
 	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(occlusionTexture.index);
 	if (pTexture)
 	{
-		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(occlusionTexture.texCoord, pTexture);
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("occlusionTexture", occlusionTexture.texCoord));
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("occlusionTextureStrength", occlusionTexture.strength));
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useOcclusionTexture", true));
+		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(OCCLUSION_TEXTURE_INDEX, pTexture);
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(OCCLUSION_TEXTURE, occlusionTexture.texCoord));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(OCCLUSION_TEXTURE_STRENGTH, occlusionTexture.strength));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_OCCLUSION_TEXTURE, true));
 		return true;
 	}
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("useOcclusionTexture", false));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_OCCLUSION_TEXTURE, false));
 
 	return false;
 }

@@ -70,14 +70,14 @@ void PickEventHandler::PickObject(osgViewer::Viewer* viewer, double x, double y)
 	osgUtil::LineSegmentIntersector::Intersections intersections;
 	if (viewer->computeIntersections(x, y, intersections))
 	{
-		for (const osgUtil::LineSegmentIntersector::Intersection& intersection : intersections)
-		{
-			for (osg::Node* node : intersection.nodePath)
-			{
-				std::cout << node->getName() << std::endl;
-			}
+		//for (const osgUtil::LineSegmentIntersector::Intersection& intersection : intersections)
+		//{
+		//	for (osg::Node* node : intersection.nodePath)
+		//	{
+		//		std::cout << node->getName() << std::endl;
+		//	}
 
-		}
+		//}
 	}
 }
 

@@ -162,6 +162,8 @@
     <ClCompile Include="GLTFArrayHelper.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="PickEventHandler.cpp" />
+    <ClCompile Include="PickEventHandler.cpp">
+      <Filter>EvenHandler</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

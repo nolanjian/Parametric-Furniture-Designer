@@ -46,7 +46,7 @@ std::string LoadString(const std::string& path)
 	std::stringstream	ss;
 	ss << fs.rdbuf();
 	std::string source = ss.str();
-	LOG(INFO) << source;
+	//LOG(INFO) << source;
 	return source;
 }
 

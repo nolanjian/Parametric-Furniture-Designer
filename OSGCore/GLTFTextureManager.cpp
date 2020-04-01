@@ -75,54 +75,100 @@ void GLTFTextureManager::LoadImage(osg::ref_ptr<osg::Texture2D> pTexture, const 
 	{
 		int width, height, nrChannels;
 		unsigned char* imgObj = nullptr;
-		if (image.IsEmbeddedResource())
+
+		auto fnLoadEmbeddedResource = [&]() -> bool
 		{
-			std::vector<uint8_t>	imgData;
-			image.MaterializeData(imgData);
-			if (imgData.empty())
+			try
+			{
+				if (!image.IsEmbeddedResource())
+				{
+					return false;
+				}
+
+				std::vector<uint8_t>	imgData;
+				image.MaterializeData(imgData);
+				if (imgData.empty())
+				{
+					return false;
+				}
+				imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
+				return imgObj != nullptr;
+			}
+			catch (const std::exception& e)
+			{
+				LOG(ERROR) << "fnLoadEmbeddedResource:\n";
+				LOG(ERROR) << e.what();
+				return false;
+			}
+		};
+
+		auto fnLoadExteralResource = [&]() -> bool
+		{
+			try
+			{
+				std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(m_strGLTFPath), image.uri);
+				if (!std::filesystem::exists(filePath))
+				{
+					return false;
+				}
+				
+				imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
+				return imgObj != nullptr;
+			}
+			catch (const std::exception& e)
+			{
+				LOG(ERROR) << "fnLoadExteralResource:\n";
+				LOG(ERROR) << e.what();
+				return false;
+			}
+		};
+
+		auto fnLoadBufferViewResource = [&]() -> bool
+		{
+			try
+			{
+				if (image.bufferView >= 0)
+				{
+					const fx::gltf::BufferView bufferView = m_gltfObject->bufferViews[image.bufferView];
+					fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
+					auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset);
+					const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset)];
+					if (!pData)
+					{
+						return false;
+					}
+					imgObj = stbi_load_from_memory(pData, bufferView.byteLength, &width, &height, &nrChannels, STBI_rgb_alpha);
+					return imgObj != nullptr;
+				}
+				return false;
+			}
+			catch (const std::exception& e)
+			{
+				LOG(ERROR) << "fnLoadBufferViewResource:\n";
+				LOG(ERROR) << e.what();
+				return false;
+			}
+		};
+
+		if (fnLoadEmbeddedResource() || fnLoadExteralResource() || fnLoadBufferViewResource())
+		{
+			osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
+			osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_MALLOC_FREE);
+			if (!osgIMG->valid())
 			{
 				return;
 			}
-			imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
-		}
-		else if (image.bufferView > 0)
-		{
-			const fx::gltf::BufferView bufferView = m_gltfObject->bufferViews[image.bufferView];
-			fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
-			auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset);
-			const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset)];
-			if (!pData)
-			{
-				return;
-			}
-			imgObj = stbi_load_from_memory(pData, bufferView.byteLength, &width, &height, &nrChannels, STBI_rgb_alpha);
-		}
-		else
-		{
-			std::string filePath = fx::gltf::detail::CreateBufferUriPath(fx::gltf::detail::GetDocumentRootPath(m_strGLTFPath), image.uri);
-			imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
-		}
 
-		if (!imgObj)
-		{
-			return;
+			pTexture->setImage(osgIMG);
+
+			// OSG Image will release it auto
+			//stbi_image_free(imgObj);
+			//imgObj = nullptr;
 		}
-
-		osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
-		osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_MALLOC_FREE);
-		if (!osgIMG->valid())
-		{
-			return;
-		}
-
-		pTexture->setImage(osgIMG);
-
-		// OSG Image will release it auto
-		//stbi_image_free(imgObj);
-		//imgObj = nullptr;
 	}
 	catch (const std::exception& e)
 	{
+		LOG(ERROR) << "LoadImage:\n";
 		LOG(ERROR) << e.what();
 		return;
 	}
