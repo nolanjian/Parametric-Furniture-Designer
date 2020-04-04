@@ -109,7 +109,8 @@ vec3 get_normal()
 
 void main() 
 {
-	get_color();
+    vec3 curNormal = get_normal();
+    get_color();
     if (enableAlphaCutoff)
     {
         if (fColor.a < alphaCutoff)
@@ -118,5 +119,15 @@ void main()
         }
     }
 
-    vec3 curNormal = get_normal();
+    if (gl_FrontFacing)
+    {
+        
+    }
+    else
+    {
+        if (!materialDoubleSided)
+        {
+            discard;
+        }
+    }
 }
