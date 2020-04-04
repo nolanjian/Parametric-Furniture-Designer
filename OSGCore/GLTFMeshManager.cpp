@@ -47,6 +47,8 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 	ptrRet->addPrimitiveSet(ptrPrimitiveSet);
 
 	bool useTangent = false;
+	bool useTexcoord0 = false;
+	bool useTexcoord1 = false;
 
 	for (const std::pair<std::string, uint32_t>& attribute : primitive.attributes)
 	{
@@ -87,6 +89,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			if (pArr)
 			{
 				ptrRet->setTexCoordArray(0, pArr, osg::Array::Binding::BIND_PER_VERTEX);
+				useTexcoord0 = true;
 			}
 		}
 		else if (attribute.first == "TEXCOORD_1")
@@ -95,6 +98,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			if (pArr)
 			{
 				ptrRet->setTexCoordArray(1, pArr, osg::Array::Binding::BIND_PER_VERTEX);
+				useTexcoord1 = true;
 			}
 		}
 		else if (attribute.first == "JOINTS_0")
@@ -127,7 +131,9 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 		}
 	}
 
-	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform("useTangent", useTangent));
+	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_TANGENT, useTangent));
+	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_TEXCOORD0, useTexcoord0));
+	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_TEXCOORD1, useTexcoord1));
 
 	if (m_gltfObject->materials.size() > primitive.material && primitive.material >= 0)
 	{
@@ -143,7 +149,7 @@ osg::ref_ptr<osg::Drawable> GLTFMeshManager::LoadDrawable(const fx::gltf::Primit
 			useVertexColor = true;
 		}
 	}
-	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform("useVertexColor", useVertexColor));
+	ptrRet->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_VERTEX_COLOR, useVertexColor));
 
 	// TODO 
 	// std::vector<Attributes> targets{};
@@ -213,22 +219,22 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 	switch (material.alphaMode)
 	{
 	case  fx::gltf::Material::AlphaMode::Opaque:
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("enableAlphaCutoff", false));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(ENABLE_ALPHA_CUTOFF, false));
 		break;
 	case  fx::gltf::Material::AlphaMode::Mask:
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("enableAlphaCutoff", true));
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("alphaCutoff", material.alphaCutoff));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(ENABLE_ALPHA_CUTOFF, true));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(ALPHA_CUTOFF, material.alphaCutoff));
 		pGeometry->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON);
 		break;
 	case  fx::gltf::Material::AlphaMode::Blend:
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("enableAlphaCutoff", false));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(ENABLE_ALPHA_CUTOFF, false));
 		pGeometry->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON);
 		break;
 	default:
 		break;
 	}
 
-	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform("MaterialDoubleSided", material.doubleSided));
+	pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(MATERIAL_DOUBLE_SIDED, material.doubleSided));
 
 	bool useEmissiveTexture = false;
 	if (!material.emissiveTexture.empty() && material.emissiveFactor != fx::gltf::defaults::NullVec3)
@@ -237,7 +243,8 @@ bool GLTFMeshManager::LoadMaterial(const fx::gltf::Material& material, osg::ref_
 		if (pTexture)
 		{
 			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(EMISSIVE_TEXTURE_INDEX, pTexture);
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(EMISSIVE_TEXTURE, material.emissiveTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(EMISSIVE_TEXTURE, EMISSIVE_TEXTURE_INDEX));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(EMISSIVE_TEXTURE_COORD, material.emissiveTexture.texCoord));
 			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(EMISSIVE_FACTOR,
 				osg::Vec3f(material.emissiveFactor[0], material.emissiveFactor[1], material.emissiveFactor[2])));
 			useEmissiveTexture = true;
@@ -273,7 +280,8 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 		if (pTexture)
 		{
 			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(BASE_COLOR_TEXTURE_INDEX, pTexture);
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(BASE_COLOR_TEXTURE, pbrMaterial.baseColorTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(BASE_COLOR_TEXTURE, BASE_COLOR_TEXTURE_INDEX));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(BASE_COLOR_TEXTURE_COORD, pbrMaterial.baseColorTexture.texCoord));
 			useBaseColorTexture = true;
 		}
 	}
@@ -286,7 +294,8 @@ bool GLTFMeshManager::LoadPBRTexture(const fx::gltf::Material::PBRMetallicRoughn
 		if (pTexture)
 		{
 			pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(METALLIC_ROUGHNESS_TEXTURE_INDEX, pTexture);
-			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(METALLIC_ROUGHNESS_TEXTURE, pbrMaterial.metallicRoughnessTexture.texCoord));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(METALLIC_ROUGHNESS_TEXTURE, METALLIC_ROUGHNESS_TEXTURE_INDEX));
+			pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(METALLIC_ROUGHNESS_TEXTURE_COORD, pbrMaterial.metallicRoughnessTexture.texCoord));
 			useMetallicRoughnessTexture = true;
 		}
 	}
@@ -305,11 +314,13 @@ bool GLTFMeshManager::LoadNormalTexture(const fx::gltf::Material::NormalTexture&
 		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_NORMAL_TEXTURE, false));
 		return false;
 	}
+
 	osg::ref_ptr<osg::Texture> pTexture = SceneMgr::GetInstance().GetTextureManager().GetInstance().GetTexture(normalTexture.index);
 	if (pTexture)
 	{
 		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(NORMAL_TEXTURE_INDEX, pTexture);
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(NORMAL_TEXTURE, normalTexture.texCoord));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(NORMAL_TEXTURE, NORMAL_TEXTURE_INDEX));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(NORMAL_TEXTURE_COORD, normalTexture.texCoord));
 		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(NORMAL_TEXTURE_SCALE, normalTexture.scale));
 		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_NORMAL_TEXTURE, true));
 		return true;
@@ -330,7 +341,8 @@ bool GLTFMeshManager::LoadOcclusionTexture(const fx::gltf::Material::OcclusionTe
 	if (pTexture)
 	{
 		pGeometry->getOrCreateStateSet()->setTextureAttributeAndModes(OCCLUSION_TEXTURE_INDEX, pTexture);
-		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(OCCLUSION_TEXTURE, occlusionTexture.texCoord));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(OCCLUSION_TEXTURE, OCCLUSION_TEXTURE_INDEX));
+		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(OCCLUSION_TEXTURE_COORD, occlusionTexture.texCoord));
 		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(OCCLUSION_TEXTURE_STRENGTH, occlusionTexture.strength));
 		pGeometry->getOrCreateStateSet()->addUniform(new osg::Uniform(USE_OCCLUSION_TEXTURE, true));
 		return true;
