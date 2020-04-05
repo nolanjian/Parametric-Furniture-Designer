@@ -2,6 +2,7 @@
 #include "ImplementOSGCore.h"
 #include "BaseObject.h"
 #include "TestOSGWin.h"
+#include "ShadingPreDefine.h"
 #include "../Utils/Utils.h"
 
 OSGCore::ImplementOSGCore::ImplementOSGCore()
@@ -107,28 +108,18 @@ bool OSGCore::ImplementOSGCore::Render(HWND hwnd)
 		return false;
 	}
 
-	// Create graphics context 
-	osg::ref_ptr<osg::GraphicsContext> gc = osg::GraphicsContext::createGraphicsContext(traits.get());
-	osg::ref_ptr<osg::Camera> camera = new osg::Camera;
-	camera->setGraphicsContext(gc.get());
-	camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
-	camera->setDrawBuffer(GL_BACK);
-	camera->setReadBuffer(GL_BACK);
+	initViewer(osg::GraphicsContext::createGraphicsContext(traits.get()));
 
-	// Create the viewer and attach the camera to it 
-	m_ptrViewer = new osgViewer::Viewer;
-	m_ptrViewer->addSlave(camera.get());
-
-	m_ptrViewer->setCamera(camera.get());
-	m_ptrViewer->setSceneData(m_ptr3DScene);
-	osg::Node*	pCow = osgDB::readNodeFile("D:\\library\\Parametric-Furniture-Designer\\OpenSceneGraph-Data-3.0.0\\SmokeBox.osgt");
-	m_ptr3DScene->addChild(pCow);
-
-	m_ptrViewer->setKeyEventSetsDone(0);
-	m_ptrViewer->setCameraManipulator(new osgGA::TrackballManipulator);
+	auto scene = BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Lantern\\glTF\\Lantern.gltf");
+	if (scene)
+	{
+		//osgUtil::Optimizer optimizer;
+		//optimizer.optimize(scene.get(), osgUtil::Optimizer::ALL_OPTIMIZATIONS | osgUtil::Optimizer::TESSELLATE_GEOMETRY);
+		configureShaders(scene->getOrCreateStateSet());
+		m_ptrViewer->setSceneData(scene);
+	}
 
 	m_renderThread = std::thread(std::bind(&ImplementOSGCore::RenderThread, this));
-
 	return true;
 }
 
@@ -183,4 +174,58 @@ void OSGCore::ImplementOSGCore::OpenSceneInNewWindow(const std::string& path)
 	delete pWin;
 	pWin = nullptr;
 	return;
+}
+
+std::string LoadShaderString(const std::string& path)
+{
+	std::ifstream	fs(path);
+	std::stringstream	ss;
+	ss << fs.rdbuf();
+	std::string source = ss.str();
+	//LOG(INFO) << source;
+	return source;
+}
+
+void OSGCore::ImplementOSGCore::configureShaders(osg::StateSet* stateSet)
+{
+	if (!stateSet)
+	{
+		return;
+	}
+
+	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadShaderString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\VERTEX.vert"));
+	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadShaderString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\FRAGMENT.frag"));
+
+	osg::Program* program = new osg::Program;
+	program->addShader(vShader);
+	program->addShader(fShader);
+	program->addBindAttribLocation(TANGENT, TANGENT_INDEX);
+	stateSet->setAttribute(program);
+
+	osg::Vec3f lightDir(0., 0.5, 1.);
+	lightDir.normalize();
+	stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
+}
+
+void OSGCore::ImplementOSGCore::initViewer(osg::ref_ptr<osg::GraphicsContext> gc)
+{
+	m_ptrViewer = new osgViewer::Viewer;
+	osg::Camera* cam = m_ptrViewer->getCamera();
+	cam->setProjectionMatrix(osg::Matrix::perspective(30., (double)800 / (double)600, 1., 100.));
+	cam->setClearColor(osg::Vec4(94.0 / 255.0, 112 / 255.0, 129 / 255.0, 1.0));
+	cam->setGraphicsContext(gc);
+	cam->setViewport(new osg::Viewport(0, 0, gc->getTraits()->width, gc->getTraits()->height));
+	cam->setDrawBuffer(GL_BACK);
+	cam->setReadBuffer(GL_BACK);
+
+	osgViewer::Viewer::Windows windows;
+	m_ptrViewer->getWindows(windows);
+	for (osgViewer::Viewer::Windows::iterator itr = windows.begin();
+		itr != windows.end();
+		++itr)
+	{
+		osg::State* s = (*itr)->getState();
+		s->setUseModelViewAndProjectionUniforms(true);
+		s->setUseVertexAttributeAliasing(true);
+	}
 }

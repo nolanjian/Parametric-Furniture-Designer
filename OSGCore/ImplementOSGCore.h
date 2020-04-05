@@ -19,6 +19,10 @@ namespace OSGCore
 		void SetOnSelectObjectCallback(void(*ptr)(long long int)) { fnOnSelectObjectCallback = ptr; }
 		void LoadScene(const std::string& path);
 		void OpenSceneInNewWindow(const std::string& path);
+
+		void configureShaders(osg::StateSet* stateSet);
+		void initViewer(osg::ref_ptr<osg::GraphicsContext> gc);
+
 	protected:
 	private:
 		bool s_bKeepRunning = false;
