@@ -19,13 +19,13 @@ public:
 	void SetParent(osg::ref_ptr<BaseObject> parent) { m_parent = parent; }
 	osg::ref_ptr<BaseObject> GetParent() { return m_parent; }
 
-	const std::map<std::wstring, std::wstring>& GetFormulas() { return m_formulas; }
+	const std::map<std::string, std::string>& GetFormulas() { return m_formulas; }
 
 	bool ReInitParser();
 	bool SetParentFormulars();
 	bool UpdateFormulas();
 	bool UpdateSelfFormulas();
-	bool SetOneLine(const std::wstring& line);
+	bool SetOneLine(const std::string& line);
 
 	const mup::var_maptype& FormulasResult();
 
@@ -73,9 +73,9 @@ protected:
 	osg::Vec3	vTranslation;
 	osg::Matrixd	mat;
 
-	std::map<std::wstring, std::wstring>	m_formulas;
-	std::map<std::wstring, std::wstring>	m_formulasResult4Cal;
-	std::map<std::wstring, std::wstring>	m_parentFormulasResult;
+	std::map<std::string, std::string>	m_formulas;
+	std::map<std::string, std::string>	m_formulasResult4Cal;
+	std::map<std::string, std::string>	m_parentFormulasResult;
 
 	mup::var_maptype	m_formulasResult;
 

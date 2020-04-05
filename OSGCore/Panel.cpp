@@ -13,17 +13,17 @@ Panel::~Panel()
 
 bool Panel::InitFromParams()
 {
-	if (m_formulasResult.find(L"W") != m_formulasResult.end())
+	if (m_formulasResult.find("W") != m_formulasResult.end())
 	{
-		dWidth = m_formulasResult[L"W"]->AsIValue()->GetFloat();
+		dWidth = m_formulasResult["W"]->AsIValue()->GetFloat();
 	}
-	if (m_formulasResult.find(L"D") != m_formulasResult.end())
+	if (m_formulasResult.find("D") != m_formulasResult.end())
 	{
-		dDepth = m_formulasResult[L"D"]->AsIValue()->GetFloat();
+		dDepth = m_formulasResult["D"]->AsIValue()->GetFloat();
 	}
-	if (m_formulasResult.find(L"H") != m_formulasResult.end())
+	if (m_formulasResult.find("H") != m_formulasResult.end())
 	{
-		dHeight = m_formulasResult[L"H"]->AsIValue()->GetFloat();
+		dHeight = m_formulasResult["H"]->AsIValue()->GetFloat();
 	}
 
 	return true;

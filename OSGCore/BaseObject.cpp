@@ -107,22 +107,22 @@ bool BaseObject::UpdateSelfFormulas()
 	assert(m_parser);
 	m_formulasResult.clear();
 
-	std::list<std::wstring>	lstFormulas;
+	std::list<std::string>	lstFormulas;
 
 	for (auto pKV : GetFormulas())
 	{
-		static std::wstring wsParent(L"Parent.");
-		static std::wstring wsrParent(L"Parent_");
-		std::wstring val = pKV.second;
+		static std::string wsParent(_T("Parent."));
+		static std::string wsrParent(_T("Parent_"));
+		std::string val = pKV.second;
 
 		size_t	pos = val.find(wsParent);
-		while (pos != std::wstring::npos)
+		while (pos != std::string::npos)
 		{
 			val = val.replace(pos, wsParent.length(), wsrParent);
 			pos = val.find(wsParent);
 		}
 
-		std::wstring line = pKV.first + _T("=") + val;
+		std::string line = pKV.first + _T("=") + val;
 		lstFormulas.push_back(line);
 	}
 
@@ -143,7 +143,7 @@ bool BaseObject::UpdateSelfFormulas()
 		}
 		if (lstFormulas.size() == preSize)
 		{
-			std::wstring	outMsg = _T("Parsing Fail for:\n");
+			std::string	outMsg = _T("Parsing Fail for:\n");
 			for (auto& s : lstFormulas)
 			{
 				outMsg += s + _T("\n");
@@ -173,7 +173,7 @@ bool BaseObject::UpdateSelfFormulas()
 	return true;
 }
 
-bool BaseObject::SetOneLine(const std::wstring& line)
+bool BaseObject::SetOneLine(const std::string& line)
 {
 	try
 	{
@@ -534,8 +534,8 @@ bool BaseObject::ParseParams(const nlohmann::json::value_type& params)
 	{
 		if (item.is_object() && item.contains("name") && item.contains("formula"))
 		{
-			m_formulas[L"name"] = item["name"].get<std::wstring>();
-			m_formulas[L"formula"] = item["formula"].get<std::wstring>();
+			m_formulas[_T("name")] = item["name"].get<std::string>();
+			m_formulas[_T("formula")] = item["formula"].get<std::string>();
 		}
 	}
 	assert(params.size() == m_formulas.size());

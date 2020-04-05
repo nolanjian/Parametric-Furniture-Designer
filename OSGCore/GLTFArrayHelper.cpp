@@ -159,7 +159,9 @@ inline osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGVecArrayImp(const fx::glt
 {
 	osg::ref_ptr<ArrayType> pRet = new ArrayType();
 
-	fx::gltf::BufferView const& bufferView = m_gltfObject->bufferViews[accessor.bufferView];
+	int32_t bvIndex = accessor.bufferView == -1 ? 0 : accessor.bufferView;
+
+	fx::gltf::BufferView const& bufferView = m_gltfObject->bufferViews[bvIndex];
 	fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
 	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
 	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];
@@ -210,7 +212,9 @@ inline osg::ref_ptr<osg::Array> GLTFArrayHelper::GetOSGArrayImp(const fx::gltf::
 {
 	osg::ref_ptr<ArrayType>	pRet = new ArrayType();
 
-	fx::gltf::BufferView const& bufferView = m_gltfObject->bufferViews[accessor.bufferView];
+	int32_t bvIndex = accessor.bufferView == -1 ? 0 : accessor.bufferView;
+
+	fx::gltf::BufferView const& bufferView = m_gltfObject->bufferViews[bvIndex];
 	fx::gltf::Buffer const& buffer = m_gltfObject->buffers[bufferView.buffer];
 	auto bufOffset = static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset;
 	const uint8_t* pData = &buffer.data[static_cast<uint64_t>(bufferView.byteOffset) + accessor.byteOffset];

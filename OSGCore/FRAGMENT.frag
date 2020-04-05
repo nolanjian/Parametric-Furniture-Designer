@@ -20,6 +20,8 @@ uniform int baseColorTextureCoord;
 uniform bool useMetallicRoughnessTexture;
 uniform sampler2D metallicRoughnessTexture;
 uniform int metallicRoughnessTextureCoord;
+uniform float metallicFactor;
+uniform float roughnessFactor;
 
 uniform bool enableAlphaCutoff;
 uniform float alphaCutoff;
@@ -38,9 +40,6 @@ uniform bool useEmissiveTexture;
 uniform vec3 emissiveFactor;
 uniform sampler2D emissiveTexture;
 uniform int emissiveTextureCoord;
-
-uniform float metallicFactor;
-uniform float roughnessFactor;
 
 uniform bool materialDoubleSided;
 
@@ -106,6 +105,34 @@ vec3 get_normal()
         return tmp;
     }
 }
+
+// void get_roughness()
+// {
+//     if (useMetallicRoughnessTexture)
+//     {
+//         vec2 texcoord = get_texcoord(metallicRoughnessTextureCoord);
+//         vec3 rgb = texture2D(metallicRoughnessTexture, texcoord).rgb;
+//         int metallic = rgb.b;
+//         metallic = metallic * metallicFactor;
+//         int roughness = rgb.g;
+//         roughness = roughness * roughnessFactor;
+//     }
+// }
+
+// void get_()
+// {
+//     if (useOcclusionTexture)
+//     {
+//         vec2 texcoord = get_texcoord(occlusionTextureCoord);
+//         vec3 ot = texture2D(metallicRoughnessTexture, texcoord).xyz;
+
+//     }
+
+// uniform bool useOcclusionTexture;
+// uniform float occlusionTextureStrength;
+// uniform sampler2D occlusionTexture;
+// uniform int occlusionTextureCoord;
+// }
 
 void main() 
 {
