@@ -10,7 +10,7 @@ Scene::~Scene()
 {
 }
 
-bool Scene::InitFromParams()
-{
-	return false;
-}
+//bool Scene::InitFromParams()
+//{
+//	return false;
+//}

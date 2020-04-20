@@ -9,7 +9,7 @@ Handler::~Handler()
 {
 }
 
-bool Handler::InitFromParams()
-{
-	return false;
-}
+//bool Handler::InitFromParams()
+//{
+//	return false;
+//}

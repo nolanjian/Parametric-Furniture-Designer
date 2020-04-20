@@ -6,5 +6,5 @@ class Hard : public Model
 public:
 	Hard();
 	virtual ~Hard();
-	virtual bool InitFromParams() override;
+	//virtual bool InitFromParams() override;
 };

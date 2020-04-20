@@ -9,7 +9,7 @@ Hard::~Hard()
 {
 }
 
-bool Hard::InitFromParams()
-{
-	return false;
-}
+//bool Hard::InitFromParams()
+//{
+//	return false;
+//}

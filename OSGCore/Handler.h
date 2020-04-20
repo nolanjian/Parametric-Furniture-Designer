@@ -5,5 +5,5 @@ class Handler : public Model
 public:
 	Handler();
 	virtual ~Handler();
-	virtual bool InitFromParams() override;
+	//virtual bool InitFromParams() override;
 };

@@ -6,5 +6,5 @@ class Scene : public BaseObject
 public:
 	Scene();
 	virtual ~Scene();
-	virtual bool InitFromParams() override;
+	//virtual bool InitFromParams() override;
 };

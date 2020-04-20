@@ -14,20 +14,8 @@ public:
 	BaseObject();
 	virtual ~BaseObject();
 
-	virtual bool InitFromParams() { return false; };
-
 	void SetParent(osg::ref_ptr<BaseObject> parent) { m_parent = parent; }
 	osg::ref_ptr<BaseObject> GetParent() { return m_parent; }
-
-	const std::map<std::string, std::string>& GetFormulas() { return m_formulas; }
-
-	bool ReInitParser();
-	bool SetParentFormulars();
-	bool UpdateFormulas();
-	bool UpdateSelfFormulas();
-	bool SetOneLine(const std::string& line);
-
-	const mup::var_maptype& FormulasResult();
 
 	// GLTF JSON STRING
 	static osg::ref_ptr<BaseObject> JSON2OSG(const std::string& str);
@@ -46,6 +34,11 @@ public:
 
 	void	RetsetMatrixFromTSR();
 
+	bool		SetPosition(const osg::Vec3& pos);
+	osg::Vec3	GetPosition();
+
+	virtual bool UpdatePrimitive();
+
 	std::string	m_name;
 	std::string	m_gltfPath;
 
@@ -58,33 +51,28 @@ protected:
 	bool ExportTranslation(fx::gltf::Node& node);
 	bool ImportMatrix(const fx::gltf::Node& node);
 	bool ExportMatrix(fx::gltf::Node& node);
-	bool ImportParams(const fx::gltf::Node& node);
-	bool ExportParams(fx::gltf::Node& node);
+	//bool ImportParams(const fx::gltf::Node& node);
+	//bool ExportParams(fx::gltf::Node& node);
 	bool ImportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
 	bool ExportMesh(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Node& node);
 	//osg::ref_ptr<osg::Drawable> ImportPrimitive(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Primitive& primitive);
 	bool ExportPrimitive(osg::ref_ptr<osg::Drawable> ptrDrawable, std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Primitive& primitive);
 	//bool ImportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, const fx::gltf::Material& Material);
 	bool ExportMaterial(std::shared_ptr<fx::gltf::Document> gltfObject, fx::gltf::Material& Material);
-	bool ParseParams(const nlohmann::json::value_type& params);
+	
 
 	osg::Vec4	vRotation;
 	osg::Vec3	vScale;
 	osg::Vec3	vTranslation;
 	osg::Matrixd	mat;
 
-	std::map<std::string, std::string>	m_formulas;
-	std::map<std::string, std::string>	m_formulasResult4Cal;
-	std::map<std::string, std::string>	m_parentFormulasResult;
-
-	mup::var_maptype	m_formulasResult;
+	osg::ref_ptr<osg::Geode> m_geo;
 
 private:
 	bool m_bEnableParams = false;	// TODO, if get not any params from gltf, just let it load and disable params changes.
 	unsigned long long int	m_ID = 0;
 	bool m_bDirty = true;
 	osg::ref_ptr<BaseObject>	m_parent;
-	std::shared_ptr<mup::ParserX>	m_parser;
 
 	osg::ref_ptr<osg::Array>	m_vertex;
 	osg::ref_ptr<osg::Array>	m_normal;

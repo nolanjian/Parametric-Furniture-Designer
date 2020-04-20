@@ -23,6 +23,9 @@
     <Filter Include="EvenHandler">
       <UniqueIdentifier>{f37e1a9d-6cab-4817-bbe1-1a765ce6f14b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Vistor">
+      <UniqueIdentifier>{d377a451-2a59-441f-b02a-189ce7dd0e44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -165,5 +168,6 @@
     <ClCompile Include="PickEventHandler.cpp">
       <Filter>EvenHandler</Filter>
     </ClCompile>
+    <ClCompile Include="ParametricComponent.cpp" />
   </ItemGroup>
 </Project>
