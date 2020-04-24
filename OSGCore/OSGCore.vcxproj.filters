@@ -26,6 +26,9 @@
     <Filter Include="Vistor">
       <UniqueIdentifier>{d377a451-2a59-441f-b02a-189ce7dd0e44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Misc">
+      <UniqueIdentifier>{d396cb8c-44db-449a-946d-2950b049ad40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -109,6 +112,12 @@
     <ClInclude Include="ShadingPreDefine.h">
       <Filter>shader</Filter>
     </ClInclude>
+    <ClInclude Include="Axis.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>Misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
@@ -169,5 +178,11 @@
       <Filter>EvenHandler</Filter>
     </ClCompile>
     <ClCompile Include="ParametricComponent.cpp" />
+    <ClCompile Include="Axis.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Coordinate.cpp">
+      <Filter>Misc</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

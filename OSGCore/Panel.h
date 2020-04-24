@@ -25,6 +25,7 @@ public:
 	osg::ref_ptr<osg::Array> GenerateVertexIndexArray();
 	osg::ref_ptr<osg::Array> GenerateNormalDataArray();
 
+
 protected:
 private:
 	double dDepth = 0.0f;

@@ -97,7 +97,9 @@
     <None Include="VERTEX.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Axis.h" />
     <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="FrameGroup.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="GLTFMaterialsManager.h" />
@@ -125,6 +127,8 @@
     <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Axis.cpp" />
+    <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="GLTFArrayHelper.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="dllmain.cpp" />

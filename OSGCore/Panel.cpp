@@ -80,14 +80,14 @@ bool Panel::UpdatePrimitive()
 
 
 	osg::ref_ptr<osg::DrawElementsUInt>	pDrawElements = new osg::DrawElementsUInt(
-		osg::PrimitiveSet::TRIANGLE_FAN, 
+		osg::PrimitiveSet::TRIANGLES, 
 		pVertexIndexArray->getNumElements(), 
 		(const GLuint*)(pVertexIndexArray->getDataPointer()));
 
 	osg::ref_ptr<osg::Geometry>	pGeometry = new osg::Geometry();
 	pGeometry->addPrimitiveSet(pDrawElements);
 	pGeometry->setVertexArray(GenerateVertexDataArray());
-	pGeometry->setNormalArray(GenerateNormalDataArray());
+	pGeometry->setNormalArray(GenerateNormalDataArray(), osg::Array::Binding::BIND_PER_VERTEX);
 	
 	assert(m_geo);
 	m_geo->addDrawable(pGeometry);
@@ -116,9 +116,13 @@ osg::ref_ptr<osg::Array> Panel::GenerateVertexDataArray()
 osg::ref_ptr<osg::Array> Panel::GenerateVertexIndexArray()
 {
 	osg::ref_ptr<osg::IntArray> pArr = new osg::IntArray();
+
 #pragma region Face0
 	pArr->push_back(0);
 	pArr->push_back(1);
+	pArr->push_back(2);
+
+	pArr->push_back(0);
 	pArr->push_back(2);
 	pArr->push_back(3);
 #pragma endregion Face0
@@ -126,11 +130,17 @@ osg::ref_ptr<osg::Array> Panel::GenerateVertexIndexArray()
 	pArr->push_back(3);
 	pArr->push_back(2);
 	pArr->push_back(6);
+
+	pArr->push_back(3);
+	pArr->push_back(6);
 	pArr->push_back(7);
 #pragma endregion Face1
 #pragma region Face2
 	pArr->push_back(1);
 	pArr->push_back(5);
+	pArr->push_back(6);
+
+	pArr->push_back(1);
 	pArr->push_back(6);
 	pArr->push_back(2);
 #pragma endregion Face2
@@ -138,17 +148,26 @@ osg::ref_ptr<osg::Array> Panel::GenerateVertexIndexArray()
 	pArr->push_back(0);
 	pArr->push_back(4);
 	pArr->push_back(5);
+
+	pArr->push_back(0);
+	pArr->push_back(5);
 	pArr->push_back(1);
 #pragma endregion Face3
 #pragma region Face4
 	pArr->push_back(0);
 	pArr->push_back(3);
 	pArr->push_back(7);
+
+	pArr->push_back(0);
+	pArr->push_back(7);
 	pArr->push_back(4);
 #pragma endregion Face4
 #pragma region Face5
 	pArr->push_back(4);
 	pArr->push_back(7);
+	pArr->push_back(6);
+
+	pArr->push_back(4);
 	pArr->push_back(6);
 	pArr->push_back(5);
 #pragma endregion Face5
@@ -158,5 +177,62 @@ osg::ref_ptr<osg::Array> Panel::GenerateVertexIndexArray()
 
 osg::ref_ptr<osg::Array> Panel::GenerateNormalDataArray()
 {
-	return osg::ref_ptr<osg::Array>();
+	osg::ref_ptr<osg::Vec3Array> pArr = new osg::Vec3Array();
+
+#pragma region Face0
+	pArr->push_back(osg::Vec3(0, 0, -1));
+	pArr->push_back(osg::Vec3(0, 0, -1));
+	pArr->push_back(osg::Vec3(0, 0, -1));
+
+	pArr->push_back(osg::Vec3(0, 0, -1));
+	pArr->push_back(osg::Vec3(0, 0, -1));
+	pArr->push_back(osg::Vec3(0, 0, -1));
+#pragma endregion Face0
+#pragma region Face1
+	pArr->push_back(osg::Vec3(0, -1, 0));
+	pArr->push_back(osg::Vec3(0, -1, 0));
+	pArr->push_back(osg::Vec3(0, -1, 0));
+
+	pArr->push_back(osg::Vec3(0, -1, 0));
+	pArr->push_back(osg::Vec3(0, -1, 0));
+	pArr->push_back(osg::Vec3(0, -1, 0));
+#pragma endregion Face1
+#pragma region Face2
+	pArr->push_back(osg::Vec3(1, 0, 0));
+	pArr->push_back(osg::Vec3(1, 0, 0));
+	pArr->push_back(osg::Vec3(1, 0, 0));
+
+	pArr->push_back(osg::Vec3(1, 0, 0));
+	pArr->push_back(osg::Vec3(1, 0, 0));
+	pArr->push_back(osg::Vec3(1, 0, 0));
+#pragma endregion Face2
+#pragma region Face3
+	pArr->push_back(osg::Vec3(0, 1, 0));
+	pArr->push_back(osg::Vec3(0, 1, 0));
+	pArr->push_back(osg::Vec3(0, 1, 0));
+
+	pArr->push_back(osg::Vec3(0, 1, 0));
+	pArr->push_back(osg::Vec3(0, 1, 0));
+	pArr->push_back(osg::Vec3(0, 1, 0));
+#pragma endregion Face3
+#pragma region Face4
+	pArr->push_back(osg::Vec3(-1, 0, 0));
+	pArr->push_back(osg::Vec3(-1, 0, 0));
+	pArr->push_back(osg::Vec3(-1, 0, 0));
+
+	pArr->push_back(osg::Vec3(-1, 0, 0));
+	pArr->push_back(osg::Vec3(-1, 0, 0));
+	pArr->push_back(osg::Vec3(-1, 0, 0));
+#pragma endregion Face4
+#pragma region Face5
+	pArr->push_back(osg::Vec3(0, 0, 1));
+	pArr->push_back(osg::Vec3(0, 0, 1));
+	pArr->push_back(osg::Vec3(0, 0, 1));
+
+	pArr->push_back(osg::Vec3(0, 0, 1));
+	pArr->push_back(osg::Vec3(0, 0, 1));
+	pArr->push_back(osg::Vec3(0, 0, 1));
+#pragma endregion Face5
+
+	return pArr;
 }

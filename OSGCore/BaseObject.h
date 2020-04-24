@@ -43,6 +43,8 @@ public:
 	std::string	m_name;
 	std::string	m_gltfPath;
 
+	void	ShowCoordinate(bool bShow);
+
 protected:
 	bool ImportRotation(const fx::gltf::Node& node);
 	bool ExportRotation(fx::gltf::Node& node);

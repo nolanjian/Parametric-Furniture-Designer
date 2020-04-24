@@ -4,6 +4,8 @@
 #include "../Utils/IParamsConverter.h"
 #include "ObjectFactory.h"
 #include "SceneMgr.h"
+#include "Coordinate.h"
+
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
@@ -217,6 +219,27 @@ bool BaseObject::UpdatePrimitive()
 		}
 	}
 	return true;
+}
+
+void BaseObject::ShowCoordinate(bool bShow)
+{
+	std::list<osg::Node*>	lsCoordinate;
+	for (osg::Node* pNode : _children)
+	{
+		if (pNode->getName() == "Coordinate")
+		{
+			lsCoordinate.push_back(pNode);
+		}
+	}
+	for (osg::Node* pNode : lsCoordinate)
+	{
+		removeChild(pNode);
+	}
+
+	if (bShow)
+	{
+		addChild(new Coordinate());
+	}
 }
 
 bool BaseObject::ImportRotation(const fx::gltf::Node& node)
