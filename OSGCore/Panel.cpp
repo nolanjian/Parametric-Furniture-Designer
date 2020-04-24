@@ -152,6 +152,8 @@ osg::ref_ptr<osg::Array> Panel::GenerateVertexIndexArray()
 	pArr->push_back(6);
 	pArr->push_back(5);
 #pragma endregion Face5
+
+	return pArr;
 }
 
 osg::ref_ptr<osg::Array> Panel::GenerateNormalDataArray()
