@@ -1,5 +1,6 @@
 #pragma once
 
+#include "OSGCoreExport.h"
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
 #include <fx/gltf.h>
@@ -8,7 +9,7 @@
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"
 
-class BaseObject : public osg::MatrixTransform
+class OSGCORE_API BaseObject : public osg::MatrixTransform
 {
 public:
 	BaseObject();

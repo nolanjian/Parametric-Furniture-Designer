@@ -1,5 +1,7 @@
 #pragma once
 #include "Model.h"
+#include "OSGCoreExport.h"
+
 class Handler : public Model
 {
 public:

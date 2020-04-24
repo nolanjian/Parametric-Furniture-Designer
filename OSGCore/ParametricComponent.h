@@ -1,10 +1,11 @@
 #pragma once
 
 #include "STLIncluding.h"
-
 #include "BaseObject.h"
+#include "OSGCoreExport.h"
 
-class ParametricComponent : public BaseObject
+
+class OSGCORE_API ParametricComponent : public BaseObject
 {
 public:
 	virtual bool Update();
