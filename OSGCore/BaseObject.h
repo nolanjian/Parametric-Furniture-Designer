@@ -15,9 +15,6 @@ public:
 	BaseObject();
 	virtual ~BaseObject();
 
-	void SetParent(osg::ref_ptr<BaseObject> parent) { m_parent = parent; }
-	osg::ref_ptr<BaseObject> GetParent() { return m_parent; }
-
 	// GLTF JSON STRING
 	static osg::ref_ptr<BaseObject> JSON2OSG(const std::string& str);
 	static std::string OSG2JSON(osg::ref_ptr<BaseObject> pObj);

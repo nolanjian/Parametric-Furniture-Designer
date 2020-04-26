@@ -1,25 +1,106 @@
-// OSGCoreTest.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+
+#include "windows.h"
 
 #include <iostream>
 #include <gtest\gtest.h>
 
-TEST(ParametricTree, CalTest) {
+#include <OSGIncluding.h>
 
+#include <ParametricComponent.h>
+
+
+
+TEST(ParametricTree, CalTest) {
+    osg::ref_ptr<ParametricComponent> pc = new ParametricComponent();
+    EXPECT_NE(pc.get(), nullptr);
+
+    pc->SetParam(" A = 800 ");
+    pc->SetParam("     \r\n       B       \r\n      =               \r\n           800        \r\n         ");
+    pc->SetParam(" W=800 ");
+
+	std::string key1(" D ");
+	std::string val1("  \r\n  \r\n  900\r\n  \r\n  ");
+    pc->SetParam(key1, val1);
+
+	std::string key2(" H ");
+	std::string val2("  \r\n  \r\n  900\r\n  \r\n  ");
+    pc->SetParam(key2, val2);
+
+    EXPECT_STREQ(pc->GetParam("A").c_str(), "800");
+    EXPECT_STREQ(pc->GetParam("B").c_str(), "800");
+    EXPECT_STREQ(pc->GetParam("W").c_str(), "800");
+    EXPECT_STREQ(pc->GetParam("D").c_str(), "900");
+    EXPECT_STREQ(pc->GetParam("H").c_str(), "900");
+}
+
+TEST(ParametricTree, RegexTest1)
+{
+    std::string strKey, strVal;
+    ParametricComponent::regexParseFormular(" A = 800 ", strKey, strVal);
+    EXPECT_STREQ(strKey.c_str(), "A");
+    EXPECT_STREQ(strVal.c_str(), "800");
+}
+
+TEST(ParametricTree, RegexTest2)
+{
+	std::string strKey, strVal;
+	ParametricComponent::regexParseFormular("     \r\n       B       \r\n      =               \r\n           800        \r\n         ",
+        strKey, strVal);
+	EXPECT_STREQ(strKey.c_str(), "B");
+	EXPECT_STREQ(strVal.c_str(), "800");
+}
+
+TEST(ParametricTree, RegexTest3)
+{
+	std::string strKey, strVal;
+	ParametricComponent::regexParseFormular(" W=800 ", strKey, strVal);
+	EXPECT_STREQ(strKey.c_str(), "W");
+	EXPECT_STREQ(strVal.c_str(), "800");
+}
+
+TEST(ParametricTree, RegexTest4)
+{
+	std::string strKey, strVal;
+	ParametricComponent::regexParseFormular("Q=800", strKey, strVal);
+	EXPECT_STREQ(strKey.c_str(), "Q");
+	EXPECT_STREQ(strVal.c_str(), "800");
+}
+
+TEST(ParametricTree, RegexTest5)
+{
+    std::string str(" 18 ");
+
+	ParametricComponent::regexParseKV(str);
+	EXPECT_STREQ(str.c_str(), "18");
+}
+
+TEST(ParametricTree, RegexTest6)
+{
+	std::string str("   \r\n   \r\n   W1\r\n");
+
+	ParametricComponent::regexParseKV(str);
+	EXPECT_STREQ(str.c_str(), "W1");
+}
+
+TEST(ParametricTree, RegexTest7)
+{
+	std::string str("   \r\n   \r\n   W1\r\n=");
+
+	ParametricComponent::regexParseKV(str);
+	EXPECT_STREQ(str.c_str(), "W1");
+}
+
+TEST(ParametricTree, RegexTest8)
+{
+	std::string str("   \r\n   \r\n   W1=  \r\n");
+
+	ParametricComponent::regexParseKV(str);
+	EXPECT_STREQ(str.c_str(), "W1");
 }
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    ::testing::InitGoogleTest();
+    RUN_ALL_TESTS();
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file

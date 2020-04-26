@@ -3,7 +3,7 @@
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
 
-class Axis : osg::MatrixTransform
+class Axis : public osg::MatrixTransform
 {
 public:
 	enum Dim {

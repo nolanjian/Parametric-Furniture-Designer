@@ -26,6 +26,16 @@ public:
 	bool ParseParams(const nlohmann::json::value_type& params);
 	bool ImportParams(const fx::gltf::Node& node);
 
+	static bool regexParseFormular(const std::string& strFormular, std::string& strKey, std::string& strVal);
+	static bool regexParseKV(std::string& strKV);
+
+	bool SetParam(const std::string& strFormular);
+	void SetParam(std::string& strKey, std::string& strValue);
+	std::string GetParam(const std::string& strName);
+
+protected:
+	static bool GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair);
+
 protected:
 	std::map<std::string, std::string>	m_formulas;
 	std::map<std::string, std::string>	m_formulasResult4Cal;

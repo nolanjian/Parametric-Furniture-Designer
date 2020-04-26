@@ -32,33 +32,6 @@ bool ParametricComponent::UpdateFormulas()
 	return InitFromParams();
 }
 
-
-//bool ParametricComponent::UpdateFormulas()
-//{
-//	if (!ReInitParser() || !SetParentFormulars())
-//	{
-//		return false;
-//	}
-//
-//	if (!UpdateSelfFormulas())
-//	{
-//		return false;
-//	}
-//
-//	InitFromParams();
-//
-//	bool bUpdateALL = true;
-//	for (auto& child : _children)
-//	{
-//		ParametricComponent* pBaseObject = dynamic_cast<ParametricComponent*>(child.get());
-//		if (pBaseObject)
-//		{
-//			bUpdateALL &= pBaseObject->UpdateFormulas();
-//		}
-//	}
-//	return bUpdateALL;
-//}
-
 bool ParametricComponent::UpdateSelfFormulas()
 {
 	assert(m_parser);
@@ -158,27 +131,30 @@ bool ParametricComponent::ParseParams(const nlohmann::json::value_type& params)
 	if (!params.is_array())
 	{
 		LOG(ERROR) << "params is not array";
-		// TODO LOG
 		return false;
 	}
 	for (const auto& item : params)
 	{
 		if (item.is_string())
 		{
+			// eg: W = a + b
 			std::string strFormula = item.get<std::string>();
-			auto pos = strFormula.find("=");
-			if (pos != std::string::npos)
+			std::pair<std::string, std::string>	pair;
+			if (!GetFormulaPairFromString(strFormula, pair))
 			{
-				m_formulas[_T("name")] = strFormula.substr(0, pos);
-				m_formulas[_T("formula")] = strFormula.substr(pos + 1);
+				LOG(ERROR) << "Parse Fail:" + strFormula;
+				continue;
 			}
-			else
+
+			if (m_formulas.find(pair.first) != m_formulas.end())
 			{
-				// LOG todo
+				LOG(ERROR) << "Dup Check:" + pair.first;
+				continue;
 			}
+
+			m_formulas.insert(pair);
 		}
 	}
-	assert(params.size() == m_formulas.size());
 
 	return true;
 }
@@ -212,6 +188,110 @@ bool ParametricComponent::ImportParams(const fx::gltf::Node& node)
 	return ParseParams(params);
 }
 
+bool ParametricComponent::regexParseFormular(const std::string& strFormular, std::string& strKey, std::string& strVal)
+{
+	try
+	{
+		std::regex	pattern("\\W*(\\w+)\\W*(=)\\W*(\\w+)\\W*");
+
+		std::smatch	result;
+
+		bool bMatch = std::regex_match(strFormular, result, pattern);
+		if (!bMatch)
+			return false;
+		else if (result.size() < 4)
+			return false;
+
+		strKey = result[1];
+		strVal = result[3];
+		return true;
+	}
+	catch (const std::regex_error& err)
+	{
+		LOG(ERROR) << err.what();
+	}
+	catch (const std::exception& err)
+	{
+		LOG(ERROR) << err.what();
+	}
+	return false;
+}
+
+bool ParametricComponent::regexParseKV(std::string& strKV)
+{
+	try
+	{
+		std::regex	pattern("\\W*(\\w+)\\W*");
+
+		std::smatch	result;
+
+		bool bMatch = std::regex_match(strKV, result, pattern);
+		if (!bMatch)
+			return false;
+		else if (result.size() < 2)
+			return false;
+
+		strKV = result[1];
+		return true;
+	}
+	catch (const std::regex_error& err)
+	{
+		LOG(ERROR) << err.what();
+	}
+	catch (const std::exception& err)
+	{
+		LOG(ERROR) << err.what();
+	}
+	return false;
+}
+
+bool ParametricComponent::SetParam(const std::string& strFormular)
+{
+	std::pair<std::string, std::string>	pair;
+	if (!GetFormulaPairFromString(strFormular, pair))
+	{
+		LOG(ERROR) << "Parse Fail:" + strFormular;
+		return false;
+	}
+
+	if (m_formulas.find(pair.first) != m_formulas.end())
+	{
+		LOG(ERROR) << "Dup Check:" + pair.first;
+	}
+
+	m_formulas.insert(pair);
+
+	return true;
+}
+
+void ParametricComponent::SetParam(std::string& strKey, std::string& strValue)
+{
+	if (regexParseKV(strKey) && regexParseKV(strValue))
+		m_formulas[strKey] = strValue;
+}
+
+std::string ParametricComponent::GetParam(const std::string& strName)
+{
+	if (m_formulas.find(strName) != m_formulas.end())
+	{
+		return m_formulas[strName];
+	}
+	return "";
+}
+
+bool ParametricComponent::GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair)
+{
+	std::string strKey, strVal;
+	if (regexParseFormular(str, strKey, strVal))
+	{
+		pair.first = strKey;
+		pair.second = strVal;
+		return true;
+	}
+
+	return false;
+}
+
 const mup::var_maptype& ParametricComponent::FormulasResult()
 {
 	return m_formulasResult;
@@ -225,19 +305,18 @@ bool ParametricComponent::ReInitParser()
 
 bool ParametricComponent::SetParentFormulars()
 {
-	osg::ref_ptr<BaseObject> pParent = GetParent();
-	if (!pParent.valid())
+	if (getNumParents() < 1)
 	{
 		return false;
 	}
 
-	ParametricComponent* pc = dynamic_cast<ParametricComponent*>(pParent.get());
-	if (!pc)
+	ParametricComponent* pParent = dynamic_cast<ParametricComponent*>(getParent(0));
+	if (!pParent)
 	{
-		return true;
+		return false;
 	}
 
-	const mup::var_maptype& parentFormulasResult = pc->FormulasResult();
+	const mup::var_maptype& parentFormulasResult = pParent->FormulasResult();
 	if (parentFormulasResult.empty())
 	{
 		return true;
