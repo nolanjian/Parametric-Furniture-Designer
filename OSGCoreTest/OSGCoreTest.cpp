@@ -98,6 +98,27 @@ TEST(ParametricTree, RegexTest8)
 	EXPECT_STREQ(str.c_str(), "W1");
 }
 
+TEST(ParametricTree, RegexTest9)
+{
+	std::string str("   \r\n   \r\n     \r\n");
+	bool bRet = ParametricComponent::regexParseKV(str);
+	EXPECT_EQ(bRet, false);
+
+	std::string str1("");
+	bool bRet1 = ParametricComponent::regexParseKV(str1);
+	EXPECT_EQ(bRet1, false);
+}
+
+TEST(ParametricTree, RegexTest10)
+{
+	std::string strKey, strVal;
+	bool bRet = ParametricComponent::regexParseFormular("Q", strKey, strVal);
+	EXPECT_EQ(bRet, false);
+
+	bool bRet1 = ParametricComponent::regexParseFormular("Q=", strKey, strVal);
+	EXPECT_EQ(bRet1, false);
+}
+
 int main()
 {
     ::testing::InitGoogleTest();
