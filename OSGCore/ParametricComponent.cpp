@@ -35,6 +35,7 @@ bool ParametricComponent::UpdateFormulas()
 bool ParametricComponent::UpdateSelfFormulas()
 {
 	assert(m_parser);
+	m_parser->EnableAutoCreateVar(true);
 	m_formulasResult.clear();
 
 	std::list<std::string>	lstFormulas;
@@ -192,18 +193,20 @@ bool ParametricComponent::regexParseFormular(const std::string& strFormular, std
 {
 	try
 	{
-		std::regex	pattern("\\W*(\\w+)\\W*(=)\\W*(\\w+)\\W*");
-
+		std::regex	patternReplace("\\s+");
+		std::string strF = std::regex_replace(strFormular, patternReplace, "");
+		
+		std::regex	pattern("(.+)=(.+)");
 		std::smatch	result;
 
-		bool bMatch = std::regex_match(strFormular, result, pattern);
+		bool bMatch = std::regex_match(strF, result, pattern);
 		if (!bMatch)
 			return false;
-		else if (result.size() < 4)
+		else if (result.size() < 3)
 			return false;
 
 		strKey = result[1];
-		strVal = result[3];
+		strVal = result[2];
 		return true;
 	}
 	catch (const std::regex_error& err)
@@ -279,6 +282,36 @@ std::string ParametricComponent::GetParam(const std::string& strName)
 	return "";
 }
 
+std::string ParametricComponent::GetParamResult(const std::string& strName)
+{
+	if (m_formulasResult.find(strName) == m_formulasResult.end())
+	{
+		return std::string();
+	}
+	auto val = m_formulasResult[strName];
+
+	mup::IValue* pValue = val->AsIValue();
+
+	std::string str;
+	if (pValue->IsString())
+	{
+		str = pValue->GetString();
+	}
+	else if (pValue->IsVariable())
+	{
+		double fVal = pValue->GetFloat();
+		return std::to_string(fVal);
+	}
+	else if (pValue->IsInteger())
+	{
+		int nVal = pValue->GetInteger();
+		return std::to_string(nVal);
+	}
+	
+
+	return str;
+}
+
 bool ParametricComponent::GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair)
 {
 	std::string strKey, strVal;
@@ -300,6 +333,7 @@ const mup::var_maptype& ParametricComponent::FormulasResult()
 bool ParametricComponent::ReInitParser()
 {
 	m_parser = std::make_shared<mup::ParserX>(mup::EPackages::pckALL_NON_COMPLEX);
+	m_parser->EnableAutoCreateVar(true);
 	return m_parser.get() != nullptr;
 }
 
@@ -307,13 +341,13 @@ bool ParametricComponent::SetParentFormulars()
 {
 	if (getNumParents() < 1)
 	{
-		return false;
+		return true;
 	}
 
 	ParametricComponent* pParent = dynamic_cast<ParametricComponent*>(getParent(0));
 	if (!pParent)
 	{
-		return false;
+		return true;
 	}
 
 	const mup::var_maptype& parentFormulasResult = pParent->FormulasResult();
@@ -325,7 +359,10 @@ bool ParametricComponent::SetParentFormulars()
 	try
 	{
 		m_parser->ClearVar();
-		assert(m_parser->GetExprVar().size() == 0);
+
+		const mup::var_maptype& exprVar = m_parser->GetVar();
+
+		assert(exprVar.size() == 0);
 		for (auto pKV : parentFormulasResult)
 		{
 			mup::IValue* pValue = pKV.second->AsIValue();
@@ -340,7 +377,7 @@ bool ParametricComponent::SetParentFormulars()
 
 			m_parser->DefineVar(name, mup::Variable(pValue));
 		}
-		assert(parentFormulasResult.size() == m_parser->GetExprVar().size());
+		assert(parentFormulasResult.size() == exprVar.size());
 
 		return true;
 	}

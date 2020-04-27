@@ -32,6 +32,7 @@ public:
 	bool SetParam(const std::string& strFormular);
 	void SetParam(std::string& strKey, std::string& strValue);
 	std::string GetParam(const std::string& strName);
+	std::string GetParamResult(const std::string& strName);
 
 protected:
 	static bool GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair);

@@ -3,6 +3,53 @@
 #include <OSGIncluding.h>
 #include <ParametricComponent.h>
 
+TEST(ParametricTree, BuildTree) {
+	// Top Level
+	osg::ref_ptr<ParametricComponent> pTop = new ParametricComponent();
+	EXPECT_NE(pTop.get(), nullptr);
+	pTop->SetParam("W = 1200\r\n");
+	pTop->SetParam("D = 500\r\n");
+	pTop->SetParam("H = 400\r\n");
+
+	// Second Level
+	osg::ref_ptr<ParametricComponent> pSecond1 = new ParametricComponent();
+	EXPECT_NE(pSecond1.get(), nullptr);
+	pSecond1->SetParam("W=Parent.W/3*2");
+	pSecond1->SetParam("D=Parent.D");
+	pSecond1->SetParam("H=Parent.H");
+
+	// Second Level
+	osg::ref_ptr<ParametricComponent> pSecond2 = new ParametricComponent();
+	EXPECT_NE(pSecond2.get(), nullptr);
+	pSecond2->SetParam("W=Parent.W/3*1");
+	pSecond2->SetParam("D=Parent.D");
+	pSecond2->SetParam("H=Parent.H");
+	pSecond2->SetParam("PV=Parent.W * Parent.D * Parent.H");
+	pSecond2->SetParam("V=W * D * H");
+
+	pTop->addChild(pSecond1);
+	pTop->addChild(pSecond2);
+
+	// Update Top to Down
+	pTop->UpdateFormulas();
+
+	//Checking
+	EXPECT_DOUBLE_EQ(atof(pTop->GetParamResult("W").c_str()), 1200.0);
+	EXPECT_DOUBLE_EQ(atof(pTop->GetParamResult("D").c_str()), 500.0);
+	EXPECT_DOUBLE_EQ(atof(pTop->GetParamResult("H").c_str()), 400.0);
+
+	EXPECT_DOUBLE_EQ(atof(pSecond1->GetParamResult("W").c_str()), 800.0);
+	EXPECT_DOUBLE_EQ(atof(pSecond1->GetParamResult("D").c_str()), 500.0);
+	EXPECT_DOUBLE_EQ(atof(pSecond1->GetParamResult("H").c_str()), 400.0);
+
+	EXPECT_DOUBLE_EQ(atof(pSecond2->GetParamResult("W").c_str()), 400.0);
+	EXPECT_DOUBLE_EQ(atof(pSecond2->GetParamResult("D").c_str()), 500.0);
+	EXPECT_DOUBLE_EQ(atof(pSecond2->GetParamResult("H").c_str()), 400.0);
+	EXPECT_DOUBLE_EQ(atof(pSecond2->GetParamResult("PV").c_str()), 1200.0 * 500.0 * 400.0);
+	EXPECT_DOUBLE_EQ(atof(pSecond2->GetParamResult("V").c_str()), 400.0 * 500.0 * 400.0);
+}
+
+
 TEST(ParametricTree, CalTest) {
 	osg::ref_ptr<ParametricComponent> pc = new ParametricComponent();
 	EXPECT_NE(pc.get(), nullptr);
