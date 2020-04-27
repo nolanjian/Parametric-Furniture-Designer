@@ -18,5 +18,13 @@
     <ClCompile Include="OSGCoreTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ParametricTreeUnitTest1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ParametricTreeUnitTest1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

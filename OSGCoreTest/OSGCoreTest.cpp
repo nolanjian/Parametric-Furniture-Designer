@@ -1,127 +1,33 @@
 
-#include "windows.h"
+
 
 #include <iostream>
 #include <gtest\gtest.h>
 
-#include <OSGIncluding.h>
+#include <chrono>
+#include <filesystem>
 
-#include <ParametricComponent.h>
+#include "ParametricTreeUnitTest1.h"
 
-
-
-TEST(ParametricTree, CalTest) {
-    osg::ref_ptr<ParametricComponent> pc = new ParametricComponent();
-    EXPECT_NE(pc.get(), nullptr);
-
-    pc->SetParam(" A = 800 ");
-    pc->SetParam("     \r\n       B       \r\n      =               \r\n           800        \r\n         ");
-    pc->SetParam(" W=800 ");
-
-	std::string key1(" D ");
-	std::string val1("  \r\n  \r\n  900\r\n  \r\n  ");
-    pc->SetParam(key1, val1);
-
-	std::string key2(" H ");
-	std::string val2("  \r\n  \r\n  900\r\n  \r\n  ");
-    pc->SetParam(key2, val2);
-
-    EXPECT_STREQ(pc->GetParam("A").c_str(), "800");
-    EXPECT_STREQ(pc->GetParam("B").c_str(), "800");
-    EXPECT_STREQ(pc->GetParam("W").c_str(), "800");
-    EXPECT_STREQ(pc->GetParam("D").c_str(), "900");
-    EXPECT_STREQ(pc->GetParam("H").c_str(), "900");
-}
-
-TEST(ParametricTree, RegexTest1)
-{
-    std::string strKey, strVal;
-    ParametricComponent::regexParseFormular(" A = 800 ", strKey, strVal);
-    EXPECT_STREQ(strKey.c_str(), "A");
-    EXPECT_STREQ(strVal.c_str(), "800");
-}
-
-TEST(ParametricTree, RegexTest2)
-{
-	std::string strKey, strVal;
-	ParametricComponent::regexParseFormular("     \r\n       B       \r\n      =               \r\n           800        \r\n         ",
-        strKey, strVal);
-	EXPECT_STREQ(strKey.c_str(), "B");
-	EXPECT_STREQ(strVal.c_str(), "800");
-}
-
-TEST(ParametricTree, RegexTest3)
-{
-	std::string strKey, strVal;
-	ParametricComponent::regexParseFormular(" W=800 ", strKey, strVal);
-	EXPECT_STREQ(strKey.c_str(), "W");
-	EXPECT_STREQ(strVal.c_str(), "800");
-}
-
-TEST(ParametricTree, RegexTest4)
-{
-	std::string strKey, strVal;
-	ParametricComponent::regexParseFormular("Q=800", strKey, strVal);
-	EXPECT_STREQ(strKey.c_str(), "Q");
-	EXPECT_STREQ(strVal.c_str(), "800");
-}
-
-TEST(ParametricTree, RegexTest5)
-{
-    std::string str(" 18 ");
-
-	ParametricComponent::regexParseKV(str);
-	EXPECT_STREQ(str.c_str(), "18");
-}
-
-TEST(ParametricTree, RegexTest6)
-{
-	std::string str("   \r\n   \r\n   W1\r\n");
-
-	ParametricComponent::regexParseKV(str);
-	EXPECT_STREQ(str.c_str(), "W1");
-}
-
-TEST(ParametricTree, RegexTest7)
-{
-	std::string str("   \r\n   \r\n   W1\r\n=");
-
-	ParametricComponent::regexParseKV(str);
-	EXPECT_STREQ(str.c_str(), "W1");
-}
-
-TEST(ParametricTree, RegexTest8)
-{
-	std::string str("   \r\n   \r\n   W1=  \r\n");
-
-	ParametricComponent::regexParseKV(str);
-	EXPECT_STREQ(str.c_str(), "W1");
-}
-
-TEST(ParametricTree, RegexTest9)
-{
-	std::string str("   \r\n   \r\n     \r\n");
-	bool bRet = ParametricComponent::regexParseKV(str);
-	EXPECT_EQ(bRet, false);
-
-	std::string str1("");
-	bool bRet1 = ParametricComponent::regexParseKV(str1);
-	EXPECT_EQ(bRet1, false);
-}
-
-TEST(ParametricTree, RegexTest10)
-{
-	std::string strKey, strVal;
-	bool bRet = ParametricComponent::regexParseFormular("Q", strKey, strVal);
-	EXPECT_EQ(bRet, false);
-
-	bool bRet1 = ParametricComponent::regexParseFormular("Q=", strKey, strVal);
-	EXPECT_EQ(bRet1, false);
-}
 
 int main()
 {
-    ::testing::InitGoogleTest();
+    
+
+    auto tp = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+    
+
+    //std::string outputXML = "--gtest_output=xml:" + std::filesystem::current_path().string() + "\\" + std::to_string(tp) + ".xml";
+    std::string outputXML = "--gtest_output=\"xml:" + std::filesystem::current_path().string() + "\\" +  std::to_string(tp) + ".xml\"";
+
+    int argc = 1;
+    char* argv[1];
+    argv[0] = (char*)outputXML.c_str();
+
+
+    testing::InitGoogleTest(&argc, argv);
     RUN_ALL_TESTS();
+    getchar();
     return 0;
 }
