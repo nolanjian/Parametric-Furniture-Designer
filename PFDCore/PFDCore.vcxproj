@@ -14,7 +14,7 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{0F8CBF05-B2B2-46AF-A329-3EBD4F8DF4B3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>OSGCore</RootNamespace>
+    <RootNamespace>PFDCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>PFDCore</ProjectName>
   </PropertyGroup>
@@ -45,12 +45,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>OSGCORE</TargetName>
+    <TargetName>PFDCore</TargetName>
     <LinkIncremental>true</LinkIncremental>
     <SourcePath>D:\Library\OpenSceneGraph\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>OSGCORE</TargetName>
+    <TargetName>PFDCore</TargetName>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

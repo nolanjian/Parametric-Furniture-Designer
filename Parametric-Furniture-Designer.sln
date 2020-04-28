@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSGCore", "OSGCore\OSGCore.vcxproj", "{0F8CBF05-B2B2-46AF-A329-3EBD4F8DF4B3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PFDCore", "PFDCore\PFDCore.vcxproj", "{0F8CBF05-B2B2-46AF-A329-3EBD4F8DF4B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFGUI", "WPFGUI\WPFGUI.csproj", "{28F5C206-127C-489E-8776-CAB850ADC4E3}"
 EndProject
