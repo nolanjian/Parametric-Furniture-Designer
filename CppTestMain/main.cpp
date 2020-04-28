@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../OSGCore/InterfaceOSGCore.h"
+#include "../PFDCore/InterfaceOSGCore.h"
 
 int main()
 {

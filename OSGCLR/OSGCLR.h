@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../OSGCore/InterfaceOSGCore.h"
+#include "../PFDCore/InterfaceOSGCore.h"
 
 #include <memory>
 

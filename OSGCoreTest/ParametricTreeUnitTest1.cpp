@@ -3,6 +3,8 @@
 #include <OSGIncluding.h>
 #include <ParametricComponent.h>
 
+using namespace PFDCore;
+
 TEST(ParametricTree, BuildTree) {
 	// Top Level
 	osg::ref_ptr<ParametricComponent> pTop = new ParametricComponent();
