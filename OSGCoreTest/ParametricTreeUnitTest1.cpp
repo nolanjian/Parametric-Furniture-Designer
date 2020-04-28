@@ -49,6 +49,39 @@ TEST(ParametricTree, BuildTree) {
 	EXPECT_DOUBLE_EQ(atof(pSecond2->GetParamResult("V").c_str()), 400.0 * 500.0 * 400.0);
 }
 
+TEST(ParametricTree, BuildTree1) {
+	osg::ref_ptr<ParametricComponent> pNode0 = new ParametricComponent();
+	EXPECT_NE(pNode0.get(), nullptr);
+	pNode0->SetParam("W = 32");
+
+	osg::ref_ptr<ParametricComponent> pNode1 = new ParametricComponent();
+	EXPECT_NE(pNode1.get(), nullptr);
+	pNode1->SetParam("W = Parent.W/2");
+	pNode0->addChild(pNode1);
+
+	osg::ref_ptr<ParametricComponent> pNode2 = new ParametricComponent();
+	EXPECT_NE(pNode2.get(), nullptr);
+	pNode2->SetParam("W = Parent.W/2");
+	pNode1->addChild(pNode2);
+
+	osg::ref_ptr<ParametricComponent> pNode3 = new ParametricComponent();
+	EXPECT_NE(pNode3.get(), nullptr);
+	pNode3->SetParam("W = Parent.W/2");
+	pNode2->addChild(pNode3);
+
+	osg::ref_ptr<ParametricComponent> pNode4 = new ParametricComponent();
+	EXPECT_NE(pNode4.get(), nullptr);
+	pNode4->SetParam("W = Parent.W/2");
+	pNode3->addChild(pNode4);
+
+	pNode0->UpdateFormulas();
+
+	EXPECT_DOUBLE_EQ(atof(pNode0->GetParamResult("W").c_str()), 32);
+	EXPECT_DOUBLE_EQ(atof(pNode1->GetParamResult("W").c_str()), 16);
+	EXPECT_DOUBLE_EQ(atof(pNode2->GetParamResult("W").c_str()), 8);
+	EXPECT_DOUBLE_EQ(atof(pNode3->GetParamResult("W").c_str()), 4);
+	EXPECT_DOUBLE_EQ(atof(pNode4->GetParamResult("W").c_str()), 2);
+}
 
 TEST(ParametricTree, CalTest) {
 	osg::ref_ptr<ParametricComponent> pc = new ParametricComponent();
