@@ -36,6 +36,9 @@
     <ClInclude Include="IParamsConverter.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="BezierCurve.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utils.cpp">

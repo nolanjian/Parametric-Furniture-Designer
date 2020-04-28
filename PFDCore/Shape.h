@@ -11,5 +11,6 @@ namespace PFDCore
 	public:
 		ShapePanel();
 		virtual ~ShapePanel();
+
 	};
 }
