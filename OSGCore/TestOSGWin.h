@@ -6,10 +6,14 @@
 #include "../easyloggingpp/easylogging++.h"
 #include "stb_image.h"
 
-
-class TestOSGWin
+namespace PFDCore
 {
-public:
-	void Run(const std::string& path);
-	void configureShaders(osg::StateSet* stateSet);
-};
+
+
+	class TestOSGWin
+	{
+	public:
+		void Run(const std::string& path);
+		void configureShaders(osg::StateSet* stateSet);
+	};
+}

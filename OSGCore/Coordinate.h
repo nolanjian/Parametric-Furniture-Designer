@@ -3,6 +3,10 @@
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
 
+namespace PFDCore
+{
+
+
 class Coordinate : public osg::MatrixTransform
 {
 public:
@@ -12,3 +16,4 @@ protected:
 private:
 	unsigned int m_uLen;
 };
+}

@@ -118,6 +118,9 @@
     <ClInclude Include="Coordinate.h">
       <Filter>Misc</Filter>
     </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
@@ -177,12 +180,17 @@
     <ClCompile Include="PickEventHandler.cpp">
       <Filter>EvenHandler</Filter>
     </ClCompile>
-    <ClCompile Include="ParametricComponent.cpp" />
     <ClCompile Include="Axis.cpp">
       <Filter>Misc</Filter>
     </ClCompile>
     <ClCompile Include="Coordinate.cpp">
       <Filter>Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ParametricComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

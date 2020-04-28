@@ -5,21 +5,21 @@
 #include "ShadingPreDefine.h"
 #include "../Utils/Utils.h"
 
-OSGCore::ImplementOSGCore::ImplementOSGCore()
+PFDCore::ImplementOSGCore::ImplementOSGCore()
 {
 	InitLogger();
 
 	LOG(INFO) << "ImplementOSGCore()";
 }
 
-OSGCore::ImplementOSGCore::~ImplementOSGCore()
+PFDCore::ImplementOSGCore::~ImplementOSGCore()
 {
 	Destory();
 
 	LOG(INFO) << "~ImplementOSGCore()";
 }
 
-bool OSGCore::ImplementOSGCore::Render(HWND hwnd)
+bool PFDCore::ImplementOSGCore::Render(HWND hwnd)
 {
 	assert(hwnd != nullptr);
 	if (hwnd == NULL)
@@ -110,7 +110,7 @@ bool OSGCore::ImplementOSGCore::Render(HWND hwnd)
 
 	initViewer(osg::GraphicsContext::createGraphicsContext(traits.get()));
 
-	auto scene = BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Lantern\\glTF\\Lantern.gltf");
+	auto scene = PFDCore::BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Lantern\\glTF\\Lantern.gltf");
 	if (scene)
 	{
 		//osgUtil::Optimizer optimizer;
@@ -123,7 +123,7 @@ bool OSGCore::ImplementOSGCore::Render(HWND hwnd)
 	return true;
 }
 
-void OSGCore::ImplementOSGCore::Destory()
+void PFDCore::ImplementOSGCore::Destory()
 {
 	s_bKeepRunning = false;
 	if (m_ptrViewer.get())
@@ -136,19 +136,19 @@ void OSGCore::ImplementOSGCore::Destory()
 	}
 }
 
-void OSGCore::ImplementOSGCore::RenderThread()
+void PFDCore::ImplementOSGCore::RenderThread()
 {
 	s_bKeepRunning = true;
 	m_ptrViewer->run();
 	s_bKeepRunning = false;
 }
 
-void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
+void PFDCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
 {
 	m_ptr3DScene->removeChildren(0, m_ptr3DScene->getNumChildren());
 
 	std::string strPath;
-	m_ptr3DScene = BaseObject::LoadSceneFromJsonFile(strPath);
+	m_ptr3DScene = PFDCore::BaseObject::LoadSceneFromJsonFile(strPath);
 
 	if (fnOnSelectObjectCallback)
 	{
@@ -157,9 +157,9 @@ void OSGCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
 
 }
 
-void OSGCore::ImplementOSGCore::LoadScene(const std::string& path)
+void PFDCore::ImplementOSGCore::LoadScene(const std::string& path)
 {
-	BaseObject::LoadSceneFromJsonFile(path);
+	PFDCore::BaseObject::LoadSceneFromJsonFile(path);
 }
 
 osg::ref_ptr<osg::Program> createProgram()
@@ -167,7 +167,7 @@ osg::ref_ptr<osg::Program> createProgram()
 	return nullptr;
 }
 
-void OSGCore::ImplementOSGCore::OpenSceneInNewWindow(const std::string& path)
+void PFDCore::ImplementOSGCore::OpenSceneInNewWindow(const std::string& path)
 {
 	TestOSGWin* pWin = new TestOSGWin();
 	pWin->Run(path);
@@ -186,7 +186,7 @@ std::string LoadShaderString(const std::string& path)
 	return source;
 }
 
-void OSGCore::ImplementOSGCore::configureShaders(osg::StateSet* stateSet)
+void PFDCore::ImplementOSGCore::configureShaders(osg::StateSet* stateSet)
 {
 	if (!stateSet)
 	{
@@ -207,7 +207,7 @@ void OSGCore::ImplementOSGCore::configureShaders(osg::StateSet* stateSet)
 	stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
 }
 
-void OSGCore::ImplementOSGCore::initViewer(osg::ref_ptr<osg::GraphicsContext> gc)
+void PFDCore::ImplementOSGCore::initViewer(osg::ref_ptr<osg::GraphicsContext> gc)
 {
 	m_ptrViewer = new osgViewer::Viewer;
 	osg::Camera* cam = m_ptrViewer->getCamera();

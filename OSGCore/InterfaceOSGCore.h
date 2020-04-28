@@ -4,7 +4,7 @@
 #include <windows.h>
 
 
-namespace OSGCore
+namespace PFDCore
 {
 	class OSGCORE_API InterfaceOSG
 	{

@@ -1,15 +1,21 @@
 #include "pch.h"
 #include "Handler.h"
 
-Handler::Handler()
+namespace PFDCore
 {
-}
 
-Handler::~Handler()
-{
-}
 
-//bool Handler::InitFromParams()
-//{
-//	return false;
-//}
+	Handler::Handler()
+	{
+	}
+
+	Handler::~Handler()
+	{
+	}
+
+	//bool Handler::InitFromParams()
+	//{
+	//	return false;
+	//}
+
+}

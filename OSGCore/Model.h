@@ -2,9 +2,13 @@
 #include "OSGCoreExport.h"
 #include "BaseObject.h"
 
-
-class Model : public BaseObject
+namespace PFDCore
 {
-public:
 
-};
+
+	class Model : public BaseObject
+	{
+	public:
+
+	};
+}

@@ -1,5 +1,8 @@
 #pragma once
 #include <osg/Array>
+#include <osg/BoundingBox>
+#include <osg/BoundingSphere>
+#include <osg/ComputeBoundsVisitor>
 #include <osg/MatrixTransform>
 #include <osg/Geode>
 #include <osg/Geometry>

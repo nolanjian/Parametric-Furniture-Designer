@@ -3,10 +3,13 @@
 #include "ParametricComponent.h"
 #include "OSGCoreExport.h"
 
-class FrameGroup : public ParametricComponent
+namespace PFDCore
 {
-public:
-	FrameGroup();
-	virtual ~FrameGroup();
-	virtual bool InitFromParams();
-};
+	class FrameGroup : public ParametricComponent
+	{
+	public:
+		FrameGroup();
+		virtual ~FrameGroup();
+		virtual bool InitFromParams();
+	};
+}

@@ -2,7 +2,7 @@
 #include <cassert>
 
 OSGCLR::Wrapper::Wrapper()
-	:ptrInterfaceOSG(new OSGCore::InterfaceOSG())
+	:ptrInterfaceOSG(new PFDCore::InterfaceOSG())
 {
 }
 

@@ -4,7 +4,7 @@
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
 
-namespace OSGCore
+namespace PFDCore
 {
 	class ImplementOSGCore
 	{

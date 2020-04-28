@@ -1,15 +1,21 @@
 #include "pch.h"
 #include "FrameGroup.h"
 
-FrameGroup::FrameGroup()
+namespace PFDCore
 {
-}
 
-FrameGroup::~FrameGroup()
-{
-}
 
-bool FrameGroup::InitFromParams()
-{
-	return false;
+	FrameGroup::FrameGroup()
+	{
+	}
+
+	FrameGroup::~FrameGroup()
+	{
+	}
+
+	bool FrameGroup::InitFromParams()
+	{
+		return false;
+	}
+
 }

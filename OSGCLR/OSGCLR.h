@@ -47,6 +47,6 @@ namespace OSGCLR {
 		OnSelectObjectDelegate^ handlerOnSelectObject = nullptr;
 	private:
 
-		OSGCore::InterfaceOSG* ptrInterfaceOSG = nullptr;
+		PFDCore::InterfaceOSG* ptrInterfaceOSG = nullptr;
 	};
 }

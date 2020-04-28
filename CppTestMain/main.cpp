@@ -14,7 +14,7 @@ int main()
 		std::string strPath;
 		std::getline(std::cin, strPath);
 
-		OSGCore::InterfaceOSG* ptr = new OSGCore::InterfaceOSG();
+		PFDCore::InterfaceOSG* ptr = new PFDCore::InterfaceOSG();
 		ptr->OpenSceneInNewWindow(strPath);
 		delete ptr;
 	}

@@ -1,16 +1,21 @@
 #include "pch.h"
 #include "Scene.h"
 
-Scene::Scene()
-	:BaseObject()
+namespace PFDCore
 {
-}
 
-Scene::~Scene()
-{
-}
+	Scene::Scene()
+		:BaseObject()
+	{
+	}
 
-//bool Scene::InitFromParams()
-//{
-//	return false;
-//}
+	Scene::~Scene()
+	{
+	}
+
+	//bool Scene::InitFromParams()
+	//{
+	//	return false;
+	//}
+
+}

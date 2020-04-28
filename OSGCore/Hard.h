@@ -1,10 +1,14 @@
 #pragma once
 #include "Model.h"
 
-class Hard : public Model
+namespace PFDCore
 {
-public:
-	Hard();
-	virtual ~Hard();
-	//virtual bool InitFromParams() override;
-};
+
+	class Hard : public Model
+	{
+	public:
+		Hard();
+		virtual ~Hard();
+		//virtual bool InitFromParams() override;
+	};
+}
