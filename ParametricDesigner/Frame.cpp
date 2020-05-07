@@ -30,11 +30,17 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 	SetStatusText("Parametric Designer CopyRight");
 
 	wxGridSizer* topsizer = new wxGridSizer(2, 2, 1, 1);
-
-	topsizer->SetMinSize(wxSize(800, 800));
 	
+	wxWindow* pDrawWin = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(600), FromDIP(600)));
+	topsizer->Add(pDrawWin);
+
+	//topsizer->SetMinSize(wxSize(800, 800));
+	
+	HWND hwndDrawing = pDrawWin->GetHWND();
+
+	SetSizer(topsizer);
 	// Tell dialog to use sizer
-	SetSizerAndFit(topsizer);
+	//SetSizerAndFit(topsizer);
 	
 }
 
