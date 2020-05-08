@@ -15,24 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h">
+    <ClInclude Include="ConfigExport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WXIncluding.h">
+    <ClInclude Include="IProgramConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Frame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnumID.h">
+    <ClInclude Include="ProgramConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="IProgramConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Frame.cpp">
+    <ClCompile Include="ProgramConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

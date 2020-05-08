@@ -14,7 +14,7 @@ UTILS_API int nUtils=0;
 UTILS_API bool InitLogger(void)
 {
 	el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);
-	el::Configurations conf("config\\OSGCoreLog.config");
+	el::Configurations conf("file\\PFDCore.config");
 	el::Loggers::reconfigureAllLoggers(conf);
     return true;
 }

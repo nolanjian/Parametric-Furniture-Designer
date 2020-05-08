@@ -62,7 +62,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\OpenSceneGraph\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Config;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CallingConvention>StdCall</CallingConvention>
     </ClCompile>
     <Link>
@@ -70,7 +70,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>D:\library\osg_build\lib;$(OutDir);D:\library\Parametric-Furniture-Designer\easyloggingpp;D:\Library\OpenSceneGraph\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenThreadsd.lib;osgAnimationd.lib;osgd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgManipulatord.lib;osgParticled.lib;osgPresentationd.lib;osgShadowd.lib;osgSimd.lib;osgTerraind.lib;osgTextd.lib;osgUId.lib;osgUtild.lib;osgViewerd.lib;osgVolumed.lib;osgWidgetd.lib;MUPARSERX.lib;UTILS.lib;easyloggingppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PFDConfig.lib;OpenThreadsd.lib;osgAnimationd.lib;osgd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgManipulatord.lib;osgParticled.lib;osgPresentationd.lib;osgShadowd.lib;osgSimd.lib;osgTerraind.lib;osgTextd.lib;osgUId.lib;osgUtild.lib;osgViewerd.lib;osgVolumed.lib;osgWidgetd.lib;MUPARSERX.lib;UTILS.lib;easyloggingppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

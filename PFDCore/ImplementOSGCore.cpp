@@ -4,6 +4,7 @@
 #include "TestOSGWin.h"
 #include "ShadingPreDefine.h"
 #include "../Utils/Utils.h"
+#include "IProgramConfig.h"
 
 PFDCore::ImplementOSGCore::ImplementOSGCore()
 {
@@ -36,7 +37,6 @@ bool PFDCore::ImplementOSGCore::Render(HWND hwnd)
 	}
 	else
 	{
-		s_bKeepRunning = false;
 		Destory();
 	}
 
@@ -110,7 +110,7 @@ bool PFDCore::ImplementOSGCore::Render(HWND hwnd)
 
 	initViewer(osg::GraphicsContext::createGraphicsContext(traits.get()));
 
-	auto scene = PFDCore::BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Lantern\\glTF\\Lantern.gltf");
+	auto scene = PFDCore::BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Box\\glTF\\Box.gltf");
 	if (scene)
 	{
 		//osgUtil::Optimizer optimizer;
@@ -125,8 +125,7 @@ bool PFDCore::ImplementOSGCore::Render(HWND hwnd)
 
 void PFDCore::ImplementOSGCore::Destory()
 {
-	s_bKeepRunning = false;
-	if (m_ptrViewer.get())
+	if (m_ptrViewer.get() && !m_ptrViewer->done())
 	{
 		m_ptrViewer->setDone(true);
 	}
@@ -138,9 +137,7 @@ void PFDCore::ImplementOSGCore::Destory()
 
 void PFDCore::ImplementOSGCore::RenderThread()
 {
-	s_bKeepRunning = true;
 	m_ptrViewer->run();
-	s_bKeepRunning = false;
 }
 
 void PFDCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
@@ -193,8 +190,8 @@ void PFDCore::ImplementOSGCore::configureShaders(osg::StateSet* stateSet)
 		return;
 	}
 
-	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadShaderString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\VERTEX.vert"));
-	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadShaderString("D:\\library\\Parametric-Furniture-Designer\\OSGCore\\FRAGMENT.frag"));
+	osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadShaderString(PFDConfig::IProgramConfig::GetInstance()->GetString("VERTEX_SHADER")));
+	osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadShaderString(PFDConfig::IProgramConfig::GetInstance()->GetString("FRAGMENT_SHADER")));
 
 	osg::Program* program = new osg::Program;
 	program->addShader(vShader);
@@ -211,8 +208,8 @@ void PFDCore::ImplementOSGCore::initViewer(osg::ref_ptr<osg::GraphicsContext> gc
 {
 	m_ptrViewer = new osgViewer::Viewer;
 	osg::Camera* cam = m_ptrViewer->getCamera();
-	cam->setProjectionMatrix(osg::Matrix::perspective(30., (double)800 / (double)600, 1., 100.));
-	cam->setClearColor(osg::Vec4(94.0 / 255.0, 112 / 255.0, 129 / 255.0, 1.0));
+	cam->setProjectionMatrix(osg::Matrix::perspective(30., (double)800 / (double)800, 1., 100.));
+	cam->setClearColor(GetBackgroundColor3D());
 	cam->setGraphicsContext(gc);
 	cam->setViewport(new osg::Viewport(0, 0, gc->getTraits()->width, gc->getTraits()->height));
 	cam->setDrawBuffer(GL_BACK);
@@ -228,4 +225,27 @@ void PFDCore::ImplementOSGCore::initViewer(osg::ref_ptr<osg::GraphicsContext> gc
 		s->setUseModelViewAndProjectionUniforms(true);
 		s->setUseVertexAttributeAliasing(true);
 	}
+}
+
+osg::Vec4 PFDCore::ImplementOSGCore::GetBackgroundColor3D()
+{
+	try
+	{
+		nlohmann::json b3d = PFDConfig::IProgramConfig::GetInstance()->GetJson("BackgroundColor3D");
+		bool IsNormal = b3d["IsNormal"].get<bool>();
+		double R = b3d["R"].get<double>();
+		double G = b3d["G"].get<double>();
+		double B = b3d["B"].get<double>();
+		if (IsNormal)
+		{
+			return osg::Vec4(R, G, B, 1.0);
+		}
+		return osg::Vec4(R / 255.0, G / 255.0, B / 255.0, 1.0);
+	}
+	catch (const std::exception& ex)
+	{
+		// TODO LOG
+	}
+
+	return osg::Vec4(0.466, 0.533, 0.6, 1.0);	// default LightSlateGray
 }

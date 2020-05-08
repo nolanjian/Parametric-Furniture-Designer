@@ -1,5 +1,7 @@
 #pragma once
 #include "WXIncluding.h"
+#include "InterfaceOSGCore.h"
+#include <memory>
 
 namespace PFDGUI
 {
@@ -14,7 +16,7 @@ namespace PFDGUI
 		void OnAbout(wxCommandEvent& event);
 
 		wxDECLARE_EVENT_TABLE();
-	protected:
-		void CreateCanvas();
+	private:
+		std::shared_ptr<PFDCore::InterfaceOSG>	m_pInterfaceOSG;
 	};
 };

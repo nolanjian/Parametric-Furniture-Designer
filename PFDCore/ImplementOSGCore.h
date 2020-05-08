@@ -24,8 +24,9 @@ namespace PFDCore
 		void initViewer(osg::ref_ptr<osg::GraphicsContext> gc);
 
 	protected:
+		osg::Vec4	GetBackgroundColor3D();
+
 	private:
-		bool s_bKeepRunning = false;
 		std::thread	m_renderThread;
 		HWND m_hwnd = NULL;
 		osg::ref_ptr<osgViewer::Viewer>	m_ptrViewer;
