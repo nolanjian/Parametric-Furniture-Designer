@@ -10,7 +10,9 @@ namespace PFDUtils
 	{
 		if (bInitLogger)
 			return true;
-		spdlog::basic_logger_mt<spdlog::async_factory>(PFD_LOGGER, "logs/program.log");
+		auto max_size = 1048576 * 5;
+		auto max_files = 3;
+		auto logger = spdlog::rotating_logger_mt(PFD_LOGGER, "logs/program.log", max_size, max_files);
 		bInitLogger = true;
 		return bInitLogger;
 	}

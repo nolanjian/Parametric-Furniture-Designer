@@ -17,7 +17,7 @@ namespace PFDConfig
 		virtual double GetDouble(const std::string& strKey) override;
 		virtual nlohmann::json GetJson(const std::string& strKey) override;
 	protected:
-
+		std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
 	private:
 		nlohmann::json	m_configJson;
 	};

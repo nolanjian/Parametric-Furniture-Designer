@@ -28,23 +28,19 @@ namespace PFDConfig
 		}
 		catch (const nlohmann::detail::parse_error& ex)
 		{
-			// TODO LOG
-			std::cout << ex.what();
+			logger->error(ex.what());
 		}
 		catch (const nlohmann::detail::exception& ex)
 		{
-			// TODO LOG
-			std::cout << ex.what();
+			logger->error(ex.what());
 		}
 		catch (const std::filesystem::filesystem_error& ex)
 		{
-			// TODO LOG
-			std::cout << ex.what();
+			logger->error(ex.what());
 		}
 		catch (const std::exception& ex)
 		{
-			// TODO LOG
-			std::cout << ex.what();
+			logger->error(ex.what());
 		}
 
 		return false;

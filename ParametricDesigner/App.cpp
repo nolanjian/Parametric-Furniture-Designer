@@ -9,10 +9,12 @@ wxIMPLEMENT_APP(PFDGUI::App);
 
 PFDGUI::App::App()
 {
+	logger->info("Program Start");
 }
 
 PFDGUI::App::~App()
 {
+	logger->info("Program Exit");
 	spdlog::shutdown();
 }
 

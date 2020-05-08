@@ -8,6 +8,7 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/async.h"
 #include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/rotating_file_sink.h"
 
 #define PFD_LOGGER "pfd_async_file_logger"
 
