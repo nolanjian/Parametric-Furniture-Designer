@@ -17,6 +17,7 @@ namespace PFDCore
 		void RenderThread();
 		void SetOnSelectObjectCallback(void(*ptr)(long long int)) { fnOnSelectObjectCallback = ptr; }
 		void LoadScene(const std::string& path);
+		void CloseScene();
 		void OpenSceneInNewWindow(const std::string& path);
 
 		void configureShaders(osg::StateSet* stateSet);

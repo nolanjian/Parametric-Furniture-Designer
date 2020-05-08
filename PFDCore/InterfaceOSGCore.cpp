@@ -44,6 +44,11 @@ void PFDCore::InterfaceOSG::LoadScene(const std::string& path)
 	GetImplement(ptrImp)->LoadScene(path);
 }
 
+void PFDCore::InterfaceOSG::CloseScene()
+{
+	GetImplement(ptrImp)->CloseScene();
+}
+
 void PFDCore::InterfaceOSG::OpenSceneInNewWindow(const std::string& path)
 {
 	GetImplement(ptrImp)->OpenSceneInNewWindow(path);

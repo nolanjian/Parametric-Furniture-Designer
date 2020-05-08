@@ -15,6 +15,8 @@ namespace PFDGUI
 		void OnTimer(wxTimerEvent& event);
 		void OnAbout(wxCommandEvent& event);
 		void OnOpenGLTF(wxCommandEvent& event);
+		void OnCloseGLTF(wxCommandEvent& event);
+		void OnExit(wxCommandEvent& event);
 
 		wxDECLARE_EVENT_TABLE();
 	private:

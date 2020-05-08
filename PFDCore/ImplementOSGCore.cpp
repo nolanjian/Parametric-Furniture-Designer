@@ -110,14 +110,14 @@ bool PFDCore::ImplementOSGCore::Render(HWND hwnd)
 
 	initViewer(osg::GraphicsContext::createGraphicsContext(traits.get()));
 
-	auto scene = PFDCore::BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Box\\glTF\\Box.gltf");
-	if (scene)
-	{
-		//osgUtil::Optimizer optimizer;
-		//optimizer.optimize(scene.get(), osgUtil::Optimizer::ALL_OPTIMIZATIONS | osgUtil::Optimizer::TESSELLATE_GEOMETRY);
-		configureShaders(scene->getOrCreateStateSet());
-		m_ptrViewer->setSceneData(scene);
-	}
+	//auto scene = PFDCore::BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Box\\glTF\\Box.gltf");
+	//if (scene)
+	//{
+	//	//osgUtil::Optimizer optimizer;
+	//	//optimizer.optimize(scene.get(), osgUtil::Optimizer::ALL_OPTIMIZATIONS | osgUtil::Optimizer::TESSELLATE_GEOMETRY);
+	//	configureShaders(scene->getOrCreateStateSet());
+	//	m_ptrViewer->setSceneData(scene);
+	//}
 
 	m_renderThread = std::thread(std::bind(&ImplementOSGCore::RenderThread, this));
 	return true;
@@ -148,6 +148,11 @@ void PFDCore::ImplementOSGCore::LoadScene(const std::string& path)
 		configureShaders(scene->getOrCreateStateSet());
 		m_ptrViewer->setSceneData(scene);
 	}
+}
+
+void PFDCore::ImplementOSGCore::CloseScene()
+{
+	m_ptrViewer->setSceneData(nullptr);
 }
 
 osg::ref_ptr<osg::Program> createProgram()
