@@ -97,8 +97,7 @@ namespace PFDCore {
 				}
 				catch (const std::exception& e)
 				{
-					LOG(ERROR) << "fnLoadEmbeddedResource:\n";
-					LOG(ERROR) << e.what();
+					logger->error("fnLoadEmbeddedResource:\n{}", e.what());
 					return false;
 				}
 			};
@@ -118,8 +117,7 @@ namespace PFDCore {
 				}
 				catch (const std::exception& e)
 				{
-					LOG(ERROR) << "fnLoadExteralResource:\n";
-					LOG(ERROR) << e.what();
+					logger->error("fnLoadExteralResource:\n{}", e.what());
 					return false;
 				}
 			};
@@ -145,8 +143,7 @@ namespace PFDCore {
 				}
 				catch (const std::exception& e)
 				{
-					LOG(ERROR) << "fnLoadBufferViewResource:\n";
-					LOG(ERROR) << e.what();
+					logger->error("fnLoadBufferViewResource:\n{0}", e.what());
 					return false;
 				}
 			};
@@ -169,8 +166,7 @@ namespace PFDCore {
 		}
 		catch (const std::exception& e)
 		{
-			LOG(ERROR) << "LoadImage:\n";
-			LOG(ERROR) << e.what();
+			logger->error("LoadImage:\n{}", e.what());
 			return;
 		}
 	}

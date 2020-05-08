@@ -3,14 +3,21 @@
 #include "Frame.h"
 #include "IProgramConfig.h"
 #include "Utils.h"
+#include "spdlog/spdlog.h"
 
 wxIMPLEMENT_APP(PFDGUI::App);
 
+PFDGUI::App::App()
+{
+}
+
+PFDGUI::App::~App()
+{
+	spdlog::shutdown();
+}
+
 bool PFDGUI::App::OnInit()
 {
-	PFDUtils::InitLogger();
-
-	LOG(INFO) << "app start";
 	bool bRet = wxApp::OnInit();
 	if (!bRet)
 		return false;

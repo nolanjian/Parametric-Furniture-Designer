@@ -1,20 +1,17 @@
 #include "Utils.h"
-#include "../easyloggingpp/easylogging++.h"
 
 namespace PFDUtils
 {
-	UTILS_API bool InitLogger(void)
+	static bool bInitLogger = []() {
+		return InitLogger();
+	}();
+
+	bool InitLogger()
 	{
-		static bool bInit = false;
-		if (!bInit)
-		{
-			el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);
-			el::Configurations conf("file\\PFDCore.config");
-			el::Loggers::reconfigureAllLoggers(conf);
-			bInit = true;
-		}
-
-		return true;
+		if (bInitLogger)
+			return true;
+		spdlog::basic_logger_mt<spdlog::async_factory>(PFD_LOGGER, "logs/program.log");
+		bInitLogger = true;
+		return bInitLogger;
 	}
-
 }

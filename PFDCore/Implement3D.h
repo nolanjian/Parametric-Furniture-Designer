@@ -3,6 +3,7 @@
 
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
+#include "Utils.h"
 
 namespace PFDCore
 {
@@ -25,6 +26,8 @@ namespace PFDCore
 
 	protected:
 		osg::Vec4	GetBackgroundColor3D();
+
+		std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
 
 	private:
 		std::thread	m_renderThread;

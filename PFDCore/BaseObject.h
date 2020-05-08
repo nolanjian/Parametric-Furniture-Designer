@@ -3,8 +3,8 @@
 #include "PFDCoreExport.h"
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
+#include "Utils.h"
 #include <fx/gltf.h>
-#include "../easyloggingpp/easylogging++.h"
 #include "../muparserx/mpParser.h"
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"
@@ -14,6 +14,8 @@ namespace PFDCore
 	class PFDCORE_API BaseObject : public osg::MatrixTransform
 	{
 	public:
+		static std::shared_ptr<spdlog::logger> logger;
+
 		BaseObject();
 		virtual ~BaseObject();
 
@@ -48,6 +50,8 @@ namespace PFDCore
 		void	ShowCoordinate(bool bShow);
 
 	protected:
+		
+
 		bool ImportRotation(const fx::gltf::Node& node);
 		bool ExportRotation(fx::gltf::Node& node);
 		bool ImportScale(const fx::gltf::Node& node);

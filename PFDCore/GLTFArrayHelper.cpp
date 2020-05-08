@@ -31,7 +31,7 @@ namespace PFDCore {
 				continue;
 			}
 
-			LOG(WARNING) << "accessors " + std::to_string(ii) + "unhandled";
+			logger->warn("accessors {} unhandled", ii);
 		}
 	}
 
@@ -44,7 +44,7 @@ namespace PFDCore {
 	{
 		if (accessor.type != fx::gltf::Accessor::Type::Mat4 && accessor.componentType == fx::gltf::Accessor::ComponentType::Float)
 		{
-			LOG(WARNING) << "GetOSGMatrix only support Mat4 and Float";
+			logger->warn("GetOSGMatrix only support Mat4 and Float");
 			return nullptr;
 		}
 
@@ -151,7 +151,7 @@ namespace PFDCore {
 			break;
 		}
 		default:
-			LOG(WARNING) << "GetVecArray only support Vec2,Vec3,Vec4";
+			logger->warn("GetVecArray only support Vec2,Vec3,Vec4");
 			return nullptr;
 		}
 	}

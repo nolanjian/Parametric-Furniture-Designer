@@ -81,7 +81,8 @@ namespace PFDCore
 				{
 					outMsg += s + _T("\n");
 				}
-				LOG(ERROR) << outMsg;
+				
+				logger->error(outMsg);
 				return false;
 			}
 		}
@@ -116,15 +117,15 @@ namespace PFDCore
 		}
 		catch (const mup::ParserError& e)
 		{
-			LOG(ERROR) << e.GetMsg();
+			logger->error(e.GetMsg());
 		}
 		catch (const std::exception& e)
 		{
-			LOG(ERROR) << e.what();
+			logger->error(e.what());
 		}
 		catch (...)
 		{
-			LOG(ERROR) << "UNKNOW";
+			logger->error("UNKNOW");
 		}
 		return false;
 	}
@@ -133,7 +134,7 @@ namespace PFDCore
 	{
 		if (!params.is_array())
 		{
-			LOG(ERROR) << "params is not array";
+			logger->error("params is not array");
 			return false;
 		}
 		for (const auto& item : params)
@@ -145,13 +146,13 @@ namespace PFDCore
 				std::pair<std::string, std::string>	pair;
 				if (!GetFormulaPairFromString(strFormula, pair))
 				{
-					LOG(ERROR) << "Parse Fail:" + strFormula;
+					logger->error("Parse Fail:{}", strFormula);
 					continue;
 				}
 
 				if (m_formulas.find(pair.first) != m_formulas.end())
 				{
-					LOG(ERROR) << "Dup Check:" + pair.first;
+					logger->error("Dup Check:{}", pair.first);
 					continue;
 				}
 
@@ -213,11 +214,11 @@ namespace PFDCore
 		}
 		catch (const std::regex_error& err)
 		{
-			LOG(ERROR) << err.what();
+			logger->error(err.what());
 		}
 		catch (const std::exception& err)
 		{
-			LOG(ERROR) << err.what();
+			logger->error(err.what());
 		}
 		return false;
 	}
@@ -241,11 +242,11 @@ namespace PFDCore
 		}
 		catch (const std::regex_error& err)
 		{
-			LOG(ERROR) << err.what();
+			logger->error(err.what());
 		}
 		catch (const std::exception& err)
 		{
-			LOG(ERROR) << err.what();
+			logger->error(err.what());
 		}
 		return false;
 	}
@@ -255,13 +256,13 @@ namespace PFDCore
 		std::pair<std::string, std::string>	pair;
 		if (!GetFormulaPairFromString(strFormular, pair))
 		{
-			LOG(ERROR) << "Parse Fail:" + strFormular;
+			logger->error("Parse Fail:{}", strFormular);
 			return false;
 		}
 
 		if (m_formulas.find(pair.first) != m_formulas.end())
 		{
-			LOG(ERROR) << "Dup Check:" + pair.first;
+			logger->error("Dup Check:{}", strFormular);
 		}
 
 		m_formulas.insert(pair);
@@ -385,15 +386,15 @@ namespace PFDCore
 		}
 		catch (const mup::ParserError& e)
 		{
-			LOG(ERROR) << e.GetMsg();
+			logger->error(e.GetMsg());
 		}
 		catch (const std::exception& e)
 		{
-			LOG(ERROR) << e.what();
+			logger->error(e.what());
 		}
 		catch (...)
 		{
-			LOG(ERROR) << "UNKNOW";
+			logger->error("UNKNOW");
 		}
 		return false;
 	}

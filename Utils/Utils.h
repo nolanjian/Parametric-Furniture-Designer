@@ -5,10 +5,13 @@
 // UTILS_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
 #include "UtilsExport.h"
-#include "../easyloggingpp/easylogging++.h"
-INITIALIZE_EASYLOGGINGPP
+#include "spdlog/spdlog.h"
+#include "spdlog/async.h"
+#include "spdlog/sinks/basic_file_sink.h"
+
+#define PFD_LOGGER "pfd_async_file_logger"
 
 namespace PFDUtils
 {
-	UTILS_API bool InitLogger(void);
+	UTILS_API bool InitLogger();
 };

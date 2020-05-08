@@ -3,7 +3,7 @@
 #include "BaseObject.h"
 #include "TestOSGWin.h"
 #include "ShadingPreDefine.h"
-#include "../Utils/Utils.h"
+#include "Utils.h"
 #include "IProgramConfig.h"
 
 namespace PFDCore
@@ -11,16 +11,11 @@ namespace PFDCore
 
 	Implement3D::Implement3D()
 	{
-		PFDUtils::InitLogger();
-
-		LOG(INFO) << "ImplementOSGCore()";
 	}
 
 	Implement3D::~Implement3D()
 	{
 		Destory();
-
-		LOG(INFO) << "~ImplementOSGCore()";
 	}
 
 	bool Implement3D::Render(HWND hwnd)
@@ -243,7 +238,7 @@ namespace PFDCore
 		}
 		catch (const std::exception& ex)
 		{
-			// TODO LOG
+			logger->error(ex.what());
 		}
 
 		return osg::Vec4(0.466, 0.533, 0.6, 1.0);	// default LightSlateGray

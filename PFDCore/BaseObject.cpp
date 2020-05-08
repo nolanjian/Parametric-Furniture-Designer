@@ -13,6 +13,7 @@
 
 namespace PFDCore
 {
+	std::shared_ptr<spdlog::logger> BaseObject::logger = PFDUtils::InitLogger() ? spdlog::get(PFD_LOGGER) : spdlog::get(PFD_LOGGER);
 
 	BaseObject::BaseObject()
 		:osg::MatrixTransform()
@@ -35,11 +36,12 @@ namespace PFDCore
 		}
 		catch (const std::exception& e)
 		{
-			LOG(ERROR) << e.what();
+			logger->error(e.what());
+			
 		}
 		catch (...)
 		{
-			LOG(ERROR) << "JSON2OSG unknown exception";
+			logger->error("JSON2OSG unknown exception");
 		}
 		return nullptr;
 	}
@@ -69,11 +71,11 @@ namespace PFDCore
 		}
 		catch (const std::exception& e)
 		{
-			LOG(ERROR) << e.what();
+			logger->error(e.what());
 		}
 		catch (...)
 		{
-			LOG(ERROR) << "JSON2OSG unknown exception";
+			logger->error("JSON2OSG unknown exception");
 		}
 		return nullptr;
 	}
