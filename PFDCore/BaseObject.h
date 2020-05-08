@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OSGCoreExport.h"
+#include "PFDCoreExport.h"
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
 #include <fx/gltf.h>

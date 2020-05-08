@@ -41,7 +41,7 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	HWND hwndDrawing = pDrawWin->GetHWND();
 
-	m_pInterfaceOSG = std::make_shared<PFDCore::InterfaceOSG>();
+	m_pInterfaceOSG = std::make_shared<PFDCore::Interface3D>();
 	m_pInterfaceOSG->Render(hwndDrawing);
 
 	

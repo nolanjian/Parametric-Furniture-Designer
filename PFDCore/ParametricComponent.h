@@ -1,8 +1,8 @@
 #pragma once
 
+#include "PFDCoreExport.h"
 #include "STLIncluding.h"
 #include "BaseObject.h"
-#include "OSGCoreExport.h"
 
 namespace PFDCore
 {

@@ -109,12 +109,12 @@
     <ClInclude Include="Hard.h" />
     <ClInclude Include="GLTFArrayHelper.h" />
     <ClInclude Include="IGLTFResourceManager.h" />
-    <ClInclude Include="ImplementOSGCore.h" />
-    <ClInclude Include="InterfaceOSGCore.h" />
+    <ClInclude Include="Implement3D.h" />
+    <ClInclude Include="Interface3D.h" />
     <ClInclude Include="GLTFMeshManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectFactory.h" />
-    <ClInclude Include="OSGCoreExport.h" />
+    <ClInclude Include="PFDCoreExport.h" />
     <ClInclude Include="OSGIncluding.h" />
     <ClInclude Include="Panel.h" />
     <ClInclude Include="ParametricComponent.h" />
@@ -141,8 +141,8 @@
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Hard.cpp" />
     <ClCompile Include="IGLTFResourceManager.cpp" />
-    <ClCompile Include="ImplementOSGCore.cpp" />
-    <ClCompile Include="InterfaceOSGCore.cpp" />
+    <ClCompile Include="Implement3D.cpp" />
+    <ClCompile Include="Interface3D.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Panel.cpp" />
     <ClCompile Include="ParametricComponent.cpp" />

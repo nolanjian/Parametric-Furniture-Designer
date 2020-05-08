@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../PFDCore/InterfaceOSGCore.h"
+#include "../PFDCore/Interface3D.h"
 
 int main()
 {
@@ -14,7 +14,7 @@ int main()
 		std::string strPath;
 		std::getline(std::cin, strPath);
 
-		PFDCore::InterfaceOSG* ptr = new PFDCore::InterfaceOSG();
+		PFDCore::Interface3D* ptr = new PFDCore::Interface3D();
 		ptr->OpenSceneInNewWindow(strPath);
 		delete ptr;
 	}

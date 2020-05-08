@@ -1,26 +1,20 @@
-// Utils.cpp : Defines the exported functions for the DLL.
-//
-
-#include "pch.h"
-#include "framework.h"
 #include "Utils.h"
 #include "../easyloggingpp/easylogging++.h"
 
-
-// This is an example of an exported variable
-UTILS_API int nUtils=0;
-
-// This is an example of an exported function.
-UTILS_API bool InitLogger(void)
+namespace PFDUtils
 {
-	el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);
-	el::Configurations conf("file\\PFDCore.config");
-	el::Loggers::reconfigureAllLoggers(conf);
-    return true;
-}
+	UTILS_API bool InitLogger(void)
+	{
+		static bool bInit = false;
+		if (!bInit)
+		{
+			el::Loggers::addFlag(el::LoggingFlag::StrictLogFileSizeCheck);
+			el::Configurations conf("file\\PFDCore.config");
+			el::Loggers::reconfigureAllLoggers(conf);
+			bInit = true;
+		}
 
-// This is the constructor of a class that has been exported.
-CUtils::CUtils()
-{
-    return;
+		return true;
+	}
+
 }

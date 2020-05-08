@@ -1,6 +1,6 @@
 #pragma once
 #include "WXIncluding.h"
-#include "InterfaceOSGCore.h"
+#include "Interface3D.h"
 #include <memory>
 
 namespace PFDGUI
@@ -20,6 +20,6 @@ namespace PFDGUI
 
 		wxDECLARE_EVENT_TABLE();
 	private:
-		std::shared_ptr<PFDCore::InterfaceOSG>	m_pInterfaceOSG;
+		std::shared_ptr<PFDCore::Interface3D>	m_pInterfaceOSG;
 	};
 };

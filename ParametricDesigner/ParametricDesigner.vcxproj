@@ -87,14 +87,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\PFDCore;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\3rdPart;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\PFDCore;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>PFDConfig.lib;wxmsw31ud_core.lib;wxbase31ud.lib;wxmsw31ud_gl.lib;osgViewerd.lib;OpenThreadsd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;PFDCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\easyloggingpp;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>UTILS.lib;easyloggingppd.lib;PFDConfig.lib;wxmsw31ud_core.lib;wxbase31ud.lib;wxmsw31ud_gl.lib;osgViewerd.lib;OpenThreadsd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;PFDCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

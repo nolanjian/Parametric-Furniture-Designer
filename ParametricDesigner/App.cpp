@@ -2,11 +2,15 @@
 #include "App.h"
 #include "Frame.h"
 #include "IProgramConfig.h"
+#include "Utils.h"
 
 wxIMPLEMENT_APP(PFDGUI::App);
 
 bool PFDGUI::App::OnInit()
 {
+	PFDUtils::InitLogger();
+
+	LOG(INFO) << "app start";
 	bool bRet = wxApp::OnInit();
 	if (!bRet)
 		return false;

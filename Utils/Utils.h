@@ -7,13 +7,8 @@
 #include "UtilsExport.h"
 #include "../easyloggingpp/easylogging++.h"
 INITIALIZE_EASYLOGGINGPP
-// This class is exported from the dll
-class UTILS_API CUtils {
-public:
-	CUtils(void);
-	// TODO: add your methods here.
+
+namespace PFDUtils
+{
+	UTILS_API bool InitLogger(void);
 };
-
-extern UTILS_API int nUtils;
-
-UTILS_API bool InitLogger(void);

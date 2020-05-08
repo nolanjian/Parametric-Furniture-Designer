@@ -1,5 +1,5 @@
 #pragma once
-#include "OSGCoreExport.h"
+#include "PFDCoreExport.h"
 #include "BaseObject.h"
 
 namespace PFDCore

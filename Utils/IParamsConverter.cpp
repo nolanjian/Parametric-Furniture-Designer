@@ -1,4 +1,4 @@
-#include "pch.h"
+
 #include "IParamsConverter.h"
 
 namespace PFDUtils

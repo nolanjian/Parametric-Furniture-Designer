@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ParametricComponent.h"
-#include "OSGCoreExport.h"
+#include "PFDCoreExport.h"
 
 namespace PFDCore
 {

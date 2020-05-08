@@ -67,15 +67,6 @@
     <ClInclude Include="Hard.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="ImplementOSGCore.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="InterfaceOSGCore.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="OSGCoreExport.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="framework.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -121,6 +112,15 @@
     <ClInclude Include="Shape.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Interface3D.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Implement3D.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="PFDCoreExport.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
@@ -145,12 +145,6 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="dllmain.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="ImplementOSGCore.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="InterfaceOSGCore.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
@@ -191,6 +185,12 @@
     </ClCompile>
     <ClCompile Include="Shape.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface3D.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Implement3D.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,16 +1,16 @@
 #pragma once
-#include "OSGCoreExport.h"
+#include "PFDCoreExport.h"
 #include "STLIncluding.h"
 #include <windows.h>
 
 
 namespace PFDCore
 {
-	class PFDCORE_API InterfaceOSG
+	class PFDCORE_API Interface3D
 	{
 	public:
-		InterfaceOSG();
-		virtual ~InterfaceOSG();
+		Interface3D();
+		virtual ~Interface3D();
 
 		bool Render(HWND hwnd);
 		void Destroy();

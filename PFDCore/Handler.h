@@ -1,6 +1,6 @@
 #pragma once
 #include "Model.h"
-#include "OSGCoreExport.h"
+#include "PFDCoreExport.h"
 
 namespace PFDCore
 {

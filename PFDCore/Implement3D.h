@@ -6,11 +6,11 @@
 
 namespace PFDCore
 {
-	class ImplementOSGCore
+	class Implement3D
 	{
 	public:
-		ImplementOSGCore();
-		virtual ~ImplementOSGCore();
+		Implement3D();
+		virtual ~Implement3D();
 
 		bool Render(HWND);
 		void Destory();
