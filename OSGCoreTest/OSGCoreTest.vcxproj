@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)gtest\include;$(SolutionDir)PFDCore;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)gtest\include;$(SolutionDir)PFDCore;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
