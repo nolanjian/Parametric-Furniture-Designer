@@ -11,7 +11,7 @@
 
 namespace PFDCore
 {
-	class OSGCORE_API BaseObject : public osg::MatrixTransform
+	class PFDCORE_API BaseObject : public osg::MatrixTransform
 	{
 	public:
 		BaseObject();

@@ -18,7 +18,7 @@ namespace PFDConfig
 		try
 		{
 			m_configJson.clear();
-			std::filesystem::path	configPath = std::filesystem::current_path().string() + ("/File/Program.json");
+			std::filesystem::path	configPath = std::filesystem::current_path().string() + ("/Program.json");
 			std::ifstream ifs(configPath);
 			auto b = ifs.is_open();
 

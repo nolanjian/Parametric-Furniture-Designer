@@ -15,7 +15,6 @@ namespace PFDCore
 		bool Render(HWND);
 		void Destory();
 		void RenderThread();
-		void SetModelPath(const std::wstring& path);
 		void SetOnSelectObjectCallback(void(*ptr)(long long int)) { fnOnSelectObjectCallback = ptr; }
 		void LoadScene(const std::string& path);
 		void OpenSceneInNewWindow(const std::string& path);

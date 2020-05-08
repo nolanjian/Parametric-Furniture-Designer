@@ -6,7 +6,7 @@
 
 namespace PFDCore
 {
-	class OSGCORE_API ParametricComponent : public BaseObject
+	class PFDCORE_API ParametricComponent : public BaseObject
 	{
 	public:
 		virtual bool Update();

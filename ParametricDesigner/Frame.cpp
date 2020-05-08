@@ -5,6 +5,7 @@ wxBEGIN_EVENT_TABLE(PFDGUI::Frame, wxFrame)
 	EVT_CLOSE(PFDGUI::Frame::OnClose)
 	EVT_TIMER(ID_TIMER, PFDGUI::Frame::OnTimer)
 	EVT_MENU(LAYOUT_ABOUT, PFDGUI::Frame::OnAbout)
+	EVT_MENU(ID_OPEN_GLTF, PFDGUI::Frame::OnOpenGLTF)
 wxEND_EVENT_TABLE()
 
 PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size)
@@ -17,6 +18,7 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	wxMenu* file_menu = new wxMenu;
 	menu_bar->Append(file_menu, "&File");
+	file_menu->Append(ID_OPEN_GLTF, "&Open");
 
 	wxMenu* help_menu = new wxMenu;
 	menu_bar->Append(help_menu, "&Help");
@@ -51,4 +53,19 @@ void PFDGUI::Frame::OnTimer(wxTimerEvent& event)
 void PFDGUI::Frame::OnAbout(wxCommandEvent& event)
 {
 	wxMessageBox("About Parametric Designer", "About");
+}
+
+void PFDGUI::Frame::OnOpenGLTF(wxCommandEvent& event)
+{
+	wxFileDialog dialog(this, "Please choose an GLTF",
+		wxEmptyString, wxEmptyString, "*.gltf;*.glb", wxFD_OPEN);
+
+	if (dialog.ShowModal() == wxID_OK)
+	{
+		wxString filename(dialog.GetPath());
+		if (m_pInterfaceOSG)
+		{
+			m_pInterfaceOSG->LoadScene(filename.c_str().AsChar());
+		}
+	}
 }

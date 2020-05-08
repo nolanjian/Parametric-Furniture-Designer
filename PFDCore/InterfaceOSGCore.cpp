@@ -30,11 +30,6 @@ void PFDCore::InterfaceOSG::Destroy()
 	GetImplement(ptrImp)->Destory();
 }
 
-void PFDCore::InterfaceOSG::SetModelPath(const std::wstring& path)
-{
-	GetImplement(ptrImp)->SetModelPath(path);
-}
-
 void PFDCore::InterfaceOSG::SetParam(long long int objectID, const std::wstring& name, const std::wstring& formula)
 {
 }

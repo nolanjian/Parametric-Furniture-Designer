@@ -140,23 +140,14 @@ void PFDCore::ImplementOSGCore::RenderThread()
 	m_ptrViewer->run();
 }
 
-void PFDCore::ImplementOSGCore::SetModelPath(const std::wstring& path)
-{
-	m_ptr3DScene->removeChildren(0, m_ptr3DScene->getNumChildren());
-
-	std::string strPath;
-	m_ptr3DScene = PFDCore::BaseObject::LoadSceneFromJsonFile(strPath);
-
-	if (fnOnSelectObjectCallback)
-	{
-		fnOnSelectObjectCallback(-1);
-	}
-
-}
-
 void PFDCore::ImplementOSGCore::LoadScene(const std::string& path)
 {
-	PFDCore::BaseObject::LoadSceneFromJsonFile(path);
+	auto scene = PFDCore::BaseObject::LoadSceneFromJsonFile(path);
+	if (scene)
+	{
+		configureShaders(scene->getOrCreateStateSet());
+		m_ptrViewer->setSceneData(scene);
+	}
 }
 
 osg::ref_ptr<osg::Program> createProgram()

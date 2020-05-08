@@ -6,7 +6,7 @@
 
 namespace PFDCore
 {
-	class OSGCORE_API InterfaceOSG
+	class PFDCORE_API InterfaceOSG
 	{
 	public:
 		InterfaceOSG();
@@ -15,7 +15,6 @@ namespace PFDCore
 		bool Render(HWND hwnd);
 		void Destroy();
 
-		void SetModelPath(const std::wstring& path);
 		void SetParam(long long int objectID, const std::wstring& name, const std::wstring& formula);
 
 		void SetOnSelectObjectCallback(void(*ptr)(long long int));
