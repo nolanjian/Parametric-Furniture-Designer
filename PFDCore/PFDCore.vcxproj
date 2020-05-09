@@ -70,7 +70,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>$(OutDir);D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\spdlog</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlogd.lib;PFDConfig.lib;OpenThreadsd.lib;osgAnimationd.lib;osgd.lib;osgDBd.lib;osgFXd.lib;osgGAd.lib;osgManipulatord.lib;osgParticled.lib;osgPresentationd.lib;osgShadowd.lib;osgSimd.lib;osgTerraind.lib;osgTextd.lib;osgUId.lib;osgUtild.lib;osgViewerd.lib;osgVolumed.lib;osgWidgetd.lib;MUPARSERX.lib;UTILS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>spdlogd.lib;PFDConfig.lib;OpenThreadsd.lib;osgAnimationd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;osgSimd.lib;osgTerraind.lib;osgTextd.lib;osgUtild.lib;osgViewerd.lib;osgVolumed.lib;MUPARSERX.lib;UTILS.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
