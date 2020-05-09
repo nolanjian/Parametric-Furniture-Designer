@@ -108,15 +108,6 @@ namespace PFDCore
 
 		initViewer(osg::GraphicsContext::createGraphicsContext(traits.get()));
 
-		//auto scene = BaseObject::LoadSceneFromJsonFile("D:\\glTF-Sample-Models\\2.0\\Box\\glTF\\Box.gltf");
-		//if (scene)
-		//{
-		//	//osgUtil::Optimizer optimizer;
-		//	//optimizer.optimize(scene.get(), osgUtil::Optimizer::ALL_OPTIMIZATIONS | osgUtil::Optimizer::TESSELLATE_GEOMETRY);
-		//	configureShaders(scene->getOrCreateStateSet());
-		//	m_ptrViewer->setSceneData(scene);
-		//}
-
 		m_renderThread = std::thread(std::bind(&Implement3D::RenderThread, this));
 		return true;
 	}
@@ -173,7 +164,6 @@ namespace PFDCore
 		std::stringstream	ss;
 		ss << fs.rdbuf();
 		std::string source = ss.str();
-		//LOG(INFO) << source;
 		return source;
 	}
 
@@ -219,6 +209,8 @@ namespace PFDCore
 			s->setUseModelViewAndProjectionUniforms(true);
 			s->setUseVertexAttributeAliasing(true);
 		}
+
+		logger->info("init 3d viewer done");
 	}
 
 	std::string Implement3D::GetSenceTree()
@@ -249,9 +241,12 @@ namespace PFDCore
 			break;
 		default:
 			assert(false);
-			break;
+			return;
 		}
+
 		throw new std::exception("SetRenderMode not Implement");
+
+		logger->info("switch to render mode:{}", mode);
 	}
 
 	bool Implement3D::ExportScene(const std::string& path)
