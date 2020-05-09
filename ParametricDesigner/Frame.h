@@ -18,8 +18,12 @@ namespace PFDGUI
 		void OnCloseGLTF(wxCommandEvent& event);
 		void OnExit(wxCommandEvent& event);
 
+	protected:
+		void Init3DWindow();
+
 		wxDECLARE_EVENT_TABLE();
 	private:
+		wxWindow* m_p3DWindow = nullptr;
 		std::shared_ptr<PFDCore::Interface3D>	m_pInterfaceOSG;
 	};
 };

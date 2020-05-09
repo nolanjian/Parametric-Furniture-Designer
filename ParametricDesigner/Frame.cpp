@@ -35,16 +35,9 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	wxGridSizer* topsizer = new wxGridSizer(2, 2, 1, 1);
 	topsizer->SetMinSize(wxSize(1208, 1000));
-	
-	wxWindow* pDrawWin = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(600), FromDIP(600)));
-	topsizer->Add(pDrawWin);
 
-	HWND hwndDrawing = pDrawWin->GetHWND();
-
-	m_pInterfaceOSG = std::make_shared<PFDCore::Interface3D>();
-	m_pInterfaceOSG->Render(hwndDrawing);
-
-	
+	Init3DWindow();
+	topsizer->Add(m_p3DWindow);
 
 	SetSizer(topsizer);
 }
@@ -91,4 +84,23 @@ void PFDGUI::Frame::OnExit(wxCommandEvent& event)
 {
 	// TODO
 	Destroy();
+}
+
+void PFDGUI::Frame::Init3DWindow()
+{
+	m_p3DWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(600), FromDIP(600)));
+	if (!m_p3DWindow)
+	{
+		wxASSERT(m_p3DWindow);
+		return;
+	}
+	
+	HWND hwndDrawing = m_p3DWindow->GetHWND();
+	m_pInterfaceOSG = std::make_shared<PFDCore::Interface3D>();
+	if (!m_pInterfaceOSG)
+	{
+		wxASSERT(m_pInterfaceOSG);
+		return;
+	}
+	m_pInterfaceOSG->Render(hwndDrawing);
 }

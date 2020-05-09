@@ -93,8 +93,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\spdlog;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlogd.lib;UTILS.lib;PFDConfig.lib;wxmsw31ud_core.lib;wxbase31ud.lib;wxmsw31ud_gl.lib;osgViewerd.lib;OpenThreadsd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;PFDCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\spdlog;D:\Library\wxBuild\debugSingle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>spdlogd.lib;UTILS.lib;PFDConfig.lib;wxmsw31ud.lib;osgViewerd.lib;OpenThreadsd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;PFDCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
