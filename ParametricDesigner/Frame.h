@@ -17,6 +17,7 @@ namespace PFDGUI
 		void OnOpenGLTF(wxCommandEvent& event);
 		void OnCloseGLTF(wxCommandEvent& event);
 		void OnExit(wxCommandEvent& event);
+		void OnExportSence(wxCommandEvent& event);
 
 	protected:
 		void Init3DWindow();

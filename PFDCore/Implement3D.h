@@ -4,6 +4,7 @@
 #include "OSGIncluding.h"
 #include "STLIncluding.h"
 #include "Utils.h"
+#include "Interface3D.h"
 
 namespace PFDCore
 {
@@ -23,6 +24,13 @@ namespace PFDCore
 
 		void configureShaders(osg::StateSet* stateSet);
 		void initViewer(osg::ref_ptr<osg::GraphicsContext> gc);
+
+		std::string GetSenceTree();
+
+		Interface3D::RenderMode	GetRenderMode();
+		void		SetRenderMode(Interface3D::RenderMode mode);
+
+		bool		ExportScene(const std::string& path);
 
 	protected:
 		osg::Vec4	GetBackgroundColor3D();

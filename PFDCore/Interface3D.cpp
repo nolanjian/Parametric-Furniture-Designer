@@ -57,5 +57,25 @@ namespace PFDCore
 		GetImplement(ptrImp)->OpenSceneInNewWindow(path);
 	}
 
+	std::string Interface3D::GetSenceTree()
+	{
+		return GetImplement(ptrImp)->GetSenceTree();
+	}
+
+	Interface3D::RenderMode Interface3D::GetRenderMode()
+	{
+		return GetImplement(ptrImp)->GetRenderMode();
+	}
+
+	void Interface3D::SetRenderMode(RenderMode mode)
+	{
+		GetImplement(ptrImp)->SetRenderMode(mode);
+	}
+
+	bool Interface3D::ExportScene(const std::string& path)
+	{
+		return GetImplement(ptrImp)->ExportScene(path);
+	}
+
 
 };

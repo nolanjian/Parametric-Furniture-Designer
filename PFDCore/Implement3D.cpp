@@ -221,6 +221,44 @@ namespace PFDCore
 		}
 	}
 
+	std::string Implement3D::GetSenceTree()
+	{
+		throw new std::exception("GetSenceTree not Implement");
+	}
+
+	Interface3D::RenderMode Implement3D::GetRenderMode()
+	{
+		throw new std::exception("GetRenderMode not Implement");
+	}
+
+	void Implement3D::SetRenderMode(Interface3D::RenderMode mode)
+	{
+		switch (mode)
+		{
+		case PFDCore::Interface3D::Texture:
+			// TODO
+			break;
+		case PFDCore::Interface3D::WireFrames:
+			// TODO
+			break;
+		case PFDCore::Interface3D::Cartoon:
+			// TODO
+			break;
+		case PFDCore::Interface3D::BlackAndWhite:
+			// TODO
+			break;
+		default:
+			assert(false);
+			break;
+		}
+		throw new std::exception("SetRenderMode not Implement");
+	}
+
+	bool Implement3D::ExportScene(const std::string& path)
+	{
+		throw new std::exception("ExportScene not Implement");
+	}
+
 	osg::Vec4 Implement3D::GetBackgroundColor3D()
 	{
 		try

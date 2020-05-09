@@ -6,6 +6,7 @@ wxBEGIN_EVENT_TABLE(PFDGUI::Frame, wxFrame)
 	EVT_TIMER(ID_TIMER, PFDGUI::Frame::OnTimer)
 	EVT_MENU(LAYOUT_ABOUT, PFDGUI::Frame::OnAbout)
 	EVT_MENU(ID_OPEN_GLTF, PFDGUI::Frame::OnOpenGLTF)
+	EVT_MENU(ID_EXPORT_GLTF, PFDGUI::Frame::OnExportSence)
 	EVT_MENU(ID_CLOSE_GLTF, PFDGUI::Frame::OnCloseGLTF)
 	EVT_MENU(ID_EXIT_PROGRAM, PFDGUI::Frame::OnExit)
 wxEND_EVENT_TABLE()
@@ -23,6 +24,7 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 	wxMenu* file_menu = new wxMenu;
 	menu_bar->Append(file_menu, "&File");
 	file_menu->Append(ID_OPEN_GLTF, "&Open");
+	file_menu->Append(ID_EXPORT_GLTF, "&Save");
 	file_menu->Append(ID_CLOSE_GLTF, "&Close");
 	file_menu->Append(ID_EXIT_PROGRAM, "&Exit");
 
@@ -84,6 +86,27 @@ void PFDGUI::Frame::OnExit(wxCommandEvent& event)
 {
 	// TODO
 	Destroy();
+}
+
+void PFDGUI::Frame::OnExportSence(wxCommandEvent& event)
+{
+	wxFileDialog dialog(this,
+		"Save Scene",
+		wxEmptyString,
+		wxEmptyString,
+		/*"*.gltf;|*.glb;",*/
+		"GLTF files (*.gltf)|*.gltf|GLB files (*.glb)|*.glb",
+		wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+	if (dialog.ShowModal() == wxID_OK)
+	{
+		wxString filename = dialog.GetPath();
+		if (m_pInterfaceOSG)
+		{
+			m_pInterfaceOSG->ExportScene(filename.c_str().AsChar());
+		}
+	}
+
 }
 
 void PFDGUI::Frame::Init3DWindow()
