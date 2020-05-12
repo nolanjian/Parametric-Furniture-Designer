@@ -4,7 +4,8 @@
 #include "stb_image.h"
 #include "IGLTFResourceManager.h"
 
-namespace PFDCore {
+namespace PFD_GLTF_Helper 
+{
 
 	class GLTFMaterialsManager : public IGLTFResourceManager
 	{

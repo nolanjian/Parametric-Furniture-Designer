@@ -1,4 +1,5 @@
 #pragma once
+#include <osg/GL>
 #include <osg/Array>
 #include <osg/BoundingBox>
 #include <osg/BoundingSphere>

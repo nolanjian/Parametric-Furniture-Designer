@@ -4,7 +4,8 @@
 #include "STLIncluding.h"
 #include "IGLTFResourceManager.h"
 
-namespace PFDCore {
+namespace PFD_GLTF_Helper 
+{
 	class GLTFMeshManager : public IGLTFResourceManager
 	{
 	public:

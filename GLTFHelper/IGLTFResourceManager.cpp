@@ -1,7 +1,7 @@
-#include "pch.h"
+
 #include "IGLTFResourceManager.h"
 
-namespace PFDCore {
+namespace PFD_GLTF_Helper {
 
 
 	void IGLTFResourceManager::SetGLTF(std::shared_ptr<fx::gltf::Document> gltfObject)

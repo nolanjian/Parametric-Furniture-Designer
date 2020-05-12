@@ -1,7 +1,7 @@
-#include "pch.h"
 #include "GLTFArrayHelper.h"
 
-namespace PFDCore {
+namespace PFD_GLTF_Helper
+{
 
 	GLTFArrayHelper& GLTFArrayHelper::GetInstance()
 	{

@@ -1,7 +1,8 @@
-#include "pch.h"
+
 #include "GLTFMaterialsManager.h"
 
-namespace PFDCore {
+namespace PFD_GLTF_Helper
+{
 
 	GLTFMaterialsManager& GLTFMaterialsManager::GetInstance()
 	{

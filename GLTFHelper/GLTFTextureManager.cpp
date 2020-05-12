@@ -1,8 +1,8 @@
-#include "pch.h"
-#include "SceneMgr.h"
+
+//#include "SceneMgr.h"
 #include "GLTFTextureManager.h"
 
-namespace PFDCore {
+namespace PFD_GLTF_Helper {
 
 	GLTFTextureManager& GLTFTextureManager::GetInstance()
 	{

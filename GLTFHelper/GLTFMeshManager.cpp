@@ -1,9 +1,9 @@
-#include "pch.h"
+
 #include "GLTFMeshManager.h"
 #include "SceneMgr.h"
 #include "ShadingPreDefine.h"
 
-namespace PFDCore
+namespace PFD_GLTF_Helper
 {
 
 	GLTFMeshManager& GLTFMeshManager::GetInstance()
