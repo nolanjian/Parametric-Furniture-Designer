@@ -32,7 +32,7 @@ namespace PFDCore
 		static bool regexParseKV(mup::string_type& strKV);
 
 		bool SetParam(const mup::string_type& strFormular);
-		void SetParam(mup::string_type& strKey, mup::string_type& strValue);
+		bool SetParam(mup::string_type& strKey, mup::string_type& strValue);
 		mup::string_type GetParam(const mup::string_type& strName);
 		mup::string_type GetParamResult(const mup::string_type& strName);
 

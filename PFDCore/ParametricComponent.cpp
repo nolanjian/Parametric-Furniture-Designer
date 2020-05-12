@@ -265,7 +265,7 @@ namespace PFDCore
 
 		if (m_formulas.find(pair.first) != m_formulas.end())
 		{
-			logger->error(_T("Dup Check:{}"), strFormular);
+			logger->warn(_T("Dup Check:{}"), strFormular);
 		}
 
 		m_formulas.insert(pair);
@@ -273,10 +273,20 @@ namespace PFDCore
 		return true;
 	}
 
-	void ParametricComponent::SetParam(mup::string_type& strKey, mup::string_type& strValue)
+	bool ParametricComponent::SetParam(mup::string_type& strKey, mup::string_type& strValue)
 	{
-		if (regexParseKV(strKey) && regexParseKV(strValue))
-			m_formulas[strKey] = strValue;
+		if (!regexParseKV(strKey))
+		{
+			logger->error(_T("Parse Key /{}/ fail"), strKey);
+			return false;
+		}
+		if (!regexParseKV(strValue))
+		{
+			logger->error(_T("Parse Value /{}/ fail"), strValue);
+			return false;
+		}
+		m_formulas[strKey] = strValue;
+		return true;
 	}
 
 	mup::string_type ParametricComponent::GetParam(const mup::string_type& strName)
@@ -302,6 +312,7 @@ namespace PFDCore
 		if (pValue->IsString())
 		{
 			str = pValue->GetString();
+			return str;
 		}
 		else if (pValue->IsVariable())
 		{
@@ -314,8 +325,7 @@ namespace PFDCore
 			return std::to_wstring(nVal);
 		}
 
-
-		return str;
+		throw new std::exception("unhandled data type");
 	}
 
 	bool ParametricComponent::GetFormulaPairFromString(const mup::string_type& str, std::pair<mup::string_type, mup::string_type>& pair)
