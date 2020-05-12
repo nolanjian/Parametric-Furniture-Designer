@@ -85,7 +85,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_COMPILED_LIB;SPDLOG_SHARED_LIB;FMT_HEADER_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\PFDCore;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -145,11 +145,13 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="EnumID.h" />
     <ClInclude Include="Frame.h" />
+    <ClInclude Include="SceneTreePage.h" />
     <ClInclude Include="WXIncluding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Frame.cpp" />
+    <ClCompile Include="SceneTreePage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

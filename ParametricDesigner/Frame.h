@@ -25,6 +25,6 @@ namespace PFDGUI
 		wxDECLARE_EVENT_TABLE();
 	private:
 		wxWindow* m_p3DWindow = nullptr;
-		std::shared_ptr<PFDCore::Interface3D>	m_pInterfaceOSG;
+		std::shared_ptr<PFDCore::Interface3D>	m_pInterface3D;
 	};
 };

@@ -6,4 +6,4 @@
 #   include "wx/wx.h"
 #endif
 
-#include "wx/glcanvas.h"
+#include "wx/treectrl.h"

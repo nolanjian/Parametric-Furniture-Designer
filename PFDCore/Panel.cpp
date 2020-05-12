@@ -15,17 +15,17 @@ namespace PFDCore
 
 	bool Panel::InitFromParams()
 	{
-		if (m_formulasResult.find("W") != m_formulasResult.end())
+		if (m_formulasResult.find(_T("W")) != m_formulasResult.end())
 		{
-			dWidth = m_formulasResult["W"]->AsIValue()->GetFloat();
+			dWidth = m_formulasResult[_T("W")]->AsIValue()->GetFloat();
 		}
-		if (m_formulasResult.find("D") != m_formulasResult.end())
+		if (m_formulasResult.find(_T("D")) != m_formulasResult.end())
 		{
-			dDepth = m_formulasResult["D"]->AsIValue()->GetFloat();
+			dDepth = m_formulasResult[_T("D")]->AsIValue()->GetFloat();
 		}
-		if (m_formulasResult.find("H") != m_formulasResult.end())
+		if (m_formulasResult.find(_T("H")) != m_formulasResult.end())
 		{
-			dHeight = m_formulasResult["H"]->AsIValue()->GetFloat();
+			dHeight = m_formulasResult[_T("H")]->AsIValue()->GetFloat();
 		}
 
 		return true;

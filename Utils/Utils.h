@@ -15,4 +15,12 @@
 namespace PFDUtils
 {
 	UTILS_API bool InitLogger();
+	
+	UTILS_API std::wstring Utf8ToUnicode(const std::string& strUTF8);
+
+	UTILS_API std::string UnicodeToUtf8(const std::wstring& strUnicode);
+
+	UTILS_API std::wstring StringToWString(const std::string& str);
+
+	UTILS_API std::string WStringToString(const std::wstring& wstr);
 };

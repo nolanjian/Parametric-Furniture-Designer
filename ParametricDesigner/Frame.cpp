@@ -67,18 +67,18 @@ void PFDGUI::Frame::OnOpenGLTF(wxCommandEvent& event)
 	if (dialog.ShowModal() == wxID_OK)
 	{
 		wxString filename(dialog.GetPath());
-		if (m_pInterfaceOSG)
+		if (m_pInterface3D)
 		{
-			m_pInterfaceOSG->LoadScene(filename.c_str().AsChar());
+			m_pInterface3D->LoadScene(filename.c_str().AsChar());
 		}
 	}
 }
 
 void PFDGUI::Frame::OnCloseGLTF(wxCommandEvent& event)
 {
-	if (m_pInterfaceOSG)
+	if (m_pInterface3D)
 	{
-		m_pInterfaceOSG->CloseScene();
+		m_pInterface3D->CloseScene();
 	}
 }
 
@@ -101,9 +101,9 @@ void PFDGUI::Frame::OnExportSence(wxCommandEvent& event)
 	if (dialog.ShowModal() == wxID_OK)
 	{
 		wxString filename = dialog.GetPath();
-		if (m_pInterfaceOSG)
+		if (m_pInterface3D)
 		{
-			m_pInterfaceOSG->ExportScene(filename.c_str().AsChar());
+			m_pInterface3D->ExportScene(filename.c_str().AsChar());
 		}
 	}
 
@@ -119,11 +119,11 @@ void PFDGUI::Frame::Init3DWindow()
 	}
 	
 	HWND hwndDrawing = m_p3DWindow->GetHWND();
-	m_pInterfaceOSG = std::make_shared<PFDCore::Interface3D>();
-	if (!m_pInterfaceOSG)
+	m_pInterface3D = std::make_shared<PFDCore::Interface3D>();
+	if (!m_pInterface3D)
 	{
-		wxASSERT(m_pInterfaceOSG);
+		wxASSERT(m_pInterface3D);
 		return;
 	}
-	m_pInterfaceOSG->Render(hwndDrawing);
+	m_pInterface3D->Render(hwndDrawing);
 }

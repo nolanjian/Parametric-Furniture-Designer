@@ -27,12 +27,18 @@
     <ClInclude Include="EnumID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneTreePage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Frame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTreePage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
