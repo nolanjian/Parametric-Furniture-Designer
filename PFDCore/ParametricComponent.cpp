@@ -121,11 +121,11 @@ namespace PFDCore
 		}
 		catch (const std::exception& e)
 		{
-			logger->error(e.what());
+			logger->error(PFDUtils::StringToWString(e.what()));
 		}
 		catch (...)
 		{
-			logger->error("UNKNOW");
+			logger->error(_T("UNKNOW"));
 		}
 		return false;
 	}
@@ -134,7 +134,7 @@ namespace PFDCore
 	{
 		if (!params.is_array())
 		{
-			logger->error("params is not array");
+			logger->error(_T("params is not array"));
 			return false;
 		}
 		for (const auto& item : params)
@@ -217,11 +217,11 @@ namespace PFDCore
 		}
 		catch (const std::regex_error& err)
 		{
-			logger->error(err.what());
+			logger->error(PFDUtils::StringToWString(err.what()));
 		}
 		catch (const std::exception& err)
 		{
-			logger->error(err.what());
+			logger->error(PFDUtils::StringToWString(err.what()));
 		}
 		return false;
 	}
@@ -245,11 +245,11 @@ namespace PFDCore
 		}
 		catch (const std::regex_error& err)
 		{
-			logger->error(err.what());
+			logger->error(PFDUtils::StringToWString(err.what()));
 		}
 		catch (const std::exception& err)
 		{
-			logger->error(err.what());
+			logger->error(PFDUtils::StringToWString(err.what()));
 		}
 		return false;
 	}
@@ -393,7 +393,7 @@ namespace PFDCore
 		}
 		catch (const std::exception& e)
 		{
-			logger->error(e.what());
+			logger->error(PFDUtils::StringToWString(e.what()));
 		}
 		catch (...)
 		{

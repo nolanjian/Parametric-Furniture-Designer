@@ -5,6 +5,7 @@
 #include "STLIncluding.h"
 #include "Utils.h"
 #include <fx/gltf.h>
+#include "spdlog/spdlog.h"
 #include "../muparserx/mpParser.h"
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"

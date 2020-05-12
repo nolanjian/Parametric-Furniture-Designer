@@ -3,6 +3,7 @@
 #include "PFDCoreExport.h"
 #include "STLIncluding.h"
 #include "BaseObject.h"
+#include "spdlog/spdlog.h"
 
 namespace PFDCore
 {
