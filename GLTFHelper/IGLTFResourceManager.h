@@ -5,7 +5,6 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/formatter.h"
 #include <fx/gltf.h>
-#include "stb_image.h"
 
 namespace PFD_GLTF_Helper
 {
@@ -13,20 +12,16 @@ namespace PFD_GLTF_Helper
 	class IGLTFResourceManager
 	{
 	public:
+		static std::shared_ptr<IGLTFResourceManager> Load(std::shared_ptr<fx::gltf::Document> gltfObject);
+		virtual osg::ref_ptr<osg::Array> GetArrayByAccessorIndex(size_t index) = 0;
+		virtual osg::ref_ptr<osg::Texture> GetTexture(size_t index) = 0;
+		virtual osg::ref_ptr<osg::Geode> GetMesh(size_t index) = 0;
+
 		IGLTFResourceManager() {}
 		IGLTFResourceManager(const IGLTFResourceManager&) = delete;
 		IGLTFResourceManager(const IGLTFResourceManager&&) = delete;
 		IGLTFResourceManager& operator= (const IGLTFResourceManager&) = delete;
 		IGLTFResourceManager& operator= (const IGLTFResourceManager&&) = delete;
-		~IGLTFResourceManager() {}
-
-		virtual void SetGLTF(std::shared_ptr<fx::gltf::Document> gltfObject) final;
-		virtual void Load() = 0;
-	protected:
-		std::string	m_strGLTFPath;
-		std::shared_ptr<fx::gltf::Document> m_gltfObject;
-		std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
-	private:
-
+		virtual ~IGLTFResourceManager() {}
 	};
 }

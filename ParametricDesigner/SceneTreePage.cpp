@@ -1,4 +1,5 @@
 #include "SceneTreePage.h"
+#include "ISceneManager.h"
 
 namespace PFDGUI
 {
@@ -11,16 +12,9 @@ namespace PFDGUI
 	{
 		m_pTreeCtrl = nullptr;
 	}
-	void SceneTreePage::SetInterface3D(std::shared_ptr<PFDCore::Interface3D> interface3D)
-	{
-		m_pInterface3D = interface3D;
-	}
+	
 	void SceneTreePage::Update()
 	{
-		if (m_pInterface3D)
-		{
-			m_pInterface3D->GetSenceTree();
-		}
 	}
 	void SceneTreePage::UpdateTreeCtrl()
 	{

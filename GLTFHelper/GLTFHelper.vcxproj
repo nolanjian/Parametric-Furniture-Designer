@@ -90,15 +90,15 @@
       <PreprocessorDefinitions>_DEBUG;PFD_GLTF_HELPER_EXPORTS;WIN32;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Component</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>UTILS.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\library\Parametric-Furniture-Designer\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>spdlogd.lib;UTILS.lib;osgd.lib;COMPONENT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\library\Parametric-Furniture-Designer\x64\Debug;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\spdlog</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -156,22 +156,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Exporter.h" />
-    <ClInclude Include="GLTFArrayHelper.h" />
     <ClInclude Include="GLTFHelperExport.h" />
-    <ClInclude Include="GLTFMaterialsManager.h" />
-    <ClInclude Include="GLTFMeshManager.h" />
-    <ClInclude Include="GLTFTextureManager.h" />
+    <ClInclude Include="GLTFResourceManager.h" />
     <ClInclude Include="IGLTFResourceManager.h" />
-    <ClInclude Include="Loader.h" />
+    <ClInclude Include="Importer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exporter.cpp" />
-    <ClCompile Include="GLTFArrayHelper.cpp" />
-    <ClCompile Include="GLTFMaterialsManager.cpp" />
-    <ClCompile Include="GLTFMeshManager.cpp" />
-    <ClCompile Include="GLTFTextureManager.cpp" />
+    <ClCompile Include="GLTFResourceManager.cpp" />
     <ClCompile Include="IGLTFResourceManager.cpp" />
-    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="Importer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

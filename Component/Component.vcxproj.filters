@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{bc5836f8-0aec-4212-b78c-00972ae49cd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -24,9 +27,39 @@
     <ClInclude Include="BaseObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="IComponentFactory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Axis.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="Parametric.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePanel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Axis.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Coordinate.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="Parametric.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePanel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IComponentFactory.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

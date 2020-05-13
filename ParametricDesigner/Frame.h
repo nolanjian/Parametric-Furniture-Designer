@@ -1,6 +1,6 @@
 #pragma once
 #include "WXIncluding.h"
-#include "Interface3D.h"
+#include "ISceneManager.h"
 #include <memory>
 
 namespace PFDGUI
@@ -25,6 +25,5 @@ namespace PFDGUI
 		wxDECLARE_EVENT_TABLE();
 	private:
 		wxWindow* m_p3DWindow = nullptr;
-		std::shared_ptr<PFDCore::Interface3D>	m_pInterface3D;
 	};
 };

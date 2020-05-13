@@ -1,13 +1,10 @@
 
-#include "IGLTFResourceManager.h"
+#include "GLTFResourceManager.h"
 
-namespace PFD_GLTF_Helper {
-
-
-	void IGLTFResourceManager::SetGLTF(std::shared_ptr<fx::gltf::Document> gltfObject)
+namespace PFD_GLTF_Helper
+{
+	std::shared_ptr<IGLTFResourceManager> IGLTFResourceManager::Load(std::shared_ptr<fx::gltf::Document> gltfObject)
 	{
-		m_gltfObject = gltfObject;
-		m_strGLTFPath = gltfObject->extensionsAndExtras["LocalPath"].get<std::string>();
+		return std::make_shared<GLTFResourceManager>(gltfObject);
 	}
-
 }

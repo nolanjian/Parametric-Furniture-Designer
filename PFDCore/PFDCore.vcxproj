@@ -93,68 +93,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include="FRAGMENT.frag" />
-    <None Include="VERTEX.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Axis.h" />
-    <ClInclude Include="BaseObject.h" />
-    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="FrameGroup.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="GLTFMaterialsManager.h" />
-    <ClInclude Include="GLTFTextureManager.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="Hard.h" />
-    <ClInclude Include="GLTFArrayHelper.h" />
-    <ClInclude Include="IGLTFResourceManager.h" />
-    <ClInclude Include="Implement3D.h" />
-    <ClInclude Include="Interface3D.h" />
-    <ClInclude Include="GLTFMeshManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectFactory.h" />
-    <ClInclude Include="PFDCoreExport.h" />
-    <ClInclude Include="OSGIncluding.h" />
     <ClInclude Include="Panel.h" />
-    <ClInclude Include="ParametricComponent.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="PickEventHandler.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneMgr.h" />
-    <ClInclude Include="ShadingPreDefine.h" />
-    <ClInclude Include="Shape.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="STLIncluding.h" />
-    <ClInclude Include="TestOSGWin.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Axis.cpp" />
-    <ClCompile Include="Coordinate.cpp" />
-    <ClCompile Include="GLTFArrayHelper.cpp" />
-    <ClCompile Include="BaseObject.cpp" />
-    <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FrameGroup.cpp" />
-    <ClCompile Include="GLTFMaterialsManager.cpp" />
-    <ClCompile Include="GLTFMeshManager.cpp" />
-    <ClCompile Include="GLTFTextureManager.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="Hard.cpp" />
-    <ClCompile Include="IGLTFResourceManager.cpp" />
-    <ClCompile Include="Implement3D.cpp" />
-    <ClCompile Include="Interface3D.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="Panel.cpp" />
-    <ClCompile Include="ParametricComponent.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="PickEventHandler.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneMgr.cpp" />
-    <ClCompile Include="Shape.cpp" />
-    <ClCompile Include="TestOSGWin.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

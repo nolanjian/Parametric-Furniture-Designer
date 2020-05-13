@@ -21,49 +21,31 @@
     <ClInclude Include="GLTFHelperExport.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Loader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Exporter.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="IGLTFResourceManager.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFArrayHelper.h">
-      <Filter>ResourceManager</Filter>
+    <ClInclude Include="Importer.h">
+      <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GLTFMaterialsManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFMeshManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFTextureManager.h">
+    <ClInclude Include="GLTFResourceManager.h">
       <Filter>ResourceManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Loader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="IGLTFResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFArrayHelper.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFMaterialsManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFMeshManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFTextureManager.cpp">
       <Filter>ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="Exporter.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFResourceManager.cpp">
+      <Filter>ResourceManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

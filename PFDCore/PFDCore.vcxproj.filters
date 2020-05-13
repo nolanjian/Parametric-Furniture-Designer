@@ -1,55 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Component">
       <UniqueIdentifier>{784dd200-4e64-4510-9bd0-32ec1962f246}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core">
-      <UniqueIdentifier>{d6a918e3-b1ef-4c0a-a98c-0ca0219c5d62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Test">
-      <UniqueIdentifier>{d037e87d-8c28-48e5-8430-e39fa7c65f00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shader">
-      <UniqueIdentifier>{ddc49634-85e8-4144-892a-574168c35e83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ResourceManager">
-      <UniqueIdentifier>{5278cd0a-ad43-4880-9c95-87b75ee83da4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="EvenHandler">
-      <UniqueIdentifier>{f37e1a9d-6cab-4817-bbe1-1a765ce6f14b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Vistor">
-      <UniqueIdentifier>{d377a451-2a59-441f-b02a-189ce7dd0e44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Misc">
-      <UniqueIdentifier>{d396cb8c-44db-449a-946d-2950b049ad40}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
-    <None Include="FRAGMENT.frag">
-      <Filter>shader</Filter>
-    </None>
-    <None Include="VERTEX.vert">
-      <Filter>shader</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BaseObject.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="FrameGroup.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="ParametricComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Panel.h">
@@ -67,65 +24,8 @@
     <ClInclude Include="Hard.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="TestOSGWin.h">
-      <Filter>Test</Filter>
-    </ClInclude>
-    <ClInclude Include="OSGIncluding.h" />
-    <ClInclude Include="STLIncluding.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="SceneMgr.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFMaterialsManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFMeshManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFTextureManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="IGLTFResourceManager.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="GLTFArrayHelper.h">
-      <Filter>ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="PickEventHandler.h">
-      <Filter>EvenHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="ShadingPreDefine.h">
-      <Filter>shader</Filter>
-    </ClInclude>
-    <ClInclude Include="Axis.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Coordinate.h">
-      <Filter>Misc</Filter>
-    </ClInclude>
-    <ClInclude Include="Shape.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Interface3D.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Implement3D.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="PFDCoreExport.h">
-      <Filter>Core</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseObject.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
     <ClCompile Include="FrameGroup.cpp">
       <Filter>Component</Filter>
     </ClCompile>
@@ -140,57 +40,6 @@
     </ClCompile>
     <ClCompile Include="Panel.cpp">
       <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="pch.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="TestOSGWin.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFMeshManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFTextureManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="IGLTFResourceManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFMaterialsManager.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneMgr.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GLTFArrayHelper.cpp">
-      <Filter>ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="PickEventHandler.cpp">
-      <Filter>EvenHandler</Filter>
-    </ClCompile>
-    <ClCompile Include="Axis.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="Coordinate.cpp">
-      <Filter>Misc</Filter>
-    </ClCompile>
-    <ClCompile Include="ParametricComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Shape.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Interface3D.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Implement3D.cpp">
-      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
