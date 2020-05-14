@@ -37,7 +37,8 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	wxGridSizer* topsizer = new wxGridSizer(2, 2, 1, 1);
 	topsizer->SetMinSize(wxSize(1208, 1000));
-
+	topsizer->SetHGap(FromDIP(1));
+	topsizer->SetVGap(FromDIP(1));
 	Init3DWindow();
 	topsizer->Add(m_p3DWindow);
 
@@ -105,6 +106,7 @@ void PFDGUI::Frame::OnExportSence(wxCommandEvent& event)
 void PFDGUI::Frame::Init3DWindow()
 {
 	m_p3DWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(600), FromDIP(600)));
+
 	if (!m_p3DWindow)
 	{
 		wxASSERT(m_p3DWindow);

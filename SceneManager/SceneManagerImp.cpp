@@ -332,6 +332,8 @@ namespace PFDSceneManager
 			s->setUseVertexAttributeAliasing(true);
 		}
 
+		m_p3DViewer->setThreadingModel(m_p3DViewer->suggestBestThreadingModel());
+
 		logger->info("init 3d viewer done");
 	}
 
