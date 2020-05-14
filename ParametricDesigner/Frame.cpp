@@ -47,6 +47,7 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 void PFDGUI::Frame::OnClose(wxCloseEvent& event)
 {
 	// TODO
+	PFDSceneManager::ISceneManager::GetInstance()->StopRender();
 	Destroy();
 }
 
@@ -79,6 +80,7 @@ void PFDGUI::Frame::OnCloseGLTF(wxCommandEvent& event)
 void PFDGUI::Frame::OnExit(wxCommandEvent& event)
 {
 	// TODO
+	PFDSceneManager::ISceneManager::GetInstance()->StopRender();
 	Destroy();
 }
 

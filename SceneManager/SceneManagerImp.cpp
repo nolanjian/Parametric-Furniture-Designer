@@ -14,6 +14,7 @@ namespace PFDSceneManager
 	SceneManagerImp::~SceneManagerImp()
 	{
 		StopRender();
+		m_p3DViewer = nullptr;
 	}
 
 	void SceneManagerImp::SetHWND(HWND hwnd)
@@ -121,6 +122,7 @@ namespace PFDSceneManager
 		if (m_renderThread.joinable())
 		{
 			m_renderThread.join();
+			m_p3DViewer->stopThreading();
 		}
 		return true;
 	}
