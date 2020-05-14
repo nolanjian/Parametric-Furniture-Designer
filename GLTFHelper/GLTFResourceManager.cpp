@@ -388,7 +388,7 @@ namespace PFD_GLTF_Helper
 				}
 				catch (const std::exception& e)
 				{
-					logger->error("fnLoadExteralResource:\n{}", e.what());
+					logger->error(L"fnLoadExteralResource:\n{}", PFDUtils::StringToWString(e.what()));
 					return false;
 				}
 			};
@@ -441,6 +441,7 @@ namespace PFD_GLTF_Helper
 			return;
 		}
 	}
+
 	void GLTFResourceManager::LoadMesh()
 	{
 		m_mapGeode.clear();
@@ -476,8 +477,8 @@ namespace PFD_GLTF_Helper
 		}
 
 		osg::ref_ptr<osg::Geometry>	ptrRet = new osg::Geometry();
+		ptrRet->getOrCreateStateSet();
 		ptrRet->addPrimitiveSet(ptrPrimitiveSet);
-
 		bool useTangent = false;
 		bool useTexcoord0 = false;
 		bool useTexcoord1 = false;

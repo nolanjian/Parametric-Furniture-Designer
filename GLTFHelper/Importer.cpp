@@ -23,7 +23,7 @@ namespace PFD_GLTF_Helper
 		{
 			m_pDoc = std::make_shared<fx::gltf::Document>(fx::gltf::LoadFromBinary(strPath));
 		}
-
+		m_pDoc->extensionsAndExtras["LocalPath"] = strPath;
 		return Load(m_pDoc);
 	}
 

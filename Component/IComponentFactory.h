@@ -15,5 +15,6 @@ namespace PFDComponent
 		static IComponentFactory* Get();
 
 		virtual osg::ref_ptr<BaseObject> CreateObject(Type type) = 0;
+		
 	};
 }

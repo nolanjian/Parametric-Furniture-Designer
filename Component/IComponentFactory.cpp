@@ -1,4 +1,5 @@
 #include "IComponentFactory.h"
+#include "ComponentFactoryImp.h"
 
 namespace PFDComponent
 {
@@ -6,7 +7,8 @@ namespace PFDComponent
 
 	IComponentFactory* IComponentFactory::Get()
 	{
-		return nullptr;
+		static ComponentFactoryImp s_Imp;
+		return &s_Imp;
 	}
 
 }

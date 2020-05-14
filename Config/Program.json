@@ -1,7 +1,7 @@
 {
     "AppTitle": "Parametric Designer",
-    "VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\PFDCore\\VERTEX.vert",
-    "FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\PFDCore\\FRAGMENT.frag",
+    "VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\VERTEX.vert",
+    "FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\FRAGMENT.frag",
     "BackgroundColor3D": {
         "IsNormal": false,
         "R": 94,

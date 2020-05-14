@@ -165,6 +165,7 @@
     <ClInclude Include="Axis.h" />
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="ComponentExport.h" />
+    <ClInclude Include="ComponentFactoryImp.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="IComponentFactory.h" />
     <ClInclude Include="BasePanel.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Axis.cpp" />
     <ClCompile Include="BaseObject.cpp" />
     <ClCompile Include="BasePanel.cpp" />
+    <ClCompile Include="ComponentFactoryImp.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="IComponentFactory.cpp" />
     <ClCompile Include="Parametric.cpp" />
