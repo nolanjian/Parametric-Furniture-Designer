@@ -21,6 +21,9 @@
     <ClCompile Include="ParametricTreeUnitTest1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GLTFHelperTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ParametricTreeUnitTest1.h">

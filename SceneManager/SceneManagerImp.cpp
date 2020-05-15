@@ -158,21 +158,33 @@ namespace PFDSceneManager
 
 	bool SceneManagerImp::ImportScene(const std::wstring& path)
 	{
-		auto pImporter = std::make_shared<PFD_GLTF_Helper::Importer>();
-		if (!pImporter)
+		try
 		{
-			logger->error("Create GLTF importer fail");
+
+			auto pImporter = std::make_shared<PFD_GLTF_Helper::Importer>();
+			if (!pImporter)
+			{
+				logger->error("Create GLTF importer fail");
+				return false;
+			}
+
+			osg::ref_ptr<osg::Group> pScene = pImporter->Load(path);
+			if (!pScene)
+			{
+				logger->error(L"Load GLTF {} fail", path);
+				return false;
+			}
+
+			bool bRet = OpenScene(pScene);
+			return bRet;
+
+
+		}
+		catch (const std::exception& ex)
+		{
+			logger->error(ex.what());
 			return false;
 		}
-
-		osg::ref_ptr<osg::Group> pScene = pImporter->Load(path);
-		if (!pScene)
-		{
-			logger->error(L"Load GLTF {} fail", path);
-			return false;
-		}
-
-		return OpenScene(pScene);
 	}
 
 	bool SceneManagerImp::ImportScene(const std::string& utf8Json)

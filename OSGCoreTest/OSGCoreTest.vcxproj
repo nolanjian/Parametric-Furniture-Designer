@@ -88,16 +88,16 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)gtest\include;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer\Component</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)gtest\include;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer\Component;D:\library\Parametric-Furniture-Designer\GLTFHelper</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)gtest\lib;$(SolutionDir)x64\Debug;D:\Library\OpenSceneGraph\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gtestd.lib;gmockd.lib;COMPONENT.lib;osgd.lib;osgUtild.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gtestd.lib;gmockd.lib;GLTFHelper.lib;COMPONENT.lib;osgd.lib;osgUtild.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GLTFHelperTest.cpp" />
     <ClCompile Include="OSGCoreTest.cpp" />
     <ClCompile Include="ParametricTreeUnitTest1.cpp" />
   </ItemGroup>
