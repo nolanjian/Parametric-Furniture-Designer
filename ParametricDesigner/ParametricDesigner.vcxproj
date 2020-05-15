@@ -85,7 +85,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_SHARED_LIB;FMT_HEADER_ONLY;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_SHARED_LIB;FMT_HEADER_ONLY;FMT_UNICODE;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\SceneManager;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Commom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -94,7 +94,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\spdlog;D:\Library\wxBuild\debugSingle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlogd.lib;UTILS.lib;PFDConfig.lib;wxmsw31ud.lib;osgViewerd.lib;OpenThreadsd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;SceneManager.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>spdlogd.lib;UTILS.lib;SceneManager.lib;PFDConfig.lib;wxmsw31ud.lib;osgViewerd.lib;OpenThreadsd.lib;osgd.lib;osgGAd.lib;osgManipulatord.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

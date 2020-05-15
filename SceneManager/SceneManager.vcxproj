@@ -87,7 +87,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;PFD_SCENEMANAGER_EXPORTS;_WINDOWS;_USRDLL;FMT_SHARED;FMT_UNICODE;SPDLOG_SHARED_LIB;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;PFD_SCENEMANAGER_EXPORTS;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_HEADER_ONLY;FMT_UNICODE;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\Commom;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\GLTFHelper;D:\library\Parametric-Furniture-Designer\Component;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
