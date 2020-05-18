@@ -118,9 +118,10 @@ namespace PFD_GLTF_Helper
 	osg::Matrix Importer::GetMatrix(const osg::Vec3& tran, const osg::Vec3& scale, const osg::Vec4& rot)
 	{
 		osg::Matrix mat;
-		mat.makeRotate(osg::Quat(rot));
-		mat.makeScale(scale);
-		mat.makeTranslate(tran);
+
+		mat.postMultRotate(osg::Quat(rot));
+		mat.postMultTranslate(tran);
+		mat.postMultScale(scale);
 		return mat;
 	}
 
