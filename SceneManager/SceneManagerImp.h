@@ -38,6 +38,10 @@ namespace PFDSceneManager
 
 		virtual bool CloseScene() override;
 		
+		/// Some OpenGL Options
+		virtual bool EnableDepthTest(bool bEnable = true) override;
+		virtual bool EnableBlend(bool bEnable = true) override;
+
 	protected:
 		bool OpenScene(osg::ref_ptr<osg::Group> pScene);
 		osg::Vec4 GetBackgroundColor3D();
@@ -54,5 +58,8 @@ namespace PFDSceneManager
 		HWND m_hwnd = nullptr;
 		std::thread	m_renderThread;
 		osg::ref_ptr<osgViewer::Viewer>	m_p3DViewer;
+
+		bool m_bEnableDepthTest = true;
+		bool m_bEnableBlend = true;
 	};
 }

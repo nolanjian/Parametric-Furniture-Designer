@@ -54,6 +54,11 @@ namespace PFDSceneManager
 		traits->sharedContext = 0;
 		traits->inheritedWindowData = windata;
 		traits->pbuffer = false;
+		//traits->sampleBuffers = 1;
+		//traits->samples = 4;
+
+		auto n = 
+		osg::DisplaySettings::instance()->getNumMultiSamples();
 
 		// We must set the pixelformat before we can create the OSG Rendering Surface 
 		PIXELFORMATDESCRIPTOR pixelFormat =
@@ -251,6 +256,8 @@ namespace PFDSceneManager
 		if (m_p3DViewer)
 		{
 			CloseScene();
+			//m_p3DViewer->addEventHandler(new osgViewer::WindowSizeHandler);
+			m_p3DViewer->addEventHandler(new osgViewer::StatsHandler());
 			ConfigureShaders(pScene->getOrCreateStateSet());
 			m_p3DViewer->setSceneData(pScene);
 			return true;
@@ -265,6 +272,31 @@ namespace PFDSceneManager
 			m_p3DViewer->setSceneData(nullptr);
 		}
 		return true;
+	}
+
+	bool SceneManagerImp::EnableDepthTest(bool bEnable)
+	{
+		m_bEnableDepthTest = bEnable;
+
+		osg::Node* pData = m_p3DViewer->getSceneData();
+		if (pData)
+		{
+			pData->getOrCreateStateSet()->setMode(GL_DEPTH, m_bEnableDepthTest ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+		}
+
+		return m_bEnableDepthTest;
+	}
+
+	bool SceneManagerImp::EnableBlend(bool bEnable)
+	{
+		m_bEnableBlend = bEnable;
+
+		osg::Node* pData = m_p3DViewer->getSceneData();
+		if (pData)
+		{
+			pData->getOrCreateStateSet()->setMode(GL_BLEND, m_bEnableBlend ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+		}
+		return m_bEnableBlend;
 	}
 
 	osg::Vec4 SceneManagerImp::GetBackgroundColor3D()
@@ -315,6 +347,9 @@ namespace PFDSceneManager
 		program->addBindAttribLocation(TANGENT, TANGENT_INDEX);
 		stateSet->setAttribute(program);
 
+		stateSet->setMode(GL_DEPTH, m_bEnableDepthTest ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+		stateSet->setMode(GL_BLEND, m_bEnableBlend ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+
 		osg::Vec3f lightDir(0., 0.5, 1.);
 		lightDir.normalize();
 		stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
@@ -351,7 +386,9 @@ namespace PFDSceneManager
 
 	void SceneManagerImp::RenderThread()
 	{
+		logger->info("Begin Render");
 		m_p3DViewer->run();
+		logger->info("End Render");
 	}
 }
 

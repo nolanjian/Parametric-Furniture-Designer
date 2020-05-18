@@ -105,7 +105,7 @@ void PFDGUI::Frame::OnExportSence(wxCommandEvent& event)
 
 void PFDGUI::Frame::Init3DWindow()
 {
-	m_p3DWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(600), FromDIP(600)));
+	m_p3DWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(900), FromDIP(900)));
 
 	if (!m_p3DWindow)
 	{

@@ -34,6 +34,10 @@ namespace PFDSceneManager
 		virtual bool ExportScene(const std::wstring& path) = 0;
 		virtual bool ExportScene(std::string& utf8Json) = 0;
 		virtual bool CloseScene() = 0;
+
+		/// Some OpenGL Options
+		virtual bool EnableDepthTest(bool bEnable = true) = 0;
+		virtual bool EnableBlend(bool bEnable = true) = 0;
 	};
 
 }

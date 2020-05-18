@@ -98,7 +98,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\spdlog;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>osgd.lib;osgViewerd.lib;spdlogd.lib;UTILS.lib;GLTFHelper.lib;PFDConfig.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgd.lib;spdlogd.lib;UTILS.lib;GLTFHelper.lib;PFDConfig.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
