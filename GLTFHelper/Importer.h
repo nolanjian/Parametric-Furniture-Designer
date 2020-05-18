@@ -26,8 +26,8 @@ namespace PFD_GLTF_Helper
 		PFDComponent::IComponentFactory::Type GetClassType(const fx::gltf::Node& node);
 
 		osg::Matrix	GetMatrix(const fx::gltf::Node& curNode);
-		osg::Matrix	GetMatrix(const osg::Vec3& tran, const osg::Vec3& scale, const osg::Vec4& rot);
-		osg::Vec4	GetRotation(const fx::gltf::Node& node);
+		osg::Matrix	GetMatrix(const osg::Vec3& tran, const osg::Vec3& scale, const osg::Quat& quat);
+		osg::Quat	GetRotation(const fx::gltf::Node& node);
 		osg::Vec3	GetScale(const fx::gltf::Node& node);
 		osg::Vec3	GetTran(const fx::gltf::Node& node);
 

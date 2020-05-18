@@ -115,24 +115,24 @@ namespace PFD_GLTF_Helper
 		return mat;
 	}
 
-	osg::Matrix Importer::GetMatrix(const osg::Vec3& tran, const osg::Vec3& scale, const osg::Vec4& rot)
+	osg::Matrix Importer::GetMatrix(const osg::Vec3& tran, const osg::Vec3& scale, const osg::Quat& quat)
 	{
 		osg::Matrix mat;
 
-		mat.postMultRotate(osg::Quat(rot));
+		mat.postMultRotate(quat);
 		mat.postMultTranslate(tran);
 		mat.postMultScale(scale);
 		return mat;
 	}
 
-	osg::Vec4 Importer::GetRotation(const fx::gltf::Node& node)
+	osg::Quat Importer::GetRotation(const fx::gltf::Node& node)
 	{
-		osg::Vec4 rot;
-		rot.x() = node.rotation.at(0);
-		rot.y() = node.rotation.at(1);
-		rot.z() = node.rotation.at(2);
-		rot.w() = node.rotation.at(3);
-		return rot;
+		osg::Quat quat;
+		quat.x() = node.rotation.at(0);
+		quat.y() = node.rotation.at(1);
+		quat.z() = node.rotation.at(2);
+		quat.w() = node.rotation.at(3);
+		return quat;
 	}
 
 	osg::Vec3 Importer::GetScale(const fx::gltf::Node& node)
@@ -162,11 +162,11 @@ namespace PFD_GLTF_Helper
 		osg::Matrix mat = GetMatrix(curNode);
 		if (mat.isIdentity())
 		{
-			osg::Vec4 rot = GetRotation(curNode);
+			osg::Quat quat = GetRotation(curNode);
 			osg::Vec3 scale = GetScale(curNode);
 			osg::Vec3 tran = GetTran(curNode);
 
-			mat = GetMatrix(tran, scale, rot);
+			mat = GetMatrix(tran, scale, quat);
 		}
 		pNode->setMatrix(mat);
 #pragma endregion LOAD_MATRIX
