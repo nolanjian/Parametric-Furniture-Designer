@@ -7,3 +7,5 @@
 #endif
 
 #include "wx/treectrl.h"
+#include "wx/webview.h"
+#include "wx/timer.h"

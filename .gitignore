@@ -42,3 +42,4 @@
 /OpenSceneGraph-Data-3.4.0.zip
 *.log
 */*.log
+*.dll

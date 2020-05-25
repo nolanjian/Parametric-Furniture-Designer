@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="WebView">
+      <UniqueIdentifier>{b1d59740-4187-475f-aa30-7389fca0acf5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -30,6 +33,12 @@
     <ClInclude Include="SceneTreePage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WebView\PFDWebView.h">
+      <Filter>WebView</Filter>
+    </ClInclude>
+    <ClInclude Include="WebView\wke.h">
+      <Filter>WebView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -40,6 +49,9 @@
     </ClCompile>
     <ClCompile Include="SceneTreePage.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WebView\PFDWebView.cpp">
+      <Filter>WebView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
