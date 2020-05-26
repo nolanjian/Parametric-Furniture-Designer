@@ -1,4 +1,4 @@
-#include "BaseObject.h"
+﻿#include "BaseObject.h"
 #include "IDGenerater.h"
 #include "IParamsConverter.h"
 #include "Coordinate.h"

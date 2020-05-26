@@ -42,7 +42,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -85,10 +85,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_SHARED_LIB;FMT_HEADER_ONLY;FMT_UNICODE;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_SHARED_LIB;FMT_EXPORT;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\SceneManager;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Commom;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

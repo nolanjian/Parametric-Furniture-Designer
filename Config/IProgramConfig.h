@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ConfigExport.h"
 #include "Utils.h"
 #include <nlohmann/json.hpp>

@@ -43,7 +43,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -87,11 +87,11 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;PFD_GLTF_HELPER_EXPORTS;WIN32;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_HEADER_ONLY;FMT_UNICODE;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_TO_UTF8_SUPPORT;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;PFD_GLTF_HELPER_EXPORTS;WIN32;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_EXPORT;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Component</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

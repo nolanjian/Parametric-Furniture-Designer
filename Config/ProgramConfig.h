@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "IProgramConfig.h"
 #include <map>
 #include <string>
