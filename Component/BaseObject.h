@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ComponentExport.h"
 #include "OSGIncluding.h"
 #include "STLIncluding.h"

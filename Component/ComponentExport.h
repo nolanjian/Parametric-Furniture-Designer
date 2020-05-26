@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #ifdef PFD_COMPONENT_EXPORTS

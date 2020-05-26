@@ -1,4 +1,4 @@
-#include "ComponentFactoryImp.h"
+﻿#include "ComponentFactoryImp.h"
 
 namespace PFDComponent
 {

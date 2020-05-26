@@ -1,4 +1,4 @@
-#include "Parametric.h"
+﻿#include "Parametric.h"
 #include "../Utils/IParamsConverter.h"
 
 namespace PFDComponent
@@ -122,7 +122,7 @@ namespace PFDComponent
 		}
 		catch (const std::exception& e)
 		{
-			logger->error(PFDUtils::StringToWString(e.what()));
+			logger->error(e.what());
 		}
 		catch (...)
 		{
@@ -144,7 +144,7 @@ namespace PFDComponent
 			{
 				// eg: W = a + b
 				std::string utf8Formula = item.get<std::string>();
-				mup::string_type unicodeFormula = PFDUtils::Utf8ToUnicode(utf8Formula);
+				mup::string_type unicodeFormula = utf8Formula;
 
 				std::pair<mup::string_type, mup::string_type>	pair;
 				if (!GetFormulaPairFromString(unicodeFormula, pair))
@@ -200,11 +200,11 @@ namespace PFDComponent
 	{
 		try
 		{
-			std::wregex	patternReplace(_T("\\s+"));
+			std::regex	patternReplace(_T("\\s+"));
 			mup::string_type strF = std::regex_replace(strFormular, patternReplace, _T(""));
 
-			std::wregex	pattern(_T("(.+)=(.+)"));
-			std::wsmatch	result;
+			std::regex	pattern(_T("(.+)=(.+)"));
+			std::smatch	result;
 
 			bool bMatch = std::regex_match(strF, result, pattern);
 			if (!bMatch)
@@ -218,11 +218,11 @@ namespace PFDComponent
 		}
 		catch (const std::regex_error& err)
 		{
-			logger->error(PFDUtils::StringToWString(err.what()));
+			logger->error(err.what());
 		}
 		catch (const std::exception& err)
 		{
-			logger->error(PFDUtils::StringToWString(err.what()));
+			logger->error(err.what());
 		}
 		return false;
 	}
@@ -231,9 +231,9 @@ namespace PFDComponent
 	{
 		try
 		{
-			std::wregex	pattern(_T("\\W*(\\w+)\\W*"));
+			std::regex	pattern(_T("\\W*(\\w+)\\W*"));
 
-			std::wsmatch	result;
+			std::smatch	result;
 
 			bool bMatch = std::regex_match(strKV, result, pattern);
 			if (!bMatch)
@@ -246,11 +246,11 @@ namespace PFDComponent
 		}
 		catch (const std::regex_error& err)
 		{
-			logger->error(PFDUtils::StringToWString(err.what()));
+			logger->error(err.what());
 		}
 		catch (const std::exception& err)
 		{
-			logger->error(PFDUtils::StringToWString(err.what()));
+			logger->error(err.what());
 		}
 		return false;
 	}
@@ -318,12 +318,12 @@ namespace PFDComponent
 		else if (pValue->IsVariable())
 		{
 			double fVal = pValue->GetFloat();
-			return std::to_wstring(fVal);
+			return std::to_string(fVal);
 		}
 		else if (pValue->IsInteger())
 		{
 			int nVal = pValue->GetInteger();
-			return std::to_wstring(nVal);
+			return std::to_string(nVal);
 		}
 
 		throw new std::exception("unhandled data type");
@@ -404,7 +404,7 @@ namespace PFDComponent
 		}
 		catch (const std::exception& e)
 		{
-			logger->error(PFDUtils::StringToWString(e.what()));
+			logger->error(e.what());
 		}
 		catch (...)
 		{
