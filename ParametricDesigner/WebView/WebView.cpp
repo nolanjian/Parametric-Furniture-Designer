@@ -1,11 +1,15 @@
 #include "WebView.h"
 
+wxBEGIN_EVENT_TABLE(PFD::GUI::WebView, wxWindow)
+	EVT_SIZE(PFD::GUI::WebView::OnSize)
+wxEND_EVENT_TABLE()
+
 namespace PFD
 {
 	namespace GUI
 	{
 		WebView::WebView(wxWindow* parent, wxWindowID id, const wxString& url, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-			: wxControl(parent, id, pos, size, style | wxNO_BORDER | wxCLIP_CHILDREN, wxDefaultValidator, name)
+			: wxWindow(parent, id, pos, size, style | wxNO_BORDER | wxCLIP_CHILDREN, name)
 			, m_url(url)
 		{
 			if (wkeIsInitialize() == FALSE)
@@ -13,7 +17,10 @@ namespace PFD
 
 			wxSize clientSize = GetClientSize();
 			m_wkeView = wkeCreateWebWindow(WKE_WINDOW_TYPE_CONTROL, GetHWND(), 0, 0, clientSize.GetWidth(), clientSize.GetHeight());
-			InitCallback();
+			
+			InitWKECallback();
+			InitWXEvent();
+			
 		}
 		WebView::~WebView()
 		{
@@ -24,7 +31,17 @@ namespace PFD
 		{
 			wkeSetDebugConfig(m_wkeView, "showDevTools", path.ToUTF8());
 		}
-		void WebView::InitCallback()
+		void WebView::InitWXEvent()
+		{
+			Bind(wxEVT_SIZE, &WebView::OnSize, this);
+		}
+		void WebView::OnSize(wxSizeEvent& event)
+		{
+			int w, h;
+			GetClientSize(&w, &h);
+			wkeResize(m_wkeView, w, h);
+		}
+		void WebView::InitWKECallback()
 		{
 			if (m_wkeView == nullptr)
 			{

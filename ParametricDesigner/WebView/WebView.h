@@ -1,7 +1,7 @@
 #pragma once
 
 #include "wx/defs.h"
-#include "wx/control.h"
+#include "wx/window.h"
 #include "wx/timer.h"
 #include "wke.h"
 
@@ -9,7 +9,7 @@ namespace PFD
 {
 	namespace GUI
 	{
-		class WebView : public wxControl
+		class WebView : public wxWindow
 		{
 		public:
 			explicit WebView(wxWindow* parent,
@@ -18,14 +18,18 @@ namespace PFD
 				const wxPoint& pos = wxDefaultPosition,
 				const wxSize& size = wxDefaultSize,
 				long style = 0,
-				const wxString& name = wxControlNameStr);
+				const wxString& name = wxPanelNameStr);
 			virtual ~WebView();
 
 			void ShowDevTool(const wxString& path);
 
+		protected:
+			void InitWXEvent();
+			void OnSize(wxSizeEvent& event);
+
 		// callbacks
 		protected:
-			void InitCallback();
+			void InitWKECallback();
 
 			static void wkeTitleChangedCallback(wkeWebView webView, void* param, const wkeString title);
 			static void wkeURLChangedCallback(wkeWebView webView, void* param, const wkeString url);
@@ -90,6 +94,8 @@ namespace PFD
 		private:
 			wxString m_url;
 			wkeWebView	m_wkeView = nullptr;
+
+			wxDECLARE_EVENT_TABLE();
 		};	/// class WebView
 	}	/// namespace GUI
 }	/// namespace PFD
