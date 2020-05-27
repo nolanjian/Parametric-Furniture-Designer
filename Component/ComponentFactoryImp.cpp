@@ -1,23 +1,26 @@
 ﻿#include "ComponentFactoryImp.h"
 
-namespace PFDComponent
+namespace PFD
 {
-
-	ComponentFactoryImp::~ComponentFactoryImp()
+	namespace Component
 	{
-	}
 
-	osg::ref_ptr<BaseObject> ComponentFactoryImp::CreateObject(Type type)
-	{
-		switch (type)
+		ComponentFactoryImp::~ComponentFactoryImp()
 		{
-		case PFDComponent::IComponentFactory::BASE_OBJECT:
-			return new BaseObject();
-		default:
-			return new BaseObject();
 		}
+
+		osg::ref_ptr<BaseObject> ComponentFactoryImp::CreateObject(Type type)
+		{
+			switch (type)
+			{
+			case IComponentFactory::BASE_OBJECT:
+				return new BaseObject();
+			default:
+				return new BaseObject();
+			}
+		}
+
+
+
 	}
-
-
-
 }

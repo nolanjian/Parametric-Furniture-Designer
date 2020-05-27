@@ -3,63 +3,66 @@
 #include "IParamsConverter.h"
 #include "Coordinate.h"
 
-namespace PFDComponent
+namespace PFD
 {
-	BaseObject::BaseObject()
-		: osg::MatrixTransform()
-		, m_ID(PFDUtils::IDGenerater::Get()->GetNext())
+	namespace Component
 	{
-	}
-
-	BaseObject::~BaseObject()
-	{
-	}
-
-	osg::BoundingBox BaseObject::GetBoundingBox()
-	{
-		osg::ComputeBoundsVisitor boundVisitor;
-		accept(boundVisitor);
-		return boundVisitor.getBoundingBox();
-	}
-
-	osg::BoundingSphere BaseObject::GetBoundingSphere()
-	{
-		dirtyBound();
-		return getBound();
-	}
-
-
-	//bool BaseObject::UpdatePrimitive()
-	//{
-	//	for (auto& child : _children)
-	//	{
-	//		BaseObject* bo = dynamic_cast<BaseObject*>(child.get());
-	//		if (bo)
-	//		{
-	//			bo->UpdatePrimitive();
-	//		}
-	//	}
-	//	return true;
-	//}
-
-	void BaseObject::ShowCoordinate(bool bShow)
-	{
-		std::list<osg::Node*>	lsCoordinate;
-		for (osg::Node* pNode : _children)
+		BaseObject::BaseObject()
+			: osg::MatrixTransform()
+			, m_ID(PFD::Utils::IDGenerater::Get()->GetNext())
 		{
-			if (pNode->getName() == "Coordinate")
+		}
+
+		BaseObject::~BaseObject()
+		{
+		}
+
+		osg::BoundingBox BaseObject::GetBoundingBox()
+		{
+			osg::ComputeBoundsVisitor boundVisitor;
+			accept(boundVisitor);
+			return boundVisitor.getBoundingBox();
+		}
+
+		osg::BoundingSphere BaseObject::GetBoundingSphere()
+		{
+			dirtyBound();
+			return getBound();
+		}
+
+
+		//bool BaseObject::UpdatePrimitive()
+		//{
+		//	for (auto& child : _children)
+		//	{
+		//		BaseObject* bo = dynamic_cast<BaseObject*>(child.get());
+		//		if (bo)
+		//		{
+		//			bo->UpdatePrimitive();
+		//		}
+		//	}
+		//	return true;
+		//}
+
+		void BaseObject::ShowCoordinate(bool bShow)
+		{
+			std::list<osg::Node*>	lsCoordinate;
+			for (osg::Node* pNode : _children)
 			{
-				lsCoordinate.push_back(pNode);
+				if (pNode->getName() == "Coordinate")
+				{
+					lsCoordinate.push_back(pNode);
+				}
 			}
-		}
-		for (osg::Node* pNode : lsCoordinate)
-		{
-			removeChild(pNode);
-		}
+			for (osg::Node* pNode : lsCoordinate)
+			{
+				removeChild(pNode);
+			}
 
-		if (bShow)
-		{
-			addChild(new Coordinate());
+			if (bShow)
+			{
+				addChild(new Coordinate());
+			}
 		}
 	}
 }

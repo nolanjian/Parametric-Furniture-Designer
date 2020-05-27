@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConfigExport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IProgramConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ProgramConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PFDConfigExport.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

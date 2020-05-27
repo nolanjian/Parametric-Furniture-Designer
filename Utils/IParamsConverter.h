@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "UtilsExport.h"
+#include "PFDUtilsExport.h"
 #include <string>
 
 namespace PFD
@@ -7,7 +7,7 @@ namespace PFD
 
 	namespace Utils
 	{
-		class UTILS_API IParamsConverter
+		class PFD_UTILS_API IParamsConverter
 		{
 		public:
 			static bool Decode(const std::string& src, std::string& target);

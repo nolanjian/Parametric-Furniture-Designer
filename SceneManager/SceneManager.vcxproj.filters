@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ISceneManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManagerExport.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManagerImp.h">
+    <ClInclude Include="IManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ISceneManager.cpp">
+    <ClCompile Include="IManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManagerImp.cpp">
+    <ClCompile Include="Manager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

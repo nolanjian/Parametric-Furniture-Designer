@@ -3,7 +3,7 @@
 #include <Importer.h>
 #include <STLIncluding.h>
 
-using namespace PFD_GLTF_Helper;
+using namespace PFD::GLTF;
 
 TEST(GLTFHelper, Import1) {
 	std::string strRoot = "D:\\glTF-Sample-Models\\2.0";

@@ -21,11 +21,11 @@
     <ClInclude Include="IDGenerater.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="UtilsExport.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IParamsConverter.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PFDUtilsExport.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

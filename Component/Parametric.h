@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "ComponentExport.h"
+#include "PFDComponentExport.h"
 #include "STLIncluding.h"
 #include "BaseObject.h"
 #include "Utils.h"
@@ -8,48 +8,51 @@
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"
 
-namespace PFDComponent
+namespace PFD
 {
-	class PFD_COMPONENT_API Parametric : public BaseObject
+	namespace Component
 	{
-	public:
-		static std::shared_ptr<spdlog::logger> logger;
+		class PFD_COMPONENT_API Parametric : public BaseObject
+		{
+		public:
+			static std::shared_ptr<spdlog::logger> logger;
 
-		virtual bool Update();
+			virtual bool Update();
 
-		virtual bool InitFromParams() { return true; };
+			virtual bool InitFromParams() { return true; };
 
-		bool UpdateFormulas();
+			bool UpdateFormulas();
 
-		const mup::var_maptype& FormulasResult();
-		const std::map<mup::string_type, mup::string_type>& GetFormulas() { return m_formulas; }
+			const mup::var_maptype& FormulasResult();
+			const std::map<std::string, std::string>& GetFormulas() { return m_formulas; }
 
-		bool ReInitParser();
-		bool SetParentFormulars();
+			bool ReInitParser();
+			bool SetParentFormulars();
 
-		bool UpdateSelfFormulas();
-		bool SetOneLine(const mup::string_type& line);
+			bool UpdateSelfFormulas();
+			bool SetOneLine(const std::string& line);
 
-		bool ParseParams(const nlohmann::json::value_type& params);
-		bool ImportParams(const fx::gltf::Node& node);
+			bool ParseParams(const nlohmann::json::value_type& params);
+			bool ImportParams(const fx::gltf::Node& node);
 
-		static bool regexParseFormular(const mup::string_type& strFormular, mup::string_type& strKey, mup::string_type& strVal);
-		static bool regexParseKV(mup::string_type& strKV);
+			static bool regexParseFormular(const std::string& strFormular, std::string& strKey, std::string& strVal);
+			static bool regexParseKV(std::string& strKV);
 
-		bool SetParam(const mup::string_type& strFormular);
-		bool SetParam(mup::string_type& strKey, mup::string_type& strValue);
-		mup::string_type GetParam(const mup::string_type& strName);
-		mup::string_type GetParamResult(const mup::string_type& strName);
+			bool SetParam(const std::string& strFormular);
+			bool SetParam(std::string& strKey, std::string& strValue);
+			std::string GetParam(const std::string& strName);
+			std::string GetParamResult(const std::string& strName);
 
-	protected:
-		static bool GetFormulaPairFromString(const mup::string_type& str, std::pair<mup::string_type, mup::string_type>& pair);
+		protected:
+			static bool GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair);
 
-	protected:
-		// formulas k/v string before cal
-		std::map<mup::string_type, mup::string_type>	m_formulas;
-		// formulas cale result
-		mup::var_maptype	m_formulasResult;
-		// parse tool
-		std::shared_ptr<mup::ParserX>	m_parser;
-	};
+		protected:
+			// formulas k/v string before cal
+			std::map<std::string, std::string>	m_formulas;
+			// formulas cale result
+			mup::var_maptype	m_formulasResult;
+			// parse tool
+			std::shared_ptr<mup::ParserX>	m_parser;
+		};
+	}
 }

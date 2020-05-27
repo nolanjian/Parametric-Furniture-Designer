@@ -1,10 +1,14 @@
 ﻿#include "ProgramConfig.h"
 
-namespace PFDConfig
+namespace PFD
 {
-	IProgramConfig* PFDConfig::IProgramConfig::GetInstance()
+	namespace Config
 	{
-		static ProgramConfig s_ProgramConfig;
-		return &s_ProgramConfig;
+
+		IProgramConfig* IProgramConfig::GetInstance()
+		{
+			static ProgramConfig s_ProgramConfig;
+			return &s_ProgramConfig;
+		}
 	}
 };

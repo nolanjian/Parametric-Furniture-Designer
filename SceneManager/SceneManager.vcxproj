@@ -155,13 +155,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ISceneManager.h" />
+    <ClInclude Include="IManager.h" />
     <ClInclude Include="SceneManagerExport.h" />
-    <ClInclude Include="SceneManagerImp.h" />
+    <ClInclude Include="Manager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ISceneManager.cpp" />
-    <ClCompile Include="SceneManagerImp.cpp" />
+    <ClCompile Include="IManager.cpp" />
+    <ClCompile Include="Manager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

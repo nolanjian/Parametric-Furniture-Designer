@@ -2,15 +2,19 @@
 
 #include "IComponentFactory.h"
 
-namespace PFDComponent
+namespace PFD
 {
-	class ComponentFactoryImp : public IComponentFactory
+	namespace Component
 	{
-	public:
-		virtual ~ComponentFactoryImp();
 
-		virtual osg::ref_ptr<BaseObject> CreateObject(Type type) override;
-	protected:
-	private:
-	};
+		class ComponentFactoryImp : public IComponentFactory
+		{
+		public:
+			virtual ~ComponentFactoryImp();
+
+			virtual osg::ref_ptr<BaseObject> CreateObject(Type type) override;
+		protected:
+		private:
+		};
+	}
 }

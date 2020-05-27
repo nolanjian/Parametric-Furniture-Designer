@@ -1,29 +1,32 @@
 #pragma once
 #include "WXIncluding.h"
-#include "ISceneManager.h"
+#include "IManager.h"
 #include <memory>
 
-namespace PFDGUI
+namespace PFD
 {
-	class Frame : public wxFrame
+	namespace GUI
 	{
-	public:
-		Frame(const wxString& title, const wxPoint& pos, const wxSize& size);
+		class Frame : public wxFrame
+		{
+		public:
+			Frame(const wxString& title, const wxPoint& pos, const wxSize& size);
 
-		// event handlers (these functions should _not_ be virtual)
-		void OnClose(wxCloseEvent& event);
-		void OnTimer(wxTimerEvent& event);
-		void OnAbout(wxCommandEvent& event);
-		void OnOpenGLTF(wxCommandEvent& event);
-		void OnCloseGLTF(wxCommandEvent& event);
-		void OnExit(wxCommandEvent& event);
-		void OnExportSence(wxCommandEvent& event);
+			// event handlers (these functions should _not_ be virtual)
+			void OnClose(wxCloseEvent& event);
+			void OnTimer(wxTimerEvent& event);
+			void OnAbout(wxCommandEvent& event);
+			void OnOpenGLTF(wxCommandEvent& event);
+			void OnCloseGLTF(wxCommandEvent& event);
+			void OnExit(wxCommandEvent& event);
+			void OnExportSence(wxCommandEvent& event);
 
-	protected:
-		void Init3DWindow();
+		protected:
+			void Init3DWindow();
 
-		wxDECLARE_EVENT_TABLE();
-	private:
-		wxWindow* m_p3DWindow = nullptr;
-	};
-};
+			wxDECLARE_EVENT_TABLE();
+		private:
+			wxWindow* m_p3DWindow = nullptr;
+		};
+	}
+}

@@ -1,415 +1,418 @@
 ﻿#include "Parametric.h"
 #include "../Utils/IParamsConverter.h"
 
-namespace PFDComponent
+namespace PFD
 {
-	std::shared_ptr<spdlog::logger> Parametric::logger = spdlog::get(PFD_LOGGER);
-
-	bool Parametric::Update()
+	namespace Component
 	{
-		bool bRet = UpdateFormulas();
-		return bRet;
-	}
+		std::shared_ptr<spdlog::logger> Parametric::logger = spdlog::get(PFD_LOGGER);
 
-	bool Parametric::UpdateFormulas()
-	{
-		if (!ReInitParser() || !SetParentFormulars())
+		bool Parametric::Update()
 		{
-			return false;
+			bool bRet = UpdateFormulas();
+			return bRet;
 		}
 
-		if (!UpdateSelfFormulas())
+		bool Parametric::UpdateFormulas()
 		{
-			return false;
-		}
-
-		for (auto& child : _children)
-		{
-			Parametric* pc = dynamic_cast<Parametric*>(child.get());
-			if (pc)
+			if (!ReInitParser() || !SetParentFormulars())
 			{
-				pc->UpdateFormulas();
-			}
-		}
-
-		return InitFromParams();
-	}
-
-	bool Parametric::UpdateSelfFormulas()
-	{
-		assert(m_parser);
-		m_parser->EnableAutoCreateVar(true);
-		m_formulasResult.clear();
-
-		std::list<mup::string_type>	lstFormulas;
-
-		for (auto pKV : GetFormulas())
-		{
-			static mup::string_type wsParent(_T("Parent."));
-			static mup::string_type wsrParent(_T("Parent_"));
-			mup::string_type val = pKV.second;
-
-			size_t	pos = val.find(wsParent);
-			while (pos != mup::string_type::npos)
-			{
-				val = val.replace(pos, wsParent.length(), wsrParent);
-				pos = val.find(wsParent);
+				return false;
 			}
 
-			mup::string_type line = pKV.first + _T("=") + val;
-			lstFormulas.push_back(line);
-		}
-
-		size_t	preSize = lstFormulas.size();
-		while (!lstFormulas.empty())
-		{
-			auto itr = lstFormulas.begin();
-			while (itr != lstFormulas.end())
+			if (!UpdateSelfFormulas())
 			{
-				if (SetOneLine(*itr))
+				return false;
+			}
+
+			for (auto& child : _children)
+			{
+				Parametric* pc = dynamic_cast<Parametric*>(child.get());
+				if (pc)
 				{
-					itr = lstFormulas.erase(itr);
+					pc->UpdateFormulas();
+				}
+			}
+
+			return InitFromParams();
+		}
+
+		bool Parametric::UpdateSelfFormulas()
+		{
+			assert(m_parser);
+			m_parser->EnableAutoCreateVar(true);
+			m_formulasResult.clear();
+
+			std::list<std::string>	lstFormulas;
+
+			for (auto pKV : GetFormulas())
+			{
+				static std::string wsParent(_T("Parent."));
+				static std::string wsrParent(_T("Parent_"));
+				std::string val = pKV.second;
+
+				size_t	pos = val.find(wsParent);
+				while (pos != std::string::npos)
+				{
+					val = val.replace(pos, wsParent.length(), wsrParent);
+					pos = val.find(wsParent);
+				}
+
+				std::string line = pKV.first + _T("=") + val;
+				lstFormulas.push_back(line);
+			}
+
+			size_t	preSize = lstFormulas.size();
+			while (!lstFormulas.empty())
+			{
+				auto itr = lstFormulas.begin();
+				while (itr != lstFormulas.end())
+				{
+					if (SetOneLine(*itr))
+					{
+						itr = lstFormulas.erase(itr);
+					}
+					else
+					{
+						++itr;
+					}
+				}
+				if (lstFormulas.size() == preSize)
+				{
+					std::string	outMsg = _T("Parsing Fail for:\n");
+					for (auto& s : lstFormulas)
+					{
+						outMsg += s + _T("\n");
+					}
+
+					logger->error(outMsg);
+					return false;
+				}
+			}
+
+			//assert(m_parser->GetVar().size() >= GetFormulas().size() + (GetParent() ? GetParent()->FormulasResult().size() : 0));
+
+			for (auto& kv : m_formulas)
+			{
+				if (m_parser->IsVarDefined(kv.first))
+				{
+					const mup::var_maptype& m = m_parser->GetVar();
+					m_formulasResult[kv.first] = m.at(kv.first);
 				}
 				else
 				{
-					++itr;
+					m_formulasResult.clear();
+					assert(false);
+					return false;
 				}
 			}
-			if (lstFormulas.size() == preSize)
+
+			return true;
+		}
+
+		bool Parametric::SetOneLine(const std::string& line)
+		{
+			try
 			{
-				mup::string_type	outMsg = _T("Parsing Fail for:\n");
-				for (auto& s : lstFormulas)
+				m_parser->SetExpr(line);
+				m_parser->Eval();
+				return true;
+			}
+			catch (const mup::ParserError& e)
+			{
+				logger->error(e.GetMsg());
+			}
+			catch (const std::exception& e)
+			{
+				logger->error(e.what());
+			}
+			catch (...)
+			{
+				logger->error(_T("UNKNOW"));
+			}
+			return false;
+		}
+
+		bool Parametric::ParseParams(const nlohmann::json::value_type& params)
+		{
+			if (!params.is_array())
+			{
+				logger->error(_T("params is not array"));
+				return false;
+			}
+			for (const auto& item : params)
+			{
+				if (item.is_string())
 				{
-					outMsg += s + _T("\n");
+					// eg: W = a + b
+					std::string utf8Formula = item.get<std::string>();
+					std::string unicodeFormula = utf8Formula;
+
+					std::pair<std::string, std::string>	pair;
+					if (!GetFormulaPairFromString(unicodeFormula, pair))
+					{
+
+						logger->error(_T("Parse Fail:{}"), unicodeFormula);
+						continue;
+					}
+
+					if (m_formulas.find(pair.first) != m_formulas.end())
+					{
+						logger->error(_T("Dup Check:{}"), pair.first);
+						continue;
+					}
+
+					m_formulas.insert(pair);
 				}
-
-				logger->error(outMsg);
-				return false;
 			}
-		}
 
-		//assert(m_parser->GetVar().size() >= GetFormulas().size() + (GetParent() ? GetParent()->FormulasResult().size() : 0));
-
-		for (auto& kv : m_formulas)
-		{
-			if (m_parser->IsVarDefined(kv.first))
-			{
-				const mup::var_maptype& m = m_parser->GetVar();
-				m_formulasResult[kv.first] = m.at(kv.first);
-			}
-			else
-			{
-				m_formulasResult.clear();
-				assert(false);
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-	bool Parametric::SetOneLine(const mup::string_type& line)
-	{
-		try
-		{
-			m_parser->SetExpr(line);
-			m_parser->Eval();
 			return true;
 		}
-		catch (const mup::ParserError& e)
-		{
-			logger->error(e.GetMsg());
-		}
-		catch (const std::exception& e)
-		{
-			logger->error(e.what());
-		}
-		catch (...)
-		{
-			logger->error(_T("UNKNOW"));
-		}
-		return false;
-	}
 
-	bool Parametric::ParseParams(const nlohmann::json::value_type& params)
-	{
-		if (!params.is_array())
+		bool Parametric::ImportParams(const fx::gltf::Node& node)
 		{
-			logger->error(_T("params is not array"));
-			return false;
-		}
-		for (const auto& item : params)
-		{
-			if (item.is_string())
+			m_formulas.clear();
+			if (!node.extensionsAndExtras.contains("params"))
 			{
-				// eg: W = a + b
-				std::string utf8Formula = item.get<std::string>();
-				mup::string_type unicodeFormula = utf8Formula;
+				return true;
+			}
 
-				std::pair<mup::string_type, mup::string_type>	pair;
-				if (!GetFormulaPairFromString(unicodeFormula, pair))
+			const nlohmann::json::value_type& params = node.extensionsAndExtras["params"];
+			if (params.is_string())
+			{
+				std::string	str = params.get<std::string>();
+				std::string decodeStr;
+				if (PFD::Utils::IParamsConverter::Decode(str, decodeStr))
 				{
-
-					logger->error(_T("Parse Fail:{}"), unicodeFormula);
-					continue;
+					nlohmann::json	paramsJson;
+					std::stringstream	ss;
+					ss << decodeStr;
+					paramsJson << ss;
+					return ParseParams(paramsJson);
 				}
-
-				if (m_formulas.find(pair.first) != m_formulas.end())
+				else
 				{
-					logger->error(_T("Dup Check:{}"), pair.first);
-					continue;
+					return false;
 				}
-
-				m_formulas.insert(pair);
 			}
+			return ParseParams(params);
 		}
 
-		return true;
-	}
-
-	bool Parametric::ImportParams(const fx::gltf::Node& node)
-	{
-		m_formulas.clear();
-		if (!node.extensionsAndExtras.contains("params"))
+		bool Parametric::regexParseFormular(const std::string& strFormular, std::string& strKey, std::string& strVal)
 		{
-			return true;
-		}
-
-		const nlohmann::json::value_type& params = node.extensionsAndExtras["params"];
-		if (params.is_string())
-		{
-			std::string	str = params.get<std::string>();
-			std::string decodeStr;
-			if (PFDUtils::IParamsConverter::Decode(str, decodeStr))
+			try
 			{
-				nlohmann::json	paramsJson;
-				std::stringstream	ss;
-				ss << decodeStr;
-				paramsJson << ss;
-				return ParseParams(paramsJson);
+				std::regex	patternReplace(_T("\\s+"));
+				std::string strF = std::regex_replace(strFormular, patternReplace, _T(""));
+
+				std::regex	pattern(_T("(.+)=(.+)"));
+				std::smatch	result;
+
+				bool bMatch = std::regex_match(strF, result, pattern);
+				if (!bMatch)
+					return false;
+				else if (result.size() < 3)
+					return false;
+
+				strKey = result[1];
+				strVal = result[2];
+				return true;
 			}
-			else
+			catch (const std::regex_error& err)
 			{
+				logger->error(err.what());
+			}
+			catch (const std::exception& err)
+			{
+				logger->error(err.what());
+			}
+			return false;
+		}
+
+		bool Parametric::regexParseKV(std::string& strKV)
+		{
+			try
+			{
+				std::regex	pattern(_T("\\W*(\\w+)\\W*"));
+
+				std::smatch	result;
+
+				bool bMatch = std::regex_match(strKV, result, pattern);
+				if (!bMatch)
+					return false;
+				else if (result.size() < 2)
+					return false;
+
+				strKV = result[1];
+				return true;
+			}
+			catch (const std::regex_error& err)
+			{
+				logger->error(err.what());
+			}
+			catch (const std::exception& err)
+			{
+				logger->error(err.what());
+			}
+			return false;
+		}
+
+		bool Parametric::SetParam(const std::string& strFormular)
+		{
+			std::pair<std::string, std::string>	pair;
+			if (!GetFormulaPairFromString(strFormular, pair))
+			{
+				logger->error(_T("Parse Fail:{}"), strFormular);
 				return false;
 			}
-		}
-		return ParseParams(params);
-	}
 
-	bool Parametric::regexParseFormular(const mup::string_type& strFormular, mup::string_type& strKey, mup::string_type& strVal)
-	{
-		try
-		{
-			std::regex	patternReplace(_T("\\s+"));
-			mup::string_type strF = std::regex_replace(strFormular, patternReplace, _T(""));
+			if (m_formulas.find(pair.first) != m_formulas.end())
+			{
+				logger->warn(_T("Dup Check:{}"), strFormular);
+			}
 
-			std::regex	pattern(_T("(.+)=(.+)"));
-			std::smatch	result;
+			m_formulas.insert(pair);
 
-			bool bMatch = std::regex_match(strF, result, pattern);
-			if (!bMatch)
-				return false;
-			else if (result.size() < 3)
-				return false;
-
-			strKey = result[1];
-			strVal = result[2];
 			return true;
 		}
-		catch (const std::regex_error& err)
-		{
-			logger->error(err.what());
-		}
-		catch (const std::exception& err)
-		{
-			logger->error(err.what());
-		}
-		return false;
-	}
 
-	bool Parametric::regexParseKV(mup::string_type& strKV)
-	{
-		try
+		bool Parametric::SetParam(std::string& strKey, std::string& strValue)
 		{
-			std::regex	pattern(_T("\\W*(\\w+)\\W*"));
-
-			std::smatch	result;
-
-			bool bMatch = std::regex_match(strKV, result, pattern);
-			if (!bMatch)
+			if (!regexParseKV(strKey))
+			{
+				logger->error(_T("Parse Key /{}/ fail"), strKey);
 				return false;
-			else if (result.size() < 2)
+			}
+			if (!regexParseKV(strValue))
+			{
+				logger->error(_T("Parse Value /{}/ fail"), strValue);
 				return false;
-
-			strKV = result[1];
+			}
+			m_formulas[strKey] = strValue;
 			return true;
 		}
-		catch (const std::regex_error& err)
-		{
-			logger->error(err.what());
-		}
-		catch (const std::exception& err)
-		{
-			logger->error(err.what());
-		}
-		return false;
-	}
 
-	bool Parametric::SetParam(const mup::string_type& strFormular)
-	{
-		std::pair<mup::string_type, mup::string_type>	pair;
-		if (!GetFormulaPairFromString(strFormular, pair))
+		std::string Parametric::GetParam(const std::string& strName)
 		{
-			logger->error(_T("Parse Fail:{}"), strFormular);
-			return false;
-		}
-
-		if (m_formulas.find(pair.first) != m_formulas.end())
-		{
-			logger->warn(_T("Dup Check:{}"), strFormular);
-		}
-
-		m_formulas.insert(pair);
-
-		return true;
-	}
-
-	bool Parametric::SetParam(mup::string_type& strKey, mup::string_type& strValue)
-	{
-		if (!regexParseKV(strKey))
-		{
-			logger->error(_T("Parse Key /{}/ fail"), strKey);
-			return false;
-		}
-		if (!regexParseKV(strValue))
-		{
-			logger->error(_T("Parse Value /{}/ fail"), strValue);
-			return false;
-		}
-		m_formulas[strKey] = strValue;
-		return true;
-	}
-
-	mup::string_type Parametric::GetParam(const mup::string_type& strName)
-	{
-		if (m_formulas.find(strName) != m_formulas.end())
-		{
-			return m_formulas[strName];
-		}
-		return _T("");
-	}
-
-	mup::string_type Parametric::GetParamResult(const mup::string_type& strName)
-	{
-		if (m_formulasResult.find(strName) == m_formulasResult.end())
-		{
+			if (m_formulas.find(strName) != m_formulas.end())
+			{
+				return m_formulas[strName];
+			}
 			return _T("");
 		}
-		auto val = m_formulasResult[strName];
 
-		mup::IValue* pValue = val->AsIValue();
-
-		mup::string_type str;
-		if (pValue->IsString())
+		std::string Parametric::GetParamResult(const std::string& strName)
 		{
-			str = pValue->GetString();
-			return str;
-		}
-		else if (pValue->IsVariable())
-		{
-			double fVal = pValue->GetFloat();
-			return std::to_string(fVal);
-		}
-		else if (pValue->IsInteger())
-		{
-			int nVal = pValue->GetInteger();
-			return std::to_string(nVal);
-		}
-
-		throw new std::exception("unhandled data type");
-	}
-
-	bool Parametric::GetFormulaPairFromString(const mup::string_type& str, std::pair<mup::string_type, mup::string_type>& pair)
-	{
-		mup::string_type strKey, strVal;
-		if (regexParseFormular(str, strKey, strVal))
-		{
-			pair.first = strKey;
-			pair.second = strVal;
-			return true;
-		}
-
-		return false;
-	}
-
-	const mup::var_maptype& Parametric::FormulasResult()
-	{
-		return m_formulasResult;
-	}
-
-	bool Parametric::ReInitParser()
-	{
-		m_parser = std::make_shared<mup::ParserX>(mup::EPackages::pckALL_NON_COMPLEX);
-		m_parser->EnableAutoCreateVar(true);
-		return m_parser.get() != nullptr;
-	}
-
-	bool Parametric::SetParentFormulars()
-	{
-		if (getNumParents() < 1)
-		{
-			return true;
-		}
-
-		Parametric* pParent = dynamic_cast<Parametric*>(getParent(0));
-		if (!pParent)
-		{
-			return true;
-		}
-
-		const mup::var_maptype& parentFormulasResult = pParent->FormulasResult();
-		if (parentFormulasResult.empty())
-		{
-			return true;
-		}
-
-		try
-		{
-			m_parser->ClearVar();
-
-			const mup::var_maptype& exprVar = m_parser->GetVar();
-
-			assert(exprVar.size() == 0);
-			for (auto pKV : parentFormulasResult)
+			if (m_formulasResult.find(strName) == m_formulasResult.end())
 			{
-				mup::IValue* pValue = pKV.second->AsIValue();
-				if (pValue == nullptr)
-				{
-					continue;
-				}
-				mup::string_type name = _T("Parent_") + pKV.first;
-
-
-				mup::ptr_tok_type ptt = pKV.second;
-
-				m_parser->DefineVar(name, mup::Variable(pValue));
+				return _T("");
 			}
-			assert(parentFormulasResult.size() == exprVar.size());
+			auto val = m_formulasResult[strName];
 
-			return true;
+			mup::IValue* pValue = val->AsIValue();
+
+			std::string str;
+			if (pValue->IsString())
+			{
+				str = pValue->GetString();
+				return str;
+			}
+			else if (pValue->IsVariable())
+			{
+				double fVal = pValue->GetFloat();
+				return std::to_string(fVal);
+			}
+			else if (pValue->IsInteger())
+			{
+				int nVal = pValue->GetInteger();
+				return std::to_string(nVal);
+			}
+
+			throw new std::exception("unhandled data type");
 		}
-		catch (const mup::ParserError& e)
+
+		bool Parametric::GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair)
 		{
-			logger->error(e.GetMsg());
+			std::string strKey, strVal;
+			if (regexParseFormular(str, strKey, strVal))
+			{
+				pair.first = strKey;
+				pair.second = strVal;
+				return true;
+			}
+
+			return false;
 		}
-		catch (const std::exception& e)
+
+		const mup::var_maptype& Parametric::FormulasResult()
 		{
-			logger->error(e.what());
+			return m_formulasResult;
 		}
-		catch (...)
+
+		bool Parametric::ReInitParser()
 		{
-			logger->error(_T("UNKNOW"));
+			m_parser = std::make_shared<mup::ParserX>(mup::EPackages::pckALL_NON_COMPLEX);
+			m_parser->EnableAutoCreateVar(true);
+			return m_parser.get() != nullptr;
 		}
-		return false;
+
+		bool Parametric::SetParentFormulars()
+		{
+			if (getNumParents() < 1)
+			{
+				return true;
+			}
+
+			Parametric* pParent = dynamic_cast<Parametric*>(getParent(0));
+			if (!pParent)
+			{
+				return true;
+			}
+
+			const mup::var_maptype& parentFormulasResult = pParent->FormulasResult();
+			if (parentFormulasResult.empty())
+			{
+				return true;
+			}
+
+			try
+			{
+				m_parser->ClearVar();
+
+				const mup::var_maptype& exprVar = m_parser->GetVar();
+
+				assert(exprVar.size() == 0);
+				for (auto pKV : parentFormulasResult)
+				{
+					mup::IValue* pValue = pKV.second->AsIValue();
+					if (pValue == nullptr)
+					{
+						continue;
+					}
+					std::string name = _T("Parent_") + pKV.first;
+
+
+					mup::ptr_tok_type ptt = pKV.second;
+
+					m_parser->DefineVar(name, mup::Variable(pValue));
+				}
+				assert(parentFormulasResult.size() == exprVar.size());
+
+				return true;
+			}
+			catch (const mup::ParserError& e)
+			{
+				logger->error(e.GetMsg());
+			}
+			catch (const std::exception& e)
+			{
+				logger->error(e.what());
+			}
+			catch (...)
+			{
+				logger->error(_T("UNKNOW"));
+			}
+			return false;
+		}
 	}
 }

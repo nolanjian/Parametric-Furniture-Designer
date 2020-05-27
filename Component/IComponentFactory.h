@@ -1,20 +1,23 @@
 ﻿#pragma once
-#include "ComponentExport.h"
+#include "PFDComponentExport.h"
 #include "BaseObject.h"
 
-namespace PFDComponent
+namespace PFD
 {
-	class PFD_COMPONENT_API IComponentFactory
+	namespace Component
 	{
-	public:
-		enum Type
+		class PFD_COMPONENT_API IComponentFactory
 		{
-			BASE_OBJECT = 1000,
-		};
-		virtual ~IComponentFactory() {}
-		static IComponentFactory* Get();
+		public:
+			enum Type
+			{
+				BASE_OBJECT = 1000,
+			};
+			virtual ~IComponentFactory() {}
+			static IComponentFactory* Get();
 
-		virtual osg::ref_ptr<BaseObject> CreateObject(Type type) = 0;
-		
-	};
+			virtual osg::ref_ptr<BaseObject> CreateObject(Type type) = 0;
+
+		};
+	}
 }

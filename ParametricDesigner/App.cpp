@@ -5,33 +5,41 @@
 #include "Utils.h"
 #include "spdlog/spdlog.h"
 
-wxIMPLEMENT_APP(PFDGUI::App);
+wxIMPLEMENT_APP(PFD::GUI::App);
 
-PFDGUI::App::App()
+namespace PFD
 {
-	logger->info("Program Start");
+	namespace GUI
+	{
+		App::App()
+		{
+			logger->info("Program Start");
+		}
+
+		App::~App()
+		{
+			logger->info("Program Exit");
+			spdlog::shutdown();
+		}
+
+		bool App::OnInit()
+		{
+			bool bRet = wxApp::OnInit();
+			if (!bRet)
+				return false;
+
+			Frame* pFrame = new Frame(PFD::Config::IProgramConfig::GetInstance()->GetString("AppTitle"), wxDefaultPosition, wxDefaultSize);
+			pFrame->Show(true);
+
+			return true;
+		}
+
+		int App::OnExit()
+		{
+			return 0;
+		}
+	}
 }
 
-PFDGUI::App::~App()
-{
-	logger->info("Program Exit");
-	spdlog::shutdown();
-}
 
-bool PFDGUI::App::OnInit()
-{
-	bool bRet = wxApp::OnInit();
-	if (!bRet)
-		return false;
-	
-	Frame* pFrame = new Frame(PFDConfig::IProgramConfig::GetInstance()->GetString("AppTitle"), wxDefaultPosition, wxDefaultSize);
-	pFrame->Show(true);
-
-	return true;
-}
-
-int PFDGUI::App::OnExit()
-{
-	return 0;
-}
 

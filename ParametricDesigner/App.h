@@ -3,16 +3,19 @@
 #include "WXIncluding.h"
 #include "Utils.h"
 
-namespace PFDGUI
+namespace PFD
 {
-	class App : public wxApp
+	namespace GUI
 	{
-	public:
-		App();
-		virtual ~App();
-		virtual bool OnInit() override;
-		virtual int OnExit() override;
-	protected:
-		std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
-	};
-};
+		class App : public wxApp
+		{
+		public:
+			App();
+			virtual ~App();
+			virtual bool OnInit() override;
+			virtual int OnExit() override;
+		protected:
+			std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
+		};
+	}
+}
