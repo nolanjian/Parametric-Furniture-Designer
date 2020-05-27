@@ -1,15 +1,19 @@
-#pragma once
+﻿#pragma once
 #include "UtilsExport.h"
 #include <string>
 
-namespace PFDUtils
+namespace PFD
 {
-	class UTILS_API IParamsConverter
+
+	namespace Utils
 	{
-	public:
-		static bool Decode(const std::string& src, std::string& target);
-		static bool Encode(const std::string& src, std::string& target);
-	protected:
-	private:
-	};
+		class UTILS_API IParamsConverter
+		{
+		public:
+			static bool Decode(const std::string& src, std::string& target);
+			static bool Encode(const std::string& src, std::string& target);
+		protected:
+		private:
+		};
+	}
 }

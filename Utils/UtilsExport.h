@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifdef UTILS_EXPORTS
 #define UTILS_API __declspec(dllexport)

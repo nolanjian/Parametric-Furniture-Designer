@@ -1,21 +1,25 @@
-
+﻿
 #include "IParamsConverter.h"
 
-namespace PFDUtils
+namespace PFD
 {
 
-	bool IParamsConverter::Decode(const std::string& src, std::string& target)
+	namespace Utils
 	{
-		// TODO
-		target = src;
-		return true;
-	}
 
-	bool IParamsConverter::Encode(const std::string& src, std::string& target)
-	{
-		// TODO
-		target = src;
-		return true;
-	}
+		bool IParamsConverter::Decode(const std::string& src, std::string& target)
+		{
+			// TODO
+			target = src;
+			return true;
+		}
 
+		bool IParamsConverter::Encode(const std::string& src, std::string& target)
+		{
+			// TODO
+			target = src;
+			return true;
+		}
+
+	}
 }

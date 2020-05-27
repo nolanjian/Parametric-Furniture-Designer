@@ -1,4 +1,4 @@
-// The following ifdef block is the standard way of creating macros which make exporting
+﻿// The following ifdef block is the standard way of creating macros which make exporting
 // from a DLL simpler. All files within this DLL are compiled with the UTILS_EXPORTS
 // symbol defined on the command line. This symbol should not be defined on any project
 // that uses this DLL. This way any other project whose source files include this file see
@@ -12,15 +12,20 @@
 
 #define PFD_LOGGER "pfd_async_file_logger"
 
-namespace PFDUtils
+namespace PFD
 {
-	UTILS_API bool InitLogger();
-	
-	UTILS_API std::wstring Utf8ToUnicode(const std::string& strUTF8);
+	namespace Utils
+	{
+		UTILS_API bool InitLogger();
 
-	UTILS_API std::string UnicodeToUtf8(const std::wstring& strUnicode);
+		UTILS_API std::wstring Utf8ToUnicode(const std::string& strUTF8);
 
-	UTILS_API std::wstring StringToWString(const std::string& str);
+		UTILS_API std::string UnicodeToUtf8(const std::wstring& strUnicode);
 
-	UTILS_API std::string WStringToString(const std::wstring& wstr);
-};
+		UTILS_API std::wstring StringToWString(const std::string& str);
+
+		UTILS_API std::string WStringToString(const std::wstring& wstr);
+	}	// namespace Utils
+}	// namespace PFD
+
+
