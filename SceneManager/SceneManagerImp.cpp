@@ -1,4 +1,4 @@
-#include "SceneManagerImp.h"
+﻿#include "SceneManagerImp.h"
 #include "IProgramConfig.h"
 #include "Importer.h"
 #include "Exporter.h"
@@ -30,14 +30,14 @@ namespace PFDSceneManager
 	{
 		if (m_hwnd == NULL)
 		{
-			logger->error(L"hwnd is null");
+			logger->error("hwnd is null");
 			return false;
 		}
 
 		RECT rect;
 		if (GetWindowRect(m_hwnd, &rect) == FALSE)
 		{
-			logger->error(L"GetWindowRect fail");
+			logger->error("GetWindowRect fail");
 			return false;
 		}
 
@@ -90,7 +90,7 @@ namespace PFDSceneManager
 		HDC hdc = ::GetDC(m_hwnd);
 		if (hdc == 0)
 		{
-			logger->error(L"GetDC fail");
+			logger->error("GetDC fail");
 			return false;
 		}
 
@@ -100,7 +100,7 @@ namespace PFDSceneManager
 		{
 			// (MFC)Releases the display device context of a container of a windowless control, freeing the device context for use by other applications 
 			::ReleaseDC(m_hwnd, hdc);
-			logger->error(L"ChoosePixelFormat fail");
+			logger->error("ChoosePixelFormat fail");
 			return false;
 		}
 
@@ -108,7 +108,7 @@ namespace PFDSceneManager
 		if (!::SetPixelFormat(hdc, pixelFormatIndex, &pixelFormat))
 		{
 			::ReleaseDC(m_hwnd, hdc);
-			logger->error(L"SetPixelFormat fail");
+			logger->error("SetPixelFormat fail");
 			return false;
 		}
 
@@ -149,7 +149,7 @@ namespace PFDSceneManager
 			// TODO
 			break;
 		default:
-			logger->error(L"Unknown Render Mode:{}", mode);
+			logger->error("Unknown Render Mode:{}", mode);
 			return;
 		}
 
@@ -176,7 +176,7 @@ namespace PFDSceneManager
 			osg::ref_ptr<osg::Group> pScene = pImporter->Load(path);
 			if (!pScene)
 			{
-				logger->error(L"Load GLTF {} fail", path);
+				logger->error("Load GLTF {} fail", PFDUtils::WStringToString(path));
 				return false;
 			}
 
@@ -204,7 +204,7 @@ namespace PFDSceneManager
 		osg::ref_ptr<osg::Group> pScene = pImporter->Load(utf8Json);
 		if (!pScene)
 		{
-			logger->error(L"Load GLTF {} fail", PFDUtils::Utf8ToUnicode(utf8Json));
+			logger->error("Load GLTF {} fail", utf8Json);
 			return false;
 		}
 

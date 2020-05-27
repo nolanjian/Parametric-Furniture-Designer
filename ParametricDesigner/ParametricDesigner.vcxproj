@@ -146,15 +146,14 @@
     <ClInclude Include="EnumID.h" />
     <ClInclude Include="Frame.h" />
     <ClInclude Include="SceneTreePage.h" />
-    <ClInclude Include="WebView\PFDWebView.h" />
+    <ClInclude Include="WebView\WebView.h" />
     <ClInclude Include="WebView\wke.h" />
     <ClInclude Include="WXIncluding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Frame.cpp" />
-    <ClCompile Include="SceneTreePage.cpp" />
-    <ClCompile Include="WebView\PFDWebView.cpp" />
+    <ClCompile Include="WebView\WebView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

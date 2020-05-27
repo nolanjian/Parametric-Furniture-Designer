@@ -1,5 +1,6 @@
 #include "Frame.h"
 #include "EnumID.h"
+#include "WebView/WebView.h"
 
 wxBEGIN_EVENT_TABLE(PFDGUI::Frame, wxFrame)
 	EVT_CLOSE(PFDGUI::Frame::OnClose)
@@ -34,13 +35,19 @@ PFDGUI::Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& si
 
 	CreateStatusBar();
 	SetStatusText("Parametric Designer CopyRight");
-
 	wxGridSizer* topsizer = new wxGridSizer(2, 2, 1, 1);
+
+	PFD::GUI::WebView* pWebView = new PFD::GUI::WebView(this);
+	topsizer->Add(pWebView);
+
 	topsizer->SetMinSize(wxSize(1208, 1000));
 	topsizer->SetHGap(FromDIP(1));
 	topsizer->SetVGap(FromDIP(1));
 	Init3DWindow();
+
 	topsizer->Add(m_p3DWindow);
+	
+	
 
 	SetSizer(topsizer);
 }

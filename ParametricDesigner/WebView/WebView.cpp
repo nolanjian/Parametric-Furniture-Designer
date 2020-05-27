@@ -1,4 +1,4 @@
-#include "PFDWebView.h"
+#include "WebView.h"
 
 namespace PFD
 {

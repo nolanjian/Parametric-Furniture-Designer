@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #ifdef PFD_SCENEMANAGER_EXPORTS
 #define PFD_SCENEMANAGER_API __declspec(dllexport)

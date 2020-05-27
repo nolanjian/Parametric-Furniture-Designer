@@ -33,10 +33,10 @@
     <ClInclude Include="SceneTreePage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WebView\PFDWebView.h">
+    <ClInclude Include="WebView\wke.h">
       <Filter>WebView</Filter>
     </ClInclude>
-    <ClInclude Include="WebView\wke.h">
+    <ClInclude Include="WebView\WebView.h">
       <Filter>WebView</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,10 +47,7 @@
     <ClCompile Include="Frame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SceneTreePage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WebView\PFDWebView.cpp">
+    <ClCompile Include="WebView\WebView.cpp">
       <Filter>WebView</Filter>
     </ClCompile>
   </ItemGroup>

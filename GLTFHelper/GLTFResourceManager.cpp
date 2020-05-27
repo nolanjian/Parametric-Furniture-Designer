@@ -388,7 +388,7 @@ namespace PFD_GLTF_Helper
 				}
 				catch (const std::exception& e)
 				{
-					logger->error(L"fnLoadExteralResource:\n{}", PFDUtils::StringToWString(e.what()));
+					logger->error("fnLoadExteralResource:\n{}", e.what());
 					return false;
 				}
 			};
