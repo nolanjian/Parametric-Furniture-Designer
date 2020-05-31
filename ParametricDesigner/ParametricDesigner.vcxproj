@@ -145,14 +145,15 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="EnumID.h" />
     <ClInclude Include="Frame.h" />
-    <ClInclude Include="SceneTreePage.h" />
     <ClInclude Include="WebView\ClientHandler.h" />
+    <ClInclude Include="WebView\Widget.h" />
     <ClInclude Include="WXIncluding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="WebView\ClientHandler.cpp" />
+    <ClCompile Include="WebView\Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

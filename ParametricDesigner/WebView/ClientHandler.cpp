@@ -6,8 +6,24 @@ namespace PFD
 	{
 		namespace WebView
 		{
+			ClientHandler::ClientHandler(Widget* pWidget)
+				:m_pWidget(pWidget)
+			{
+
+			}
+
 			ClientHandler::~ClientHandler()
 			{
+			}
+
+			void ClientHandler::SetWidget(Widget* pWidget)
+			{
+				m_pWidget = pWidget;
+			}
+
+			CefRefPtr<CefBrowser> ClientHandler::GetBrowser()
+			{
+				return m_browser;
 			}
 
 			CefRefPtr<CefAudioHandler> ClientHandler::GetAudioHandler()
@@ -344,6 +360,11 @@ namespace PFD
 
 			void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser)
 			{
+				if (!m_browser.get())
+				{
+					m_browser = browser;
+					m_browserId = browser->GetIdentifier();
+				}
 			}
 
 			bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser)

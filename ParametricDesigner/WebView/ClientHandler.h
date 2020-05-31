@@ -3,6 +3,7 @@
 #include <include/cef_client.h>
 #include <include/cef_drag_handler.h>
 #include <include/cef_drag_data.h>
+#include "Widget.h"
 
 namespace PFD
 {
@@ -10,7 +11,9 @@ namespace PFD
 	{
 		namespace WebView
 		{
-			class ClientHandler : public CefClient
+			class ClientHandler
+#pragma region Derived
+				: public CefClient
 				, public CefAudioHandler
 				, public CefDialogHandler
 				, public CefContextMenuHandler
@@ -25,14 +28,20 @@ namespace PFD
 				, public CefKeyboardHandler
 				, public CefRenderHandler
 				, public CefRequestHandler
+#pragma endregion Derived
 			{
+			public:
 				ClientHandler() {};
+				ClientHandler(Widget* pWidget);
 				virtual ~ClientHandler();
+
+				void SetWidget(Widget* pWidget);
+				CefRefPtr<CefBrowser> GetBrowser();
 
 				typedef cef_drag_operations_mask_t DragOperationsMask;
 				typedef cef_window_open_disposition_t WindowOpenDisposition;
 
-				// CefClient methods
+#pragma region CefClient
 				virtual CefRefPtr<CefAudioHandler> GetAudioHandler() override;
 				virtual CefRefPtr<CefContextMenuHandler> GetContextMenuHandler() override;
 				virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override;
@@ -51,8 +60,9 @@ namespace PFD
 					CefRefPtr<CefFrame> frame,
 					CefProcessId source_process,
 					CefRefPtr<CefProcessMessage> message) override;
+#pragma endregion CefClient
 
-				// CefRequestHandler methods
+#pragma region CefRequestHandler
 				virtual bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefRequest> request, bool user_gesture, bool is_redirect) override;
 				virtual bool OnOpenURLFromTab(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& target_url, WindowOpenDisposition target_disposition, bool user_gesture) override;
 				virtual CefRefPtr<CefResourceRequestHandler> GetResourceRequestHandler(
@@ -92,8 +102,9 @@ namespace PFD
 				virtual void OnRenderViewReady(CefRefPtr<CefBrowser> browser) override;
 				virtual void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
 					TerminationStatus status) override;
+#pragma endregion CefRequestHandler
 
-				// CefRenderHandler methods
+#pragma region CefRenderHandler
 				virtual CefRefPtr<CefAccessibilityHandler> GetAccessibilityHandler() override;
 				virtual bool GetRootScreenRect(CefRefPtr<CefBrowser> browser, CefRect& rect) override;
 				virtual void GetViewRect(CefRefPtr<CefBrowser> browser, CefRect& rect) override;
@@ -138,8 +149,9 @@ namespace PFD
 					const CefRange& selected_range) override;
 				virtual void OnVirtualKeyboardRequested(CefRefPtr<CefBrowser> browser,
 					TextInputMode input_mode) override;
+#pragma endregion CefRenderHandler
 
-				// CefKeyboardHandler methods
+#pragma region CefKeyboardHandler
 				virtual bool OnPreKeyEvent(CefRefPtr<CefBrowser> browser,
 					const CefKeyEvent& event,
 					CefEventHandle os_event,
@@ -147,8 +159,9 @@ namespace PFD
 				virtual bool OnKeyEvent(CefRefPtr<CefBrowser> browser,
 					const CefKeyEvent& event,
 					CefEventHandle os_event) override;
+#pragma endregion CefKeyboardHandler
 
-				// CefJSDialogHandler methods
+#pragma region CefJSDialogHandler
 				virtual bool OnJSDialog(CefRefPtr<CefBrowser> browser,
 					const CefString& origin_url,
 					JSDialogType dialog_type,
@@ -162,21 +175,24 @@ namespace PFD
 					CefRefPtr<CefJSDialogCallback> callback) override;
 				virtual void OnResetDialogState(CefRefPtr<CefBrowser> browser) override;
 				virtual void OnDialogClosed(CefRefPtr<CefBrowser> browser) override;
+#pragma endregion CefJSDialogHandler
 
-				// CefFocusHandler methods
+#pragma region CefFocusHandler
 				virtual void OnTakeFocus(CefRefPtr<CefBrowser> browser, bool next) override;
 				virtual bool OnSetFocus(CefRefPtr<CefBrowser> browser, FocusSource source) override;
 				virtual void OnGotFocus(CefRefPtr<CefBrowser> browser) override;
+#pragma endregion CefFocusHandler
 
-				// CefFindHandler methods
+#pragma region CefFindHandler
 				virtual void OnFindResult(CefRefPtr<CefBrowser> browser,
 					int identifier,
 					int count,
 					const CefRect& selectionRect,
 					int activeMatchOrdinal,
 					bool finalUpdate) override;
+#pragma endregion CefFindHandler
 
-				// CefDragHandler methods
+#pragma region CefDragHandler
 				virtual bool OnDragEnter(CefRefPtr<CefBrowser> browser,
 					CefRefPtr<CefDragData> dragData,
 					DragOperationsMask mask) override;
@@ -184,8 +200,9 @@ namespace PFD
 					CefRefPtr<CefBrowser> browser,
 					CefRefPtr<CefFrame> frame,
 					const std::vector<CefDraggableRegion>& regions) override;
+#pragma endregion CefDragHandler
 
-				// CefDownloadHandler methods
+#pragma region CefDownloadHandler
 				virtual void OnBeforeDownload(
 					CefRefPtr<CefBrowser> browser,
 					CefRefPtr<CefDownloadItem> download_item,
@@ -194,8 +211,9 @@ namespace PFD
 				virtual void OnDownloadUpdated(CefRefPtr<CefBrowser> browser,
 					CefRefPtr<CefDownloadItem> download_item,
 					CefRefPtr<CefDownloadItemCallback> callback) override;
+#pragma endregion CefDownloadHandler
 
-				// CefDialogHandler methods
+#pragma region CefDialogHandler
 				virtual bool OnFileDialog(CefRefPtr<CefBrowser> browser,
 					FileDialogMode mode,
 					const CefString& title,
@@ -203,33 +221,69 @@ namespace PFD
 					const std::vector<CefString>& accept_filters,
 					int selected_accept_filter,
 					CefRefPtr<CefFileDialogCallback> callback) override;
+#pragma endregion CefDialogHandler
 
-				// CefAudioHandler methods
-				virtual bool GetAudioParameters(CefRefPtr<CefBrowser> browser, CefAudioParameters& params) override;
-				virtual void OnAudioStreamStarted(CefRefPtr<CefBrowser> browser, const CefAudioParameters& params, int channels) override;
-				virtual void OnAudioStreamPacket(CefRefPtr<CefBrowser> browser, const float** data, int frames, int64 pts) override;
+#pragma region CefAudioHandler
+				virtual bool GetAudioParameters(CefRefPtr<CefBrowser> browser
+					, CefAudioParameters& params) override;
+				virtual void OnAudioStreamStarted(CefRefPtr<CefBrowser> browser
+					, const CefAudioParameters& params, int channels) override;
+				virtual void OnAudioStreamPacket(CefRefPtr<CefBrowser> browser
+					, const float** data, int frames, int64 pts) override;
 				virtual void OnAudioStreamStopped(CefRefPtr<CefBrowser> browser) override;
-				virtual void OnAudioStreamError(CefRefPtr<CefBrowser> browser, const CefString& message) override;
+				virtual void OnAudioStreamError(CefRefPtr<CefBrowser> browser
+					, const CefString& message) override;
+#pragma endregion CefAudioHandler
 
-				// CefContextMenuHandler methods
-				virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, CefRefPtr<CefMenuModel> model) override;
-				virtual bool RunContextMenu(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, CefRefPtr<CefMenuModel> model, CefRefPtr<CefRunContextMenuCallback> callback) override;
-				virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, int command_id, EventFlags event_flags) override;
-				virtual void OnContextMenuDismissed(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame) override;
+#pragma region CefContextMenuHandler
+				virtual void OnBeforeContextMenu(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, CefRefPtr<CefContextMenuParams> params
+					, CefRefPtr<CefMenuModel> model) override;
+				virtual bool RunContextMenu(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, CefRefPtr<CefContextMenuParams> params
+					, CefRefPtr<CefMenuModel> model
+					, CefRefPtr<CefRunContextMenuCallback> callback) override;
+				virtual bool OnContextMenuCommand(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, CefRefPtr<CefContextMenuParams> params
+					, int command_id
+					, EventFlags event_flags) override;
+				virtual void OnContextMenuDismissed(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame) override;
+#pragma endregion CefContextMenuHandler
 
-				// CefDisplayHandler methods
-				virtual void OnAddressChange(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, const CefString& url) override;
-				virtual void OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString& title) override;
-				virtual void OnFaviconURLChange(CefRefPtr<CefBrowser> browser, const std::vector<CefString>& icon_urls) override;
-				virtual void OnFullscreenModeChange(CefRefPtr<CefBrowser> browser, bool fullscreen) override;
-				virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser, bool isLoading, bool canGoBack, bool canGoForward) override;
-				virtual bool OnTooltip(CefRefPtr<CefBrowser> browser, CefString& text) override;
-				virtual void OnStatusMessage(CefRefPtr<CefBrowser> browser, const CefString& value) override;
-				virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser, cef_log_severity_t level, const CefString& message, const CefString& source, int line) override;
-				virtual bool OnAutoResize(CefRefPtr<CefBrowser> browser, const CefSize& new_size) override;
-				virtual void OnLoadingProgressChange(CefRefPtr<CefBrowser> browser, double progress) override;
+#pragma region CefDisplayHandler
+				virtual void OnAddressChange(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, const CefString& url) override;
+				virtual void OnTitleChange(CefRefPtr<CefBrowser> browser
+					, const CefString& title) override;
+				virtual void OnFaviconURLChange(CefRefPtr<CefBrowser> browser
+					, const std::vector<CefString>& icon_urls) override;
+				virtual void OnFullscreenModeChange(CefRefPtr<CefBrowser> browser
+					, bool fullscreen) override;
+				virtual void OnLoadingStateChange(CefRefPtr<CefBrowser> browser
+					, bool isLoading
+					, bool canGoBack
+					, bool canGoForward) override;
+				virtual bool OnTooltip(CefRefPtr<CefBrowser> browser
+					, CefString& text) override;
+				virtual void OnStatusMessage(CefRefPtr<CefBrowser> browser
+					, const CefString& value) override;
+				virtual bool OnConsoleMessage(CefRefPtr<CefBrowser> browser
+					, cef_log_severity_t level
+					, const CefString& message
+					, const CefString& source
+					, int line) override;
+				virtual bool OnAutoResize(CefRefPtr<CefBrowser> browser
+					, const CefSize& new_size) override;
+				virtual void OnLoadingProgressChange(CefRefPtr<CefBrowser> browser
+					, double progress) override;
+#pragma endregion CefDisplayHandler
 
-				// CefLifeSpanHandler methods
+#pragma region CefLifeSpanHandler
 				virtual bool OnBeforePopup(CefRefPtr<CefBrowser> browser,
 					CefRefPtr<CefFrame> frame,
 					const CefString& target_url,
@@ -245,11 +299,27 @@ namespace PFD
 				virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) override;
 				virtual bool DoClose(CefRefPtr<CefBrowser> browser) override;
 				virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) override;
+#pragma endregion CefLifeSpanHandler
 
-				// CefLoadHandler methods
-				virtual void OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type) override;
-				virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode) override;
-				virtual void OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, ErrorCode errorCode, const CefString& errorText, const CefString& failedUrl) override;
+#pragma region CefLoadHandler
+				virtual void OnLoadStart(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, TransitionType transition_type) override;
+				virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, int httpStatusCode) override;
+				virtual void OnLoadError(CefRefPtr<CefBrowser> browser
+					, CefRefPtr<CefFrame> frame
+					, ErrorCode errorCode
+					, const CefString& errorText
+					, const CefString& failedUrl) override;
+#pragma endregion CefLoadHandler
+
+			private:
+				CefRefPtr<CefBrowser> m_browser;
+				int m_browserId;
+				Widget* m_pWidget = nullptr;
+				IMPLEMENT_REFCOUNTING(ClientHandler);
 			};
 		}	// namespace WebView
 	}	// namespace GUI

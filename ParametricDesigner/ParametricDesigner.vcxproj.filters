@@ -30,10 +30,10 @@
     <ClInclude Include="EnumID.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTreePage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WebView\ClientHandler.h">
+      <Filter>WebView</Filter>
+    </ClInclude>
+    <ClInclude Include="WebView\Widget.h">
       <Filter>WebView</Filter>
     </ClInclude>
   </ItemGroup>
@@ -46,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="WebView\ClientHandler.cpp">
       <Filter>WebView</Filter>
+    </ClCompile>
+    <ClCompile Include="WebView\Widget.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
