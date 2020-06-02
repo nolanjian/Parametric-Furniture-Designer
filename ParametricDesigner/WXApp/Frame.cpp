@@ -39,21 +39,23 @@ namespace PFD
 
 			CreateStatusBar();
 			SetStatusText("Parametric Designer CopyRight");
-			wxGridSizer* topsizer = new wxGridSizer(2, 2, 1, 1);
 
-			WebView::Widget* pWebView = new WebView::Widget(this, "");
-			topsizer->Add(pWebView);
+			wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
+			topSizer->SetMinSize(wxSize(1208, 1000));
 
-			topsizer->SetMinSize(wxSize(1208, 1000));
-			topsizer->SetHGap(FromDIP(1));
-			topsizer->SetVGap(FromDIP(1));
+			WebView::Widget* pToolbar = new WebView::Widget(this, "");
+			topSizer->Add(pToolbar);
+
+			wxBoxSizer* pViewBar = new wxBoxSizer(wxHORIZONTAL);
+			topSizer->Add(pViewBar);
+
+			WebView::Widget* pLeftView = new WebView::Widget(this, "");
+			pViewBar->Add(pLeftView);
+
 			Init3DWindow();
+			pViewBar->Add(m_p3DWindow);
 
-			topsizer->Add(m_p3DWindow);
-
-
-
-			SetSizer(topsizer);
+			SetSizer(topSizer);
 		}
 
 		void Frame::OnClose(wxCloseEvent& event)
