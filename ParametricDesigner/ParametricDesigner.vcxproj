@@ -93,8 +93,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\spdlog;D:\Library\wxBuild\debugSingle;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>spdlogd.lib;UTILS.lib;osgd.lib;SceneManager.lib;PFDConfig.lib;wxmsw31ud.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\library\wxBuild\lib_dll;D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\spdlog;D:\Library\wxBuild\debugSingle;D:\library\Parametric-Furniture-Designer\cef;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>spdlogd.lib;UTILS.lib;osgd.lib;SceneManager.lib;PFDConfig.lib;wxmsw31ud.lib;libcef.lib;libcef_dll_wrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -145,14 +145,19 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="EnumID.h" />
     <ClInclude Include="Frame.h" />
+    <ClInclude Include="WebView\CefHelper.h" />
     <ClInclude Include="WebView\ClientHandler.h" />
+    <ClInclude Include="WebView\WebApp.h" />
     <ClInclude Include="WebView\Widget.h" />
     <ClInclude Include="WXIncluding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Frame.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="WebView\CefHelper.cpp" />
     <ClCompile Include="WebView\ClientHandler.cpp" />
+    <ClCompile Include="WebView\WebApp.cpp" />
     <ClCompile Include="WebView\Widget.cpp" />
   </ItemGroup>
   <ItemGroup>

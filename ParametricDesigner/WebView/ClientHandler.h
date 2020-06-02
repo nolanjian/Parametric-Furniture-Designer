@@ -3,7 +3,7 @@
 #include <include/cef_client.h>
 #include <include/cef_drag_handler.h>
 #include <include/cef_drag_data.h>
-#include "Widget.h"
+//#include "Widget.h"
 
 namespace PFD
 {
@@ -11,6 +11,8 @@ namespace PFD
 	{
 		namespace WebView
 		{
+			//class Widget;
+
 			class ClientHandler
 #pragma region Derived
 				: public CefClient
@@ -32,10 +34,10 @@ namespace PFD
 			{
 			public:
 				ClientHandler() {};
-				ClientHandler(Widget* pWidget);
+				ClientHandler(void* pWidget);
 				virtual ~ClientHandler();
 
-				void SetWidget(Widget* pWidget);
+				void SetWidget(void* pWidget);
 				CefRefPtr<CefBrowser> GetBrowser();
 
 				typedef cef_drag_operations_mask_t DragOperationsMask;
@@ -317,8 +319,8 @@ namespace PFD
 
 			private:
 				CefRefPtr<CefBrowser> m_browser;
-				int m_browserId;
-				Widget* m_pWidget = nullptr;
+				int m_browserId = 0;
+				//Widget* m_pWidget = nullptr;
 				IMPLEMENT_REFCOUNTING(ClientHandler);
 			};
 		}	// namespace WebView

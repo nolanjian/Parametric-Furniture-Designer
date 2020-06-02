@@ -10,10 +10,13 @@ namespace PFD
 			{
 			}
 
-			Widget::Widget(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxValidator& validator, const wxString& name)
+			Widget::Widget(wxWindow* parent, const std::string& utf8URL, wxWindowID id, const wxPoint& pos, const wxSize& size
+				, long style, const wxValidator& validator, const wxString& name)
 				: wxControl(parent, id, pos, size, style, validator, name)
+				, m_utf8URL(utf8URL)
 			{
-				Bind(wxEVT_SIZE, &Widget::OnSize, this);
+				InitCEF();
+				InitEvents();
 			}
 
 			Widget::~Widget()
@@ -37,6 +40,59 @@ namespace PFD
 				CefString cefStrURL(utf8URL);
 				pCefFrame->LoadURL(cefStrURL);
 				return true;
+			}
+
+			void Widget::CloseCefBrowser()
+			{
+				CefRefPtr<CefBrowser> browser = m_clientHandler->GetBrowser();
+				if (browser.get()) {
+					browser->GetHost()->CloseBrowser(true);
+				}
+			}
+
+			void Widget::RunScript(const std::string& utf8Script)
+			{
+				if (!m_clientHandler)
+				{
+					return;
+				}
+				CefRefPtr<CefBrowser> pCefBrowser = m_clientHandler->GetBrowser();
+				if (!pCefBrowser)
+				{
+					return;
+				}
+				CefRefPtr<CefFrame> pCefFrame = pCefBrowser->GetMainFrame();
+				if (!pCefFrame)
+				{
+					return;
+				}
+				pCefFrame->ExecuteJavaScript(utf8Script, "", 0);
+			}
+
+			void Widget::InitCEF()
+			{
+				m_clientHandler = new ClientHandler(this);
+
+				CefBrowserSettings browsersettings;
+				CefWindowInfo info;
+
+				wxRect rect = GetRect();
+				RECT rct;
+				rct.left = rect.GetLeft();
+				rct.right = rect.GetRight();
+				rct.top = rect.GetTop();
+				rct.bottom = rect.GetBottom();
+				info.SetAsChild(GetHWND(), rct);
+
+				CefBrowserHost::CreateBrowser(info
+					, static_cast<CefRefPtr<CefClient>>(m_clientHandler)
+					, m_utf8URL, browsersettings
+					, nullptr, nullptr);
+			}
+
+			void Widget::InitEvents()
+			{
+				Bind(wxEVT_SIZE, &Widget::OnSize, this);
 			}
 
 			void Widget::OnSize(wxSizeEvent& event)

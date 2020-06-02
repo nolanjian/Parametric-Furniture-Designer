@@ -6,8 +6,8 @@ namespace PFD
 	{
 		namespace WebView
 		{
-			ClientHandler::ClientHandler(Widget* pWidget)
-				:m_pWidget(pWidget)
+			ClientHandler::ClientHandler(void* pWidget)
+				//:m_pWidget(pWidget)
 			{
 
 			}
@@ -16,9 +16,9 @@ namespace PFD
 			{
 			}
 
-			void ClientHandler::SetWidget(Widget* pWidget)
+			void ClientHandler::SetWidget(void* pWidget)
 			{
-				m_pWidget = pWidget;
+				//m_pWidget = pWidget;
 			}
 
 			CefRefPtr<CefBrowser> ClientHandler::GetBrowser()
@@ -374,6 +374,11 @@ namespace PFD
 
 			void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 			{
+				if (browser && browser->GetIdentifier() == m_browserId)
+				{
+					browser = nullptr;
+					m_browserId = 0;
+				}
 			}
 
 			void ClientHandler::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type)
