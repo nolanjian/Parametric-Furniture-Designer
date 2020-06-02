@@ -7,9 +7,6 @@
     <Filter Include="WXApp">
       <UniqueIdentifier>{a43e025b-52ba-4ab2-b610-ee6ef9280d66}</UniqueIdentifier>
     </Filter>
-    <Filter Include="WebCode">
-      <UniqueIdentifier>{7d6da2a7-9e6f-4155-8736-e65a1d83445e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WebView\ClientHandler.h">
