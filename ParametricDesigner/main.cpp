@@ -1,6 +1,6 @@
-#include "WXIncluding.h"
+#include "WXApp/WXIncluding.h"
 #include "Utils.h"
-#include "App.h"
+#include "WXApp/App.h"
 #include "WebView/CefHelper.h"
 
 class LifeHelper

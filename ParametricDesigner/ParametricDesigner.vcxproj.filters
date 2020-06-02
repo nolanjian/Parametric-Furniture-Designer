@@ -1,35 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="WebView">
       <UniqueIdentifier>{b1d59740-4187-475f-aa30-7389fca0acf5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="WXApp">
+      <UniqueIdentifier>{a43e025b-52ba-4ab2-b610-ee6ef9280d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WebCode">
+      <UniqueIdentifier>{7d6da2a7-9e6f-4155-8736-e65a1d83445e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WXIncluding.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Frame.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EnumID.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WebView\ClientHandler.h">
       <Filter>WebView</Filter>
     </ClInclude>
@@ -42,14 +24,20 @@
     <ClInclude Include="WebView\WebApp.h">
       <Filter>WebView</Filter>
     </ClInclude>
+    <ClInclude Include="WXApp\App.h">
+      <Filter>WXApp</Filter>
+    </ClInclude>
+    <ClInclude Include="WXApp\EnumID.h">
+      <Filter>WXApp</Filter>
+    </ClInclude>
+    <ClInclude Include="WXApp\Frame.h">
+      <Filter>WXApp</Filter>
+    </ClInclude>
+    <ClInclude Include="WXApp\WXIncluding.h">
+      <Filter>WXApp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Frame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WebView\ClientHandler.cpp">
       <Filter>WebView</Filter>
     </ClCompile>
@@ -62,8 +50,12 @@
     <ClCompile Include="WebView\WebApp.cpp">
       <Filter>WebView</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="WXApp\App.cpp">
+      <Filter>WXApp</Filter>
+    </ClCompile>
+    <ClCompile Include="WXApp\Frame.cpp">
+      <Filter>WXApp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

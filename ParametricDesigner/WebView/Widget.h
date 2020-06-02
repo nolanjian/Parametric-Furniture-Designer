@@ -1,5 +1,5 @@
 #pragma once
-#include "../WXIncluding.h"
+#include "../WXApp/WXIncluding.h"
 #include "ClientHandler.h"
 #include <string>
 

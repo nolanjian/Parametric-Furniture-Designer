@@ -1,6 +1,6 @@
 #include "Frame.h"
 #include "EnumID.h"
-#include "WebView/Widget.h"
+#include "../WebView/Widget.h"
 
 wxBEGIN_EVENT_TABLE(PFD::GUI::Frame, wxFrame)
 	EVT_CLOSE(PFD::GUI::Frame::OnClose)

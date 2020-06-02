@@ -142,23 +142,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
-    <ClInclude Include="EnumID.h" />
-    <ClInclude Include="Frame.h" />
     <ClInclude Include="WebView\CefHelper.h" />
     <ClInclude Include="WebView\ClientHandler.h" />
     <ClInclude Include="WebView\WebApp.h" />
     <ClInclude Include="WebView\Widget.h" />
-    <ClInclude Include="WXIncluding.h" />
+    <ClInclude Include="WXApp\App.h" />
+    <ClInclude Include="WXApp\EnumID.h" />
+    <ClInclude Include="WXApp\Frame.h" />
+    <ClInclude Include="WXApp\WXIncluding.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WebView\CefHelper.cpp" />
     <ClCompile Include="WebView\ClientHandler.cpp" />
     <ClCompile Include="WebView\WebApp.cpp" />
     <ClCompile Include="WebView\Widget.cpp" />
+    <ClCompile Include="WXApp\App.cpp" />
+    <ClCompile Include="WXApp\Frame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
