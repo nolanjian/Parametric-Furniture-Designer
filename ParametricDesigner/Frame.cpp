@@ -1,6 +1,6 @@
 #include "Frame.h"
 #include "EnumID.h"
-#include "WebView/WebView.h"
+#include "WebView/Widget.h"
 
 wxBEGIN_EVENT_TABLE(PFD::GUI::Frame, wxFrame)
 	EVT_CLOSE(PFD::GUI::Frame::OnClose)
@@ -41,7 +41,7 @@ namespace PFD
 			SetStatusText("Parametric Designer CopyRight");
 			wxGridSizer* topsizer = new wxGridSizer(2, 2, 1, 1);
 
-			WebView* pWebView = new WebView(this);
+			WebView::Widget* pWebView = new WebView::Widget(this, "");
 			topsizer->Add(pWebView);
 
 			topsizer->SetMinSize(wxSize(1208, 1000));

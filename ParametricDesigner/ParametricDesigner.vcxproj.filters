@@ -36,6 +36,12 @@
     <ClInclude Include="WebView\Widget.h">
       <Filter>WebView</Filter>
     </ClInclude>
+    <ClInclude Include="WebView\CefHelper.h">
+      <Filter>WebView</Filter>
+    </ClInclude>
+    <ClInclude Include="WebView\WebApp.h">
+      <Filter>WebView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -48,6 +54,15 @@
       <Filter>WebView</Filter>
     </ClCompile>
     <ClCompile Include="WebView\Widget.cpp">
+      <Filter>WebView</Filter>
+    </ClCompile>
+    <ClCompile Include="WebView\CefHelper.cpp">
+      <Filter>WebView</Filter>
+    </ClCompile>
+    <ClCompile Include="WebView\WebApp.cpp">
+      <Filter>WebView</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
