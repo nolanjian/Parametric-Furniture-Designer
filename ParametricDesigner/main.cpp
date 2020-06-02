@@ -19,13 +19,14 @@ private:
 	std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
 };
 
+LifeHelper lifeHelper;
+
 int WINAPI WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine,
 	_In_ int nShowCmd)
 {
-	LifeHelper lifeHelper;
 	std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
 	wxDISABLE_DEBUG_SUPPORT();
 
