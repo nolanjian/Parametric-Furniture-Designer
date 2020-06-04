@@ -32,7 +32,10 @@ namespace PFD
 				return false;
 			}
 
-			Frame* pFrame = new Frame(PFD::Config::IProgramConfig::GetInstance()->GetString("AppTitle"), wxDefaultPosition, wxDefaultSize);
+			nlohmann::json jsonGUI = PFD::Config::IProgramConfig::GetInstance()->GetJson("GUI");
+			std::string utf8AppTitle = jsonGUI["AppTitle"].get<std::string>();
+
+			Frame* pFrame = new Frame(utf8AppTitle, wxDefaultPosition, wxDefaultSize);
 			pFrame->Show(true);
 
 			return true;

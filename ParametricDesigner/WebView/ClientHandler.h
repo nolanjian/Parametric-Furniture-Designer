@@ -320,7 +320,7 @@ namespace PFD
 			private:
 				CefRefPtr<CefBrowser> m_browser;
 				int m_browserId = 0;
-				//Widget* m_pWidget = nullptr;
+				void* m_pWidget = nullptr;
 				IMPLEMENT_REFCOUNTING(ClientHandler);
 			};
 		}	// namespace WebView

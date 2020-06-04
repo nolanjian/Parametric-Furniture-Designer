@@ -1,5 +1,15 @@
 {
-    "AppTitle": "Parametric Designer",
+    "GUI": {
+        "AppTitle": "Parametric Designer",
+        "MainFrameMinSize": {
+            "X": 1500,
+            "Y": 1000
+        },
+        "3DWindowMinSize": {
+            "X": 800,
+            "Y": 800
+        }
+    },
     "VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\VERTEX.vert",
     "FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\FRAGMENT.frag",
     "BackgroundColor3D": {

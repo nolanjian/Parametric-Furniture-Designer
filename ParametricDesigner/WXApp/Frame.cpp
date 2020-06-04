@@ -1,6 +1,7 @@
 #include "Frame.h"
 #include "EnumID.h"
 #include "../WebView/Widget.h"
+#include "../Config/IProgramConfig.h"
 
 wxBEGIN_EVENT_TABLE(PFD::GUI::Frame, wxFrame)
 	EVT_CLOSE(PFD::GUI::Frame::OnClose)
@@ -12,17 +13,27 @@ wxBEGIN_EVENT_TABLE(PFD::GUI::Frame, wxFrame)
 	EVT_MENU(ID_EXIT_PROGRAM, PFD::GUI::Frame::OnExit)
 wxEND_EVENT_TABLE()
 
+//#define USE_WEB_VIEW_MENU_BAR
+
 namespace PFD
 {
 	namespace GUI
 	{
 		Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size)
-			: wxFrame(nullptr, wxID_ANY, title, pos, size)
+			: wxFrame(nullptr, wxID_ANY, title, pos, size
+				//, wxRESIZE_BORDER | wxCLIP_CHILDREN
+			)
 		{
 			SetIcon(wxICON(sample));
+			nlohmann::json jsonGUI = PFD::Config::IProgramConfig::GetInstance()->GetJson("GUI");
+			nlohmann::json jsonMainFrameMinSize = jsonGUI["MainFrameMinSize"];
+			int nX = jsonMainFrameMinSize["X"].get<int>();
+			int nY = jsonMainFrameMinSize["Y"].get<int>();
+			SetMinSize(wxSize(nX, nY));
 
-			SetMinSize(wxSize(1500, 1000));
+#ifdef USE_WEB_VIEW_MENU_BAR
 
+#else
 			wxMenuBar* menu_bar = new wxMenuBar;
 			SetMenuBar(menu_bar);
 
@@ -36,24 +47,32 @@ namespace PFD
 			wxMenu* help_menu = new wxMenu;
 			menu_bar->Append(help_menu, "&Help");
 			help_menu->Append(LAYOUT_ABOUT, "&About", "About layout demo...");
+#endif // USE_NATIVE_MENU_BAR
 
 			CreateStatusBar();
 			SetStatusText("Parametric Designer CopyRight");
 
 			wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
-			topSizer->SetMinSize(wxSize(1208, 1000));
+			//topSizer->SetMinSize(wxSize(1208, 1000));
 
 			WebView::Widget* pToolbar = new WebView::Widget(this, "");
 			topSizer->Add(pToolbar);
+			pToolbar->SetMinSize(wxSize(nX, 200));
 
 			wxBoxSizer* pViewBar = new wxBoxSizer(wxHORIZONTAL);
 			topSizer->Add(pViewBar);
+			pViewBar->SetMinSize(wxSize(300, 900));
 
 			WebView::Widget* pLeftView = new WebView::Widget(this, "");
 			pViewBar->Add(pLeftView);
 
+#ifdef USING_WEBGL
+			WebView::Widget* pWebGLView = new WebView::Widget(this, "");
+			pViewBar->Add(pWebGLView);
+#else
 			Init3DWindow();
 			pViewBar->Add(m_p3DWindow);
+#endif // USING_WEBGL
 
 			SetSizer(topSizer);
 		}
@@ -118,7 +137,13 @@ namespace PFD
 
 		void Frame::Init3DWindow()
 		{
-			m_p3DWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(FromDIP(900), FromDIP(900)));
+			nlohmann::json jsonGUI = PFD::Config::IProgramConfig::GetInstance()->GetJson("GUI");
+			nlohmann::json jsonMainFrameMinSize = jsonGUI["3DWindowMinSize"];
+			int nX = jsonMainFrameMinSize["X"].get<int>();
+			int nY = jsonMainFrameMinSize["Y"].get<int>();
+			SetMinSize(wxSize(nX, nY));
+
+			m_p3DWindow = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(nX, nY));
 
 			if (!m_p3DWindow)
 			{

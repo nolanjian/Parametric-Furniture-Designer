@@ -7,7 +7,7 @@ namespace PFD
 		namespace WebView
 		{
 			ClientHandler::ClientHandler(void* pWidget)
-				//:m_pWidget(pWidget)
+				: m_pWidget(pWidget)
 			{
 
 			}
@@ -18,7 +18,7 @@ namespace PFD
 
 			void ClientHandler::SetWidget(void* pWidget)
 			{
-				//m_pWidget = pWidget;
+				m_pWidget = pWidget;
 			}
 
 			CefRefPtr<CefBrowser> ClientHandler::GetBrowser()
@@ -407,6 +407,6 @@ namespace PFD
 				return false;
 			}
 
-}	// namespace WebView
+		}	// namespace WebView
 	}	// namespace GUI
 }	// namespace PFD
