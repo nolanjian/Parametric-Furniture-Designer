@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   Frame.h
+ * \brief  Frame Class For PFD App
+ * 
+ * \author NolanJian
+ * \date   June 2020
+ *********************************************************************/
+
 #pragma once
 #include "WXIncluding.h"
 #include "IManager.h"
@@ -7,6 +15,12 @@ namespace PFD
 {
 	namespace GUI
 	{
+		/**
+		 * \brief  Frame Class Define
+		 * \author NolanJian
+		 * \date   2020/06/09
+		 *  
+		 * */
 		class Frame : public wxFrame
 		{
 		public:

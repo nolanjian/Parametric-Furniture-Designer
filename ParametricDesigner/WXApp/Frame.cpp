@@ -88,6 +88,7 @@ namespace PFD
 		{
 		}
 
+
 		void Frame::OnAbout(wxCommandEvent& event)
 		{
 			wxMessageBox("About Parametric Designer", "About");
