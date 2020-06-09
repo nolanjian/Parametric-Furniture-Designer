@@ -12,6 +12,7 @@ namespace PFD
 			CefHelper::~CefHelper()
 			{
 				CefShutdown();
+				CefQuitMessageLoop();
 			}
 
 			CefHelper& CefHelper::GetGlobal()

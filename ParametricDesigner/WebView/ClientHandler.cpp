@@ -374,6 +374,7 @@ namespace PFD
 
 			void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser)
 			{
+				browser->GetHost()->CloseBrowser(true);
 				if (browser && browser->GetIdentifier() == m_browserId)
 				{
 					browser = nullptr;

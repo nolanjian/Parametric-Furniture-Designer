@@ -25,7 +25,7 @@ namespace PFD
 		{
 		public:
 			Frame(const wxString& title, const wxPoint& pos, const wxSize& size);
-
+			virtual ~Frame();
 			// event handlers (these functions should _not_ be virtual)
 			void OnClose(wxCloseEvent& event);
 			void OnTimer(wxTimerEvent& event);

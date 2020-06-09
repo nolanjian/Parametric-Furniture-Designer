@@ -80,6 +80,10 @@ namespace PFD
 			SetSizer(topSizer);
 		}
 
+		Frame::~Frame()
+		{
+		}
+
 		void Frame::OnClose(wxCloseEvent& event)
 		{
 			// TODO

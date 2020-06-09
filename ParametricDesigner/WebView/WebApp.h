@@ -16,6 +16,7 @@ namespace PFD
 			{
 			public:
 				WebApp();
+				virtual ~WebApp();
 
 				virtual void OnBeforeCommandLineProcessing(
 					const CefString& process_type,
