@@ -22,8 +22,11 @@ namespace PFD
 		Frame::Frame(const wxString& title, const wxPoint& pos, const wxSize& size)
 			: wxFrame(nullptr, wxID_ANY, title, pos, size
 				//, wxRESIZE_BORDER | wxCLIP_CHILDREN
+				, wxDEFAULT_FRAME_STYLE | wxMAXIMIZE
 			)
 		{
+			wxRect rc1 = wxGetClientDisplayRect();
+
 			SetIcon(wxICON(sample));
 			nlohmann::json jsonGUI = PFD::Config::IProgramConfig::GetInstance()->GetJson("GUI");
 			nlohmann::json jsonMainFrameMinSize = jsonGUI["MainFrameMinSize"];
@@ -57,7 +60,7 @@ namespace PFD
 
 			WebView::Widget* pToolbar = new WebView::Widget(this, "");
 			topSizer->Add(pToolbar);
-			pToolbar->SetMinSize(wxSize(nX, 200));
+			pToolbar->SetMaxSize(wxSize(rc1.width, 200));
 
 			wxBoxSizer* pViewBar = new wxBoxSizer(wxHORIZONTAL);
 			topSizer->Add(pViewBar);
