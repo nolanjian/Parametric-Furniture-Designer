@@ -1,33 +1,12 @@
-﻿#include "Exporter.h"
+#include "ExporterImp.h"
 
 namespace PFD
 {
-	namespace GLTF
-	{
-
-		Exporter::Exporter()
-		{
-		}
-
-		Exporter::~Exporter()
-		{
-		}
-
-		bool Exporter::Export(osg::ref_ptr<osg::Group> scene, const std::wstring& path)
-		{
-			return false;
-		}
-
-		bool Exporter::Export(osg::ref_ptr<osg::Group> scene, std::string& utf8Json)
-		{
-			return false;
-		}
-
-		bool Exporter::Export(osg::ref_ptr<osg::Group> scene)
-		{
-			return false;
-		}
-
-
-	}
+    namespace GLTF
+    {
+        std::shared_ptr<Exporter> Exporter::Create()
+        {
+            return std::make_shared<ExporterImp>();
+        }
+    }
 }

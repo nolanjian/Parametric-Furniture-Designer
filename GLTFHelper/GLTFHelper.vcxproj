@@ -156,15 +156,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Exporter.h" />
+    <ClInclude Include="ExporterImp.h" />
     <ClInclude Include="GLTFResourceManager.h" />
     <ClInclude Include="IGLTFResourceManager.h" />
     <ClInclude Include="Importer.h" />
+    <ClInclude Include="ImporterImp.h" />
+    <ClInclude Include="PFDGLTFExport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exporter.cpp" />
+    <ClCompile Include="ExporterImp.cpp" />
     <ClCompile Include="GLTFResourceManager.cpp" />
     <ClCompile Include="IGLTFResourceManager.cpp" />
     <ClCompile Include="Importer.cpp" />
+    <ClCompile Include="ImporterImp.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
