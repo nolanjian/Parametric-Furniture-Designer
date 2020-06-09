@@ -58,15 +58,6 @@ SPDLOG_API void set_formatter(std::unique_ptr<spdlog::formatter> formatter);
 // example: spdlog::set_pattern("%Y-%m-%d %H:%M:%S.%e %l : %v");
 SPDLOG_API void set_pattern(std::string pattern, pattern_time_type time_type = pattern_time_type::local);
 
-// enable global backtrace support
-SPDLOG_API void enable_backtrace(size_t n_messages);
-
-// disable global backtrace support
-SPDLOG_API void disable_backtrace();
-
-// call dump backtrace on default logger
-SPDLOG_API void dump_backtrace();
-
 // Set global logging level
 SPDLOG_API void set_level(level::level_enum log_level);
 
@@ -121,50 +112,50 @@ SPDLOG_API spdlog::logger *default_logger_raw();
 
 SPDLOG_API void set_default_logger(std::shared_ptr<spdlog::logger> default_logger);
 
-template<typename... Args>
-inline void log(source_loc source, level::level_enum lvl, string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void log(source_loc source, level::level_enum lvl, const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->log(source, lvl, fmt, args...);
 }
 
-template<typename... Args>
-inline void log(level::level_enum lvl, string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void log(level::level_enum lvl, const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->log(source_loc{}, lvl, fmt, args...);
 }
 
-template<typename... Args>
-inline void trace(string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void trace(const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->trace(fmt, args...);
 }
 
-template<typename... Args>
-inline void debug(string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void debug(const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->debug(fmt, args...);
 }
 
-template<typename... Args>
-inline void info(string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void info(const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->info(fmt, args...);
 }
 
-template<typename... Args>
-inline void warn(string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void warn(const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->warn(fmt, args...);
 }
 
-template<typename... Args>
-inline void error(string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void error(const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->error(fmt, args...);
 }
 
-template<typename... Args>
-inline void critical(string_view_t fmt, const Args &... args)
+template<typename FormatString, typename... Args>
+inline void critical(const FormatString &fmt, const Args &... args)
 {
     default_logger_raw()->critical(fmt, args...);
 }
@@ -216,57 +207,6 @@ inline void critical(const T &msg)
 {
     default_logger_raw()->critical(msg);
 }
-
-#ifdef SPDLOG_WCHAR_TO_UTF8_SUPPORT
-template<typename... Args>
-inline void log(source_loc source, level::level_enum lvl, wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->log(source, lvl, fmt, args...);
-}
-
-template<typename... Args>
-inline void log(level::level_enum lvl, wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->log(lvl, fmt, args...);
-}
-
-template<typename... Args>
-inline void trace(wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->trace(fmt, args...);
-}
-
-template<typename... Args>
-inline void debug(wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->debug(fmt, args...);
-}
-
-template<typename... Args>
-inline void info(wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->info(fmt, args...);
-}
-
-template<typename... Args>
-inline void warn(wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->warn(fmt, args...);
-}
-
-template<typename... Args>
-inline void error(wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->error(fmt, args...);
-}
-
-template<typename... Args>
-inline void critical(wstring_view_t fmt, const Args &... args)
-{
-    default_logger_raw()->critical(fmt, args...);
-}
-
-#endif // SPDLOG_WCHAR_TO_UTF8_SUPPORT
 
 } // namespace spdlog
 
@@ -331,10 +271,6 @@ inline void critical(wstring_view_t fmt, const Args &... args)
 #else
 #define SPDLOG_LOGGER_CRITICAL(logger, ...) (void)0
 #define SPDLOG_CRITICAL(...) (void)0
-#endif
-
-#ifdef SPDLOG_HEADER_ONLY
-#include "spdlog-inl.h"
 #endif
 
 #endif // SPDLOG_H

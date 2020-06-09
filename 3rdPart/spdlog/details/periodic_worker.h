@@ -14,6 +14,7 @@
 #include <functional>
 #include <mutex>
 #include <thread>
+#include <spdlog/common.h>
 namespace spdlog {
 namespace details {
 
@@ -34,7 +35,3 @@ private:
 };
 } // namespace details
 } // namespace spdlog
-
-#ifdef SPDLOG_HEADER_ONLY
-#include "periodic_worker-inl.h"
-#endif

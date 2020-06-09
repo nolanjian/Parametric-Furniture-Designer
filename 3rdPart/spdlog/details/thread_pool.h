@@ -6,6 +6,7 @@
 #include <spdlog/details/log_msg_buffer.h>
 #include <spdlog/details/mpmc_blocking_q.h>
 #include <spdlog/details/os.h>
+#include <spdlog/async_logger.h>
 
 #include <chrono>
 #include <memory>
@@ -114,7 +115,3 @@ private:
 
 } // namespace details
 } // namespace spdlog
-
-#ifdef SPDLOG_HEADER_ONLY
-#include "thread_pool-inl.h"
-#endif

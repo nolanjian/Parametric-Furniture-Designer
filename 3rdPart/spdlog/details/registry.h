@@ -101,12 +101,7 @@ private:
     std::unique_ptr<periodic_worker> periodic_flusher_;
     std::shared_ptr<logger> default_logger_;
     bool automatic_registration_ = true;
-    size_t backtrace_n_messages_ = 0;
 };
 
 } // namespace details
 } // namespace spdlog
-
-#ifdef SPDLOG_HEADER_ONLY
-#include "registry-inl.h"
-#endif

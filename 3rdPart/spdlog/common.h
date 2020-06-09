@@ -9,14 +9,11 @@
 #include <atomic>
 #include <chrono>
 #include <initializer_list>
-#include <memory>
 #include <exception>
 #include <string>
 #include <type_traits>
 #include <functional>
 
-#ifdef SPDLOG_COMPILED_LIB
-#undef SPDLOG_HEADER_ONLY
 #if defined(_WIN32) && defined(SPDLOG_SHARED_LIB)
 #ifdef spdlog_EXPORTS
 #define SPDLOG_API __declspec(dllexport)
@@ -26,31 +23,8 @@
 #else // !defined(_WIN32) || !defined(SPDLOG_SHARED_LIB)
 #define SPDLOG_API
 #endif
-#define SPDLOG_INLINE
-#else // !defined(SPDLOG_COMPILED_LIB)
-#define SPDLOG_API
-#define SPDLOG_HEADER_ONLY
-#define SPDLOG_INLINE inline
-#endif // #ifdef SPDLOG_COMPILED_LIB
 
 #include <spdlog/fmt/fmt.h>
-
-// visual studio upto 2013 does not support noexcept nor constexpr
-#if defined(_MSC_VER) && (_MSC_VER < 1900)
-#define SPDLOG_NOEXCEPT _NOEXCEPT
-#define SPDLOG_CONSTEXPR
-#else
-#define SPDLOG_NOEXCEPT noexcept
-#define SPDLOG_CONSTEXPR constexpr
-#endif
-
-#if defined(__GNUC__) || defined(__clang__)
-#define SPDLOG_DEPRECATED __attribute__((deprecated))
-#elif defined(_MSC_VER)
-#define SPDLOG_DEPRECATED __declspec(deprecated)
-#else
-#define SPDLOG_DEPRECATED
-#endif
 
 // disable thread local on msvc 2013
 #ifndef SPDLOG_NO_TLS
@@ -163,9 +137,9 @@ enum level_enum
     }
 #endif
 
-SPDLOG_API string_view_t &to_string_view(spdlog::level::level_enum l) SPDLOG_NOEXCEPT;
-SPDLOG_API const char *to_short_c_str(spdlog::level::level_enum l) SPDLOG_NOEXCEPT;
-SPDLOG_API spdlog::level::level_enum from_str(const std::string &name) SPDLOG_NOEXCEPT;
+SPDLOG_API string_view_t &to_string_view(spdlog::level::level_enum l) noexcept;
+SPDLOG_API const char *to_short_c_str(spdlog::level::level_enum l) noexcept;
+SPDLOG_API spdlog::level::level_enum from_str(const std::string &name) noexcept;
 
 using level_hasher = std::hash<int>;
 } // namespace level
@@ -198,7 +172,7 @@ class SPDLOG_API spdlog_ex : public std::exception
 public:
     explicit spdlog_ex(std::string msg);
     spdlog_ex(const std::string &msg, int last_errno);
-    const char *what() const SPDLOG_NOEXCEPT override;
+    const char *what() const noexcept override;
 
 private:
     std::string msg_;
@@ -209,14 +183,14 @@ SPDLOG_API void throw_spdlog_ex(std::string msg);
 
 struct source_loc
 {
-    SPDLOG_CONSTEXPR source_loc() = default;
-    SPDLOG_CONSTEXPR source_loc(const char *filename_in, int line_in, const char *funcname_in)
+    constexpr source_loc() = default;
+    constexpr source_loc(const char *filename_in, int line_in, const char *funcname_in)
         : filename{filename_in}
         , line{line_in}
         , funcname{funcname_in}
     {}
 
-    SPDLOG_CONSTEXPR bool empty() const SPDLOG_NOEXCEPT
+    constexpr bool empty() const noexcept
     {
         return line == 0;
     }
@@ -225,22 +199,4 @@ struct source_loc
     const char *funcname{nullptr};
 };
 
-namespace details {
-// make_unique support for pre c++14
-
-#if __cplusplus >= 201402L // C++14 and beyond
-using std::make_unique;
-#else
-template<typename T, typename... Args>
-std::unique_ptr<T> make_unique(Args &&... args)
-{
-    static_assert(!std::is_array<T>::value, "arrays not supported");
-    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
-}
-#endif
-} // namespace details
 } // namespace spdlog
-
-#ifdef SPDLOG_HEADER_ONLY
-#include "common-inl.h"
-#endif
