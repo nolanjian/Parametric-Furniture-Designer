@@ -169,8 +169,7 @@ namespace PFD
 		{
 			try
 			{
-
-				auto pImporter = std::make_shared<PFD::GLTF::Importer>();
+				auto pImporter = PFD::GLTF::Importer::Create();
 				if (!pImporter)
 				{
 					logger->error("Create GLTF importer fail");
@@ -198,7 +197,7 @@ namespace PFD
 
 		bool Manager::ImportScene(const std::string& utf8Json)
 		{
-			auto pImporter = std::make_shared<PFD::GLTF::Importer>();
+			auto pImporter = PFD::GLTF::Importer::Create();
 			if (!pImporter)
 			{
 				logger->error("Create GLTF importer fail");
@@ -217,7 +216,7 @@ namespace PFD
 
 		bool Manager::ExportScene(const std::wstring& path)
 		{
-			auto pExporter = std::make_shared<PFD::GLTF::Exporter>();
+			auto pExporter = PFD::GLTF::Exporter::Create();
 			if (pExporter)
 			{
 				osg::Node* pData = m_p3DViewer->getSceneData();
@@ -237,7 +236,7 @@ namespace PFD
 
 		bool Manager::ExportScene(std::string& utf8Json)
 		{
-			auto pExporter = std::make_shared<PFD::GLTF::Exporter>();
+			auto pExporter = PFD::GLTF::Exporter::Create();
 			if (pExporter)
 			{
 				osg::Node* pData = m_p3DViewer->getSceneData();

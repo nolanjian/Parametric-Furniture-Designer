@@ -24,7 +24,7 @@ TEST(GLTFHelper, Import1) {
 
 					std::cout << p.string() << std::endl;
 
-					std::shared_ptr<Importer> pImporter = std::make_shared<Importer>();
+					std::shared_ptr<Importer> pImporter = Importer::Create();
 					auto scene = pImporter->Load(p.wstring());
 					bool bCheck = scene.get() != nullptr;
 					EXPECT_EQ(bCheck, true);
