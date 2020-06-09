@@ -1,11 +1,17 @@
-﻿#pragma once
+﻿/*****************************************************************//**
+ * \file   Manager.h
+ * \brief  Scene Manager Implement
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/09
+ * 
+ *********************************************************************/
+#pragma once
 
 #include "IManager.h"
-#include "windows.h"
 #include "OSGIncluding.h"
-#include "STLIncluding.h"
 #include "Utils.h"
-#include "string.h"
 
 namespace PFD
 {
@@ -17,13 +23,6 @@ namespace PFD
 		public:
 			explicit Manager();
 			virtual ~Manager();
-
-			Manager(const Manager&) = delete;
-			Manager(const Manager&&) = delete;
-			Manager& operator= (const Manager&) = delete;
-			Manager& operator= (const Manager&&) = delete;
-
-
 
 			virtual void SetHWND(HWND hwnd) override;
 			virtual HWND GetHWND() override;

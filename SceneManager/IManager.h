@@ -1,4 +1,13 @@
-﻿#pragma once
+﻿/*****************************************************************//**
+ * \file   IManager.h
+ * \brief  Scene Manager for 3D window
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/09
+ * 
+ *********************************************************************/
+#pragma once
 #include "SceneManagerExport.h"
 #include "STLIncluding.h"
 #include "windows.h"
@@ -40,6 +49,13 @@ namespace PFD
 			/// Some OpenGL Options
 			virtual bool EnableDepthTest(bool bEnable = true) = 0;
 			virtual bool EnableBlend(bool bEnable = true) = 0;
+		
+		protected:
+			IManager() {}
+			IManager(const IManager&) = delete;
+			IManager(const IManager&&) = delete;
+			IManager& operator= (const IManager&) = delete;
+			IManager& operator= (const IManager&&) = delete;
 		};
 	}
 }
