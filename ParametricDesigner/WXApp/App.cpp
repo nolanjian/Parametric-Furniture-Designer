@@ -5,11 +5,7 @@
 #include "Utils.h"
 #include "spdlog/spdlog.h"
 
-#if PFD_USE_WX_MAIN
-wxIMPLEMENT_APP(PFD::GUI::App);
-#else
 wxIMPLEMENT_APP_NO_MAIN(PFD::GUI::App);
-#endif // PFD_USE_WX_MAIN
 
 namespace PFD
 {
