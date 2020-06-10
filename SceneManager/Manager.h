@@ -17,7 +17,6 @@ namespace PFD
 {
 	namespace Scene
 	{
-
 		class Manager : public IManager
 		{
 		public:
@@ -48,7 +47,7 @@ namespace PFD
 			bool OpenScene(osg::ref_ptr<osg::Group> pScene);
 			osg::Vec4 GetBackgroundColor3D();
 			bool ConfigureShaders(osg::StateSet* stateSet);
-			void InitViewer(osg::ref_ptr<osg::GraphicsContext> gc);
+			void InitViewer();
 			void RenderThread();
 
 		protected:

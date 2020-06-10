@@ -328,7 +328,7 @@ namespace PFD
 				return std::to_string(nVal);
 			}
 
-			throw new std::exception("unhandled data type");
+			throw std::exception("unhandled data type");
 		}
 
 		bool Parametric::GetFormulaPairFromString(const std::string& str, std::pair<std::string, std::string>& pair)

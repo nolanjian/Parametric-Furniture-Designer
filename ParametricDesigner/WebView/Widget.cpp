@@ -21,7 +21,6 @@ namespace PFD
 
 			Widget::~Widget()
 			{
-				m_clientHandler = nullptr;
 			}
 
 			bool Widget::LoadURL(const std::string& utf8URL)

@@ -8,8 +8,6 @@ namespace PFD
 {
 	namespace Scene
 	{
-
-
 		Manager::Manager()
 		{
 
@@ -32,27 +30,22 @@ namespace PFD
 
 		bool Manager::BeginRender()
 		{
-			if (!StopRender())
+			try
 			{
-				logger->error("Can Stop Render before");
+				if (!StopRender())
+				{
+					throw std::exception("Can`t Stop Render before");
+				}
+
+				InitViewer();
+				m_renderThread = std::thread(std::bind(&Manager::RenderThread, this));
+				return true;
+			}
+			catch (const std::exception& ex)
+			{
+				logger->error(ex.what());
 				return false;
 			}
-
-			if (m_hwnd == NULL)
-			{
-				assert(m_hwnd);
-				logger->error("hwnd is null");
-				return false;
-			}
-
-			osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits(nullptr);
-			traits->inheritedWindowData = new osgViewer::GraphicsWindowWin32::WindowData(m_hwnd);
-			traits->doubleBuffer = true;
-
-			InitViewer(osg::GraphicsContext::createGraphicsContext(traits.get()));
-
-			m_renderThread = std::thread(std::bind(&Manager::RenderThread, this));
-			return true;
 		}
 
 		bool Manager::StopRender()
@@ -293,17 +286,38 @@ namespace PFD
 			return true;
 		}
 
-		void Manager::InitViewer(osg::ref_ptr<osg::GraphicsContext> gc)
+		void Manager::InitViewer()
 		{
-			m_p3DViewer = new osgViewer::Viewer;
-			osg::Camera* cam = m_p3DViewer->getCamera();
-			cam->setProjectionMatrix(osg::Matrix::perspective(30., (double)gc->getTraits()->width / (double)gc->getTraits()->height, 1., 100.));
-			cam->setClearColor(GetBackgroundColor3D());
-			cam->setGraphicsContext(gc);
-			cam->setViewport(new osg::Viewport(0, 0, gc->getTraits()->width, gc->getTraits()->height));
-			cam->setDrawBuffer(GL_BACK);
-			cam->setReadBuffer(GL_BACK);
+			if (m_hwnd == NULL)
+			{
+				throw std::exception("hwnd is null");
+			}
 
+			osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits(nullptr);
+			traits->inheritedWindowData = new osgViewer::GraphicsWindowWin32::WindowData(m_hwnd);
+			traits->doubleBuffer = true;
+			osg::GraphicsContext* pGraphicsContext = osg::GraphicsContext::createGraphicsContext(traits.get());
+			if (!pGraphicsContext)
+			{
+				throw std::exception("GraphicsContext fail");
+			}
+
+			int nWidth = traits->width;
+			int nHeight = traits->height;
+			m_p3DViewer = new osgViewer::Viewer;
+			osg::Camera* pCamera = m_p3DViewer->getCamera();
+			pCamera->setGraphicsContext(pGraphicsContext);
+			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)nWidth / (double)nHeight, 1., 100.));
+			pCamera->setClearColor(GetBackgroundColor3D());
+			pCamera->setViewport(new osg::Viewport(0, 0, nWidth, nHeight));
+			pCamera->setDrawBuffer(GL_BACK);
+			pCamera->setReadBuffer(GL_BACK);
+
+#ifdef OSG_GL_FIXED_FUNCTION_AVAILABLE
+			/**
+			 * According to compile Options, these code no need to be built
+			 * OSG_GL_FIXED_FUNCTION_AVAILABLE is not allow.
+			 */
 			osgViewer::Viewer::Windows windows;
 			m_p3DViewer->getWindows(windows);
 			for (osgViewer::Viewer::Windows::iterator itr = windows.begin();
@@ -314,10 +328,12 @@ namespace PFD
 				s->setUseModelViewAndProjectionUniforms(true);
 				s->setUseVertexAttributeAliasing(true);
 			}
+#endif // OSG_GL_FIXED_FUNCTION_AVAILABLE
 
 			m_p3DViewer->setThreadingModel(m_p3DViewer->suggestBestThreadingModel());
 
 			logger->info("init 3d viewer done");
+			return;
 		}
 
 		void Manager::RenderThread()
@@ -327,6 +343,4 @@ namespace PFD
 			logger->info("End Render");
 		}
 	}
-
-
 }
