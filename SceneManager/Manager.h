@@ -50,11 +50,17 @@ namespace PFD
 			void InitViewer();
 			void RenderThread();
 
+		private:
+			bool PhotorealisticShaders(osg::StateSet* stateSet);
+			bool WireFramesShaders(osg::StateSet* stateSet);
+			bool CartoonShaders(osg::StateSet* stateSet);
+			bool BlackAndWhiteShaders(osg::StateSet* stateSet);
+
 		protected:
 			std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
 
 		private:
-			RenderMode m_renderMode = RenderMode::Texture;
+			RenderMode m_renderMode = RenderMode::Photorealistic;
 
 			HWND m_hwnd = nullptr;
 			std::thread	m_renderThread;

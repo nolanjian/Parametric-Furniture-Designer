@@ -36,7 +36,6 @@ namespace PFD
 				{
 					throw std::exception("Can`t Stop Render before");
 				}
-
 				InitViewer();
 				m_renderThread = std::thread(std::bind(&Manager::RenderThread, this));
 				return true;
@@ -66,7 +65,7 @@ namespace PFD
 		{
 			switch (mode)
 			{
-			case IManager::Texture:
+			case IManager::Photorealistic:
 				// TODO
 				break;
 			case IManager::WireFrames:
@@ -185,8 +184,6 @@ namespace PFD
 			if (m_p3DViewer)
 			{
 				CloseScene();
-				//m_p3DViewer->addEventHandler(new osgViewer::WindowSizeHandler);
-				m_p3DViewer->addEventHandler(new osgViewer::StatsHandler());
 				ConfigureShaders(pScene->getOrCreateStateSet());
 				m_p3DViewer->setSceneData(pScene);
 				return true;
@@ -267,23 +264,19 @@ namespace PFD
 				return false;
 			}
 
-			osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadShaderString(PFD::Config::IProgramConfig::GetInstance()->GetString("VERTEX_SHADER")));
-			osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadShaderString(PFD::Config::IProgramConfig::GetInstance()->GetString("FRAGMENT_SHADER")));
-
-			osg::Program* program = new osg::Program;
-			program->addShader(vShader);
-			program->addShader(fShader);
-			program->addBindAttribLocation(TANGENT, TANGENT_INDEX);
-			stateSet->setAttribute(program);
-
-			stateSet->setMode(GL_DEPTH, m_bEnableDepthTest ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
-			stateSet->setMode(GL_BLEND, m_bEnableBlend ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
-
-			osg::Vec3f lightDir(0., 0.5, 1.);
-			lightDir.normalize();
-			stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
-
-			return true;
+			switch (m_renderMode)
+			{
+			case PFD::Scene::IManager::Photorealistic:
+				return PhotorealisticShaders(stateSet);
+			case PFD::Scene::IManager::WireFrames:
+				return WireFramesShaders(stateSet);
+			case PFD::Scene::IManager::Cartoon:
+				return CartoonShaders(stateSet);
+			case PFD::Scene::IManager::BlackAndWhite:
+				return BlackAndWhiteShaders(stateSet);
+			default:
+				return false;
+			}
 		}
 
 		void Manager::InitViewer()
@@ -330,7 +323,7 @@ namespace PFD
 			}
 #endif // OSG_GL_FIXED_FUNCTION_AVAILABLE
 
-			m_p3DViewer->setThreadingModel(m_p3DViewer->suggestBestThreadingModel());
+			//m_p3DViewer->setThreadingModel(m_p3DViewer->suggestBestThreadingModel());
 
 			logger->info("init 3d viewer done");
 			return;
@@ -342,5 +335,42 @@ namespace PFD
 			m_p3DViewer->run();
 			logger->info("End Render");
 		}
+
+		bool Manager::PhotorealisticShaders(osg::StateSet* stateSet)
+		{
+			osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadShaderString(PFD::Config::IProgramConfig::GetInstance()->GetString("VERTEX_SHADER")));
+			osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadShaderString(PFD::Config::IProgramConfig::GetInstance()->GetString("FRAGMENT_SHADER")));
+
+			osg::Program* program = new osg::Program;
+			program->addShader(vShader);
+			program->addShader(fShader);
+			program->addBindAttribLocation(TANGENT, TANGENT_INDEX);
+			stateSet->setAttribute(program);
+
+			stateSet->setMode(GL_DEPTH, m_bEnableDepthTest ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+			stateSet->setMode(GL_BLEND, m_bEnableBlend ? osg::StateAttribute::ON : osg::StateAttribute::OFF);
+
+			osg::Vec3f lightDir(0., 0.5, 1.);
+			lightDir.normalize();
+			stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
+
+			return true;
+		}
+
+		bool Manager::WireFramesShaders(osg::StateSet* stateSet)
+		{
+			throw std::exception("WireFramesShaders not Implement");
+		}
+
+		bool Manager::CartoonShaders(osg::StateSet* stateSet)
+		{
+			throw std::exception("CartoonShaders not Implement");
+		}
+
+		bool Manager::BlackAndWhiteShaders(osg::StateSet* stateSet)
+		{
+			throw std::exception("BlackAndWhiteShaders not Implement");
+		}
+
 	}
 }

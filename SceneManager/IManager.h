@@ -21,7 +21,7 @@ namespace PFD
 		public:
 			enum RenderMode
 			{
-				Texture = 1000,
+				Photorealistic = 1000,
 				WireFrames,
 				Cartoon,
 				BlackAndWhite,
