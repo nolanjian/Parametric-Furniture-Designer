@@ -1,5 +1,3 @@
-#include "WXApp/WXIncluding.h"
-#include "Utils.h"
 #include "WXApp/App.h"
 #include "WebView/CefHelper.h"
 
