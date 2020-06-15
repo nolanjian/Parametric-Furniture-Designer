@@ -18,6 +18,7 @@
 #include <osg/State>
 #include <osg/Texture2D>
 #include <osg/Texture3D>
+#include <osg/TextureCubeMap>
 #include <osg/PolygonMode>
 #include <osgDB/ReadFile>
 #include <osgGA/TrackballManipulator>

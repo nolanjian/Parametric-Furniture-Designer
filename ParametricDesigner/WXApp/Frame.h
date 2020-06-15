@@ -8,7 +8,7 @@
 
 #pragma once
 #include "WXIncluding.h"
-#include "IManager.h"
+#include "Manager/IManager.h"
 #include <memory>
 
 namespace PFD

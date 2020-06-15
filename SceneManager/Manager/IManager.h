@@ -8,7 +8,7 @@
  * 
  *********************************************************************/
 #pragma once
-#include "SceneManagerExport.h"
+#include "../SceneManagerExport.h"
 #include "STLIncluding.h"
 #include "windows.h"
 

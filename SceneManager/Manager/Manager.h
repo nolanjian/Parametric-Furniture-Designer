@@ -12,6 +12,7 @@
 #include "IManager.h"
 #include "OSGIncluding.h"
 #include "Utils.h"
+#include "../TopScene/TopScene.h"
 
 namespace PFD
 {
@@ -65,6 +66,7 @@ namespace PFD
 			HWND m_hwnd = nullptr;
 			std::thread	m_renderThread;
 			osg::ref_ptr<osgViewer::Viewer>	m_p3DViewer;
+			osg::ref_ptr<TopScene>			m_pTopScene;
 
 			bool m_bEnableDepthTest = true;
 			bool m_bEnableBlend = true;

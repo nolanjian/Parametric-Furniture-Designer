@@ -88,7 +88,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;PFD_SCENEMANAGER_EXPORTS;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;PFD_SCENEMANAGER_EXPORTS;WIN32;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\Commom;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\GLTFHelper;D:\library\Parametric-Furniture-Designer\Component;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -156,13 +156,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="IManager.h" />
+    <ClInclude Include="Manager\IManager.h" />
+    <ClInclude Include="Manager\Manager.h" />
     <ClInclude Include="SceneManagerExport.h" />
-    <ClInclude Include="Manager.h" />
+    <ClInclude Include="SkyBox\SkyBox.h" />
+    <ClInclude Include="TopScene\TopScene.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IManager.cpp" />
-    <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="Manager\IManager.cpp" />
+    <ClCompile Include="Manager\Manager.cpp" />
+    <ClCompile Include="SkyBox\SkyBox.cpp" />
+    <ClCompile Include="TopScene\TopScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

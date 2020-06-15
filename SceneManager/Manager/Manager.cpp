@@ -63,6 +63,11 @@ namespace PFD
 
 		void Manager::SetRenderMode(RenderMode mode)
 		{
+			if (m_renderMode == mode)
+			{
+				return;
+			}
+
 			switch (mode)
 			{
 			case IManager::Photorealistic:
@@ -184,6 +189,7 @@ namespace PFD
 			if (m_p3DViewer)
 			{
 				CloseScene();
+				
 				ConfigureShaders(pScene->getOrCreateStateSet());
 				m_p3DViewer->setSceneData(pScene);
 				return true;
