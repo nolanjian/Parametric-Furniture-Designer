@@ -17,5 +17,9 @@
         "R": 94,
         "G": 112,
         "B": 129
-    }
+    },
+    "SkyImage": "\\Resource\\Image\\BigSky.jpeg",
+    "GroundImage": "\\Resource\\Image\\LightGraySolid.jpg",
+    "SKY_VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\SKY_VERTEX.vert",
+    "SKY_FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\SKY_FRAGMENT.frag"
 }

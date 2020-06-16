@@ -1,5 +1,6 @@
 ﻿#include "Utils.h"
 #include "windows.h"
+#include <Commom/STLIncluding.h>
 
 namespace PFD
 {
@@ -106,6 +107,15 @@ namespace PFD
 			delete[] pRes;
 
 			return result;
+		}
+
+		std::string LoadStringFromFile(const std::string& path)
+		{
+			std::ifstream	fs(path);
+			std::stringstream	ss;
+			ss << fs.rdbuf();
+			std::string source = ss.str();
+			return source;
 		}
 	}
 }

@@ -186,12 +186,13 @@ namespace PFD
 
 		bool Manager::OpenScene(osg::ref_ptr<osg::Group> pScene)
 		{
-			if (m_p3DViewer)
+			if (m_p3DViewer && m_pTopScene)
 			{
 				CloseScene();
-				
 				ConfigureShaders(pScene->getOrCreateStateSet());
 				m_p3DViewer->setSceneData(pScene);
+				m_p3DViewer->setSceneData(m_pTopScene);
+				m_pTopScene->AddObject(pScene);
 				return true;
 			}
 			return false;
@@ -199,9 +200,9 @@ namespace PFD
 
 		bool Manager::CloseScene()
 		{
-			if (m_p3DViewer)
+			if (m_p3DViewer && m_pTopScene)
 			{
-				m_p3DViewer->setSceneData(nullptr);
+				m_pTopScene->CleanObjects();
 			}
 			return true;
 		}
@@ -254,15 +255,6 @@ namespace PFD
 			return osg::Vec4(0.466, 0.533, 0.6, 1.0);	// default LightSlateGray
 		}
 
-		std::string LoadShaderString(const std::string& path)
-		{
-			std::ifstream	fs(path);
-			std::stringstream	ss;
-			ss << fs.rdbuf();
-			std::string source = ss.str();
-			return source;
-		}
-
 		bool Manager::ConfigureShaders(osg::StateSet* stateSet)
 		{
 			if (!stateSet)
@@ -304,6 +296,7 @@ namespace PFD
 			int nWidth = traits->width;
 			int nHeight = traits->height;
 			m_p3DViewer = new osgViewer::Viewer;
+			
 			osg::Camera* pCamera = m_p3DViewer->getCamera();
 			pCamera->setGraphicsContext(pGraphicsContext);
 			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)nWidth / (double)nHeight, 1., 100.));
@@ -331,6 +324,11 @@ namespace PFD
 
 			//m_p3DViewer->setThreadingModel(m_p3DViewer->suggestBestThreadingModel());
 
+			m_pTopScene = new TopScene();
+			m_pTopScene->ReInit();
+
+			m_p3DViewer->setSceneData(m_pTopScene);
+
 			logger->info("init 3d viewer done");
 			return;
 		}
@@ -344,8 +342,11 @@ namespace PFD
 
 		bool Manager::PhotorealisticShaders(osg::StateSet* stateSet)
 		{
-			osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, LoadShaderString(PFD::Config::IProgramConfig::GetInstance()->GetString("VERTEX_SHADER")));
-			osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, LoadShaderString(PFD::Config::IProgramConfig::GetInstance()->GetString("FRAGMENT_SHADER")));
+			std::string strVS = PFD::Utils::LoadStringFromFile(PFD::Config::IProgramConfig::GetInstance()->GetString("VERTEX_SHADER"));
+			std::string strFS = PFD::Utils::LoadStringFromFile(PFD::Config::IProgramConfig::GetInstance()->GetString("FRAGMENT_SHADER"));
+
+			osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, strVS);
+			osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, strFS);
 
 			osg::Program* program = new osg::Program;
 			program->addShader(vShader);

@@ -25,6 +25,8 @@ namespace PFD
 		PFD_UTILS_API std::wstring StringToWString(const std::string& str);
 
 		PFD_UTILS_API std::string WStringToString(const std::wstring& wstr);
+
+		PFD_UTILS_API std::string LoadStringFromFile(const std::string& path);
 	}	// namespace Utils
 }	// namespace PFD
 

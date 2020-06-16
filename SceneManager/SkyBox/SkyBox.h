@@ -7,6 +7,7 @@
  * */
 
 #include "OSGIncluding.h"
+#include "STLIncluding.h"
 #include "../Utils/Utils.h"
 
 namespace PFD
@@ -27,7 +28,7 @@ namespace PFD
 			osg::ref_ptr<osg::Image> GetSubImage(const size_t x, const size_t y, const size_t width, const size_t height);
 		};
 
-		class SkyBox : public osg::Group
+		class SkyBox : public osg::Transform
 		{
 		public:
 			void Init();
@@ -35,8 +36,9 @@ namespace PFD
 		private:
 			void InitGeode();
 			void LoadFilePath();
-			void LoadCudeMap();
+			void LoadCudeMap(osg::ref_ptr<osg::Geode> pGeode);
 			void LoadImages();
+			void LoadProgram(osg::StateSet* pStateSet);
 
 		private:
 			std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
