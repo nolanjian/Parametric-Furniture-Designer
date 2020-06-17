@@ -22,7 +22,7 @@ namespace PFD
 			osg::ref_ptr<osg::Geode> pGeode = new osg::Geode();
 			addChild(pGeode);
 
-			osg::Box* cube = new osg::Box(osg::Vec3(), 1);
+			osg::Box* cube = new osg::Box(osg::Vec3(), 10000);
 			osg::ShapeDrawable* cudeDrawable = new osg::ShapeDrawable(cube);
 
 			pGeode->setCullingActive(false);
@@ -65,8 +65,8 @@ namespace PFD
 			m_pTextureCubeMap->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR_MIPMAP_LINEAR);
 			m_pTextureCubeMap->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
 
-			LoadProgram(pGeode->getOrCreateStateSet());
 			pGeode->getOrCreateStateSet()->setTextureAttributeAndModes(0, m_pTextureCubeMap);
+			LoadProgram(pGeode->getOrCreateStateSet());
 		}
 
 		void SkyBox::LoadImages()
