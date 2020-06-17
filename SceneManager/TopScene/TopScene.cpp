@@ -7,7 +7,7 @@ namespace PFD
 	{
 		void TopScene::ReInit()
 		{
-			//ReInitSkyBox();
+			ReInitSkyBox();
 			m_pObjects = new osg::Group();
 		}
 

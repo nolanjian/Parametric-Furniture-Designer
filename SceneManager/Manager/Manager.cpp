@@ -190,7 +190,7 @@ namespace PFD
 			{
 				CloseScene();
 				ConfigureShaders(pScene->getOrCreateStateSet());
-				m_p3DViewer->setSceneData(pScene);
+				//m_p3DViewer->setSceneData(pScene);
 				m_p3DViewer->setSceneData(m_pTopScene);
 				m_pTopScene->AddObject(pScene);
 				return true;

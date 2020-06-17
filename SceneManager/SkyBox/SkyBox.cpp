@@ -22,7 +22,7 @@ namespace PFD
 			osg::ref_ptr<osg::Geode> pGeode = new osg::Geode();
 			addChild(pGeode);
 
-			osg::Box* cube = new osg::Box(osg::Vec3(), 10000);
+			osg::Box* cube = new osg::Box(osg::Vec3(), 1);
 			osg::ShapeDrawable* cudeDrawable = new osg::ShapeDrawable(cube);
 
 			pGeode->setCullingActive(false);
