@@ -8,31 +8,28 @@
     <ClInclude Include="Manager\Manager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SkyBox\SkyBox.h">
-      <Filter>SkyBox</Filter>
-    </ClInclude>
     <ClInclude Include="TopScene\TopScene.h">
       <Filter>TopScene</Filter>
     </ClInclude>
-    <ClInclude Include="SkyDome\SkyDome.h">
-      <Filter>SkyDome</Filter>
+    <ClInclude Include="Environment\Ground.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\SkyDome.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment\Enviroment.h">
+      <Filter>Environment</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Manager">
       <UniqueIdentifier>{cc6d7afd-4770-485e-9097-aed00f8e8f2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SkyBox">
-      <UniqueIdentifier>{3eda47eb-33c3-4d93-9e3c-bc7382939a4d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="TopScene">
       <UniqueIdentifier>{17eba4ea-efb7-419e-9f1e-19b3a1ecd11d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SkyDome">
-      <UniqueIdentifier>{8446e792-d666-422d-a088-19806af957b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SkyDome\shader">
-      <UniqueIdentifier>{7fc56917-9a58-4364-b882-17224e8e075c}</UniqueIdentifier>
+    <Filter Include="Environment">
+      <UniqueIdentifier>{cab30097-a4df-47c6-b6c5-9cccb30b6ded}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,11 +42,14 @@
     <ClCompile Include="TopScene\TopScene.cpp">
       <Filter>TopScene</Filter>
     </ClCompile>
-    <ClCompile Include="SkyBox\SkyBox.cpp">
-      <Filter>SkyBox</Filter>
+    <ClCompile Include="Environment\Ground.cpp">
+      <Filter>Environment</Filter>
     </ClCompile>
-    <ClCompile Include="SkyDome\SkyDome.cpp">
-      <Filter>SkyDome</Filter>
+    <ClCompile Include="Environment\SkyDome.cpp">
+      <Filter>Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment\Enviroment.cpp">
+      <Filter>Environment</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
