@@ -10,6 +10,7 @@ namespace PFD
 	{
 		Manager::Manager()
 		{
+			osg::setNotifyLevel(osg::NOTICE);
 			osg::setNotifyHandler(new osg::WinDebugNotifyHandler());
 		}
 
@@ -299,7 +300,7 @@ namespace PFD
 			
 			osg::Camera* pCamera = m_p3DViewer->getCamera();
 			pCamera->setGraphicsContext(pGraphicsContext);
-			pCamera->setProjectionMatrix(osg::Matrix::perspective(60., (double)nWidth / (double)nHeight, 1., 10.));
+			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)nWidth / (double)nHeight, 1., 100.));
 			pCamera->setClearColor(GetBackgroundColor3D());
 			pCamera->setViewport(new osg::Viewport(0, 0, nWidth, nHeight));
 			pCamera->setDrawBuffer(GL_BACK);
@@ -325,10 +326,8 @@ namespace PFD
 			//m_p3DViewer->setThreadingModel(m_p3DViewer->suggestBestThreadingModel());
 
 			m_pTopScene = new TopScene();
-			m_pTopScene->SetViewer(m_p3DViewer);
 			m_pTopScene->ReInit();
 
-			m_p3DViewer->setCameraManipulator(nullptr);
 			m_p3DViewer->setSceneData(m_pTopScene);
 
 			logger->info("init 3d viewer done");

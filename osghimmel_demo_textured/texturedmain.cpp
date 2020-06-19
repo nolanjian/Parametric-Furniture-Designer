@@ -1,5 +1,5 @@
-
-// Copyright (c) 2011-2012, Daniel Müller <dm@g4t3.de>
+ï»¿
+// Copyright (c) 2011-2012, Daniel Mé»®ler <dm@g4t3.de>
 // Computer Graphics Systems Group at the Hasso-Plattner-Institute, Germany
 // All rights reserved.
 //
@@ -40,14 +40,179 @@
 
 #include <osg/TextureCubeMap>
 #include <osg/Texture2D>
+#include <osg/Depth>
+#include <osg/ShapeDrawable>
 
+#include <osg/TexMat>
+#include <osg/TexGen>
 #include <osgDB/ReadFile>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgDB/WriteFile>
 
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#endif
+#include "stb_image.h"
 
 using namespace osgHimmel;
 
+class skyBoxPositionLimit : public osg::NodeCallback
+{
+public:
+    skyBoxPositionLimit(osgViewer::Viewer* viewer) :viewer_(viewer) {}
+    virtual void operator()(osg::Node* node, osg::NodeVisitor* nv)
+    {
+        osg::MatrixTransform* mt = dynamic_cast<osg::MatrixTransform*>(node);
+        /*osg::PositionAttitudeTransform *mt = (osg::PositionAttitudeTransform*)node;*/
+        osg::Vec3 eye, center, up;
+        viewer_->getCamera()->getViewMatrixAsLookAt(eye, center, up);
+        osg::Vec3f skybox_center = mt->getBound().center();
+        /*if((eye - skybox_center).length() > 100)
+        {*/
+        osg::Matrix mm;
+
+        mm.makeTranslate(eye.x(), eye.y(), eye.z());
+        //osg::Vec3d position = mt->getPosition();   
+        mt->setMatrix(mm);
+        // }    
+        // traverse(node, nv);   
+    }
+private:
+    osgViewer::Viewer* viewer_;
+};
+
+class MoveEarthySkyWithEyePointTransform : public osg::Transform
+{
+public:
+	virtual bool computeLocalToWorldMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv) const
+	{
+		osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
+		if (cv)
+		{
+			osg::Vec3 eyePointLocal = cv->getEyeLocal();
+			matrix.preMult(osg::Matrix::translate(eyePointLocal));
+		}
+		return true;
+	}
+
+	virtual bool computeWorldToLocalMatrix(osg::Matrix& matrix, osg::NodeVisitor* nv) const
+	{
+		osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
+		if (cv)
+		{
+			osg::Vec3 eyePointLocal = cv->getEyeLocal();
+			matrix.postMult(osg::Matrix::translate(-eyePointLocal));
+		}
+		return true;
+	}
+};
+
+// Update texture matrix for cubemaps
+struct TexMatCallback : public osg::NodeCallback
+{
+public:
+
+	TexMatCallback(osg::TexMat& tm) :
+		_texMat(tm)
+	{
+	}
+
+	virtual void operator()(osg::Node* node, osg::NodeVisitor* nv)
+	{
+		osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
+		if (cv)
+		{
+            osg::RefMatrix* MV = cv->getModelViewMatrix();
+			const osg::Matrix R = osg::Matrix::rotate(osg::DegreesToRadians(112.0f), 0.0f, 0.0f, 1.0f) *
+				osg::Matrix::rotate(osg::DegreesToRadians(90.0f), 1.0f, 0.0f, 0.0f);
+
+			osg::Quat q = MV->getRotate();
+			const osg::Matrix C = osg::Matrix::rotate(q.inverse());
+
+			_texMat.setMatrix(C * R);
+		}
+
+		traverse(node, nv);
+	}
+
+	osg::TexMat& _texMat;
+};
+
+osg::ref_ptr<osg::TextureCubeMap> readCubeMap()
+{
+    osg::ref_ptr<osg::TextureCubeMap>   pTextureCubeMap = new osg::TextureCubeMap();
+
+	std::string strPath = "D:/Library/Parametric-Furniture-Designer/Resource/Image/BigSky.jpeg";
+	int width, height, nrChannels;
+	unsigned char* imgObj = nullptr;
+    imgObj = stbi_load(strPath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
+
+    osg::Image* pImage = new osg::Image();
+    pImage->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::NO_DELETE);
+    
+    pTextureCubeMap->setImage(osg::TextureCubeMap::POSITIVE_X, pImage);
+    pTextureCubeMap->setImage(osg::TextureCubeMap::NEGATIVE_X, pImage);
+    pTextureCubeMap->setImage(osg::TextureCubeMap::POSITIVE_Y, pImage);
+    pTextureCubeMap->setImage(osg::TextureCubeMap::NEGATIVE_Y, pImage);
+    pTextureCubeMap->setImage(osg::TextureCubeMap::POSITIVE_Z, pImage);
+    pTextureCubeMap->setImage(osg::TextureCubeMap::NEGATIVE_Z, pImage);
+
+	pTextureCubeMap->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP_TO_EDGE);
+	pTextureCubeMap->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP_TO_EDGE);
+	pTextureCubeMap->setWrap(osg::Texture::WRAP_R, osg::Texture::CLAMP_TO_EDGE);
+
+	pTextureCubeMap->setFilter(osg::Texture::MIN_FILTER, osg::Texture::LINEAR_MIPMAP_LINEAR);
+	pTextureCubeMap->setFilter(osg::Texture::MAG_FILTER, osg::Texture::LINEAR);
+
+    return pTextureCubeMap;
+}
+
+osg::Node* createSkyBox(osg::StateSet* stateset)
+{
+	osg::TexEnv* te = new osg::TexEnv;
+	te->setMode(osg::TexEnv::REPLACE);
+	stateset->setTextureAttributeAndModes(0, te, osg::StateAttribute::ON);
+
+	osg::TexGen* tg = new osg::TexGen;
+	tg->setMode(osg::TexGen::NORMAL_MAP);
+	stateset->setTextureAttributeAndModes(0, tg, osg::StateAttribute::ON);
+
+	osg::TexMat* tm = new osg::TexMat;
+	stateset->setTextureAttribute(0, tm);
+
+	osg::TextureCubeMap* skymap = readCubeMap();
+	stateset->setTextureAttributeAndModes(0, skymap, osg::StateAttribute::ON);
+
+	stateset->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
+	stateset->setMode(GL_CULL_FACE, osg::StateAttribute::OFF);
+
+	// clear the depth to the far plane.
+	osg::Depth* depth = new osg::Depth;
+	depth->setFunction(osg::Depth::ALWAYS);
+	depth->setRange(1.0, 1.0);
+	stateset->setAttributeAndModes(depth, osg::StateAttribute::ON);
+
+	stateset->setRenderBinDetails(-1, "RenderBin");
+
+	osg::Drawable* drawable = new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0.0f, 0.0f, 0.0f), 1));
+
+	osg::Geode* geode = new osg::Geode;
+	geode->setCullingActive(false);
+	geode->setStateSet(stateset);
+	geode->addDrawable(drawable);
+
+
+	osg::Transform* transform = new MoveEarthySkyWithEyePointTransform;
+	transform->setCullingActive(false);
+	transform->addChild(geode);
+
+	osg::ClearNode* clearNode = new osg::ClearNode;
+	//   clearNode->setRequiresClear(false);
+	clearNode->setCullCallback(new TexMatCallback(*tm));
+	clearNode->addChild(transform);
+
+	return clearNode;
+}
 
 // utils
 
@@ -681,8 +846,33 @@ void initializeManipulators(osgViewer::View &view)
 #include <osg/Light>
 #include <osg/LightSource>
 
+void test()
+{
+	osg::ref_ptr<osgViewer::Viewer> viewer = new osgViewer::Viewer();
+	viewer->setUpViewInWindow(128, 128, 1280, 720);
+
+	osg::ref_ptr<osg::Group> rootnode = new osg::Group();
+
+	osg::ref_ptr<osg::MatrixTransform> mt = new osg::MatrixTransform;
+
+    osg::StateSet* stateset = 
+    mt->getOrCreateStateSet();
+
+	mt->addChild(createSkyBox(stateset));
+	mt->setUpdateCallback(new skyBoxPositionLimit(viewer.get()));
+    rootnode->addChild(mt);
+	viewer->setSceneData(rootnode.get());
+
+	viewer->realize();
+
+	viewer->run();
+}
+
 int main(int argc, char* argv[])
 {
+    test();
+    return 0;
+
     osg::ArgumentParser arguments(&argc, argv);
 
     arguments.getApplicationUsage()->setDescription(
@@ -729,7 +919,7 @@ int main(int argc, char* argv[])
 
     viewer.setUpViewInWindow(128, 128, 1280, 720);
     
-    //RecordCameraPathHandlerFix *rcph = new RecordCameraPathHandlerFix("D:/p/osghimmel/exchange/movie-döllner/New folder/animation.path");
+    //RecordCameraPathHandlerFix *rcph = new RecordCameraPathHandlerFix("D:/p/osghimmel/exchange/movie-dé°ˆlner/New folder/animation.path");
     //rcph->setKeyEventTogglePlayback('w');
     //
     //viewer.addEventHandler(rcph);
