@@ -160,12 +160,14 @@
     <ClInclude Include="Manager\Manager.h" />
     <ClInclude Include="SceneManagerExport.h" />
     <ClInclude Include="SkyBox\SkyBox.h" />
+    <ClInclude Include="SkyDome\SkyDome.h" />
     <ClInclude Include="TopScene\TopScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Manager\IManager.cpp" />
     <ClCompile Include="Manager\Manager.cpp" />
     <ClCompile Include="SkyBox\SkyBox.cpp" />
+    <ClCompile Include="SkyDome\SkyDome.cpp" />
     <ClCompile Include="TopScene\TopScene.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

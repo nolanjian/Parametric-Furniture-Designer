@@ -1,10 +1,6 @@
 ﻿#include "GLTFResourceManager.h"
 #include "ShadingPreDefine.h"
-
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-#include "stb_image.h"
+#include "Utils/Utils.h"
 
 namespace PFD
 {
@@ -346,8 +342,7 @@ namespace PFD
 
 			try
 			{
-				int width, height, nrChannels;
-				unsigned char* imgObj = nullptr;
+				osg::ref_ptr<osg::Image>	pImage;
 
 				auto fnLoadEmbeddedResource = [&]() -> bool
 				{
@@ -364,8 +359,9 @@ namespace PFD
 						{
 							return false;
 						}
-						imgObj = stbi_load_from_memory(&imgData[0], imgData.size(), &width, &height, &nrChannels, STBI_rgb_alpha);
-						return imgObj != nullptr;
+
+						pImage = PFD::Utils::LoadImageFromMemory(&imgData[0]);
+						return pImage != nullptr;
 					}
 					catch (const std::exception& e)
 					{
@@ -384,8 +380,8 @@ namespace PFD
 							return false;
 						}
 
-						imgObj = stbi_load(filePath.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
-						return imgObj != nullptr;
+						pImage = PFD::Utils::LoadImageFromPath(filePath);
+						return pImage != nullptr;
 					}
 					catch (const std::exception& e)
 					{
@@ -408,8 +404,9 @@ namespace PFD
 							{
 								return false;
 							}
-							imgObj = stbi_load_from_memory(pData, bufferView.byteLength, &width, &height, &nrChannels, STBI_rgb_alpha);
-							return imgObj != nullptr;
+
+							pImage = PFD::Utils::LoadImageFromMemory(const_cast<unsigned char*>(pData));
+							return pImage != nullptr;
 						}
 						return false;
 					}
@@ -422,18 +419,10 @@ namespace PFD
 
 				if (fnLoadEmbeddedResource() || fnLoadExteralResource() || fnLoadBufferViewResource())
 				{
-					osg::ref_ptr<osg::Image>	osgIMG = new osg::Image();
-					osgIMG->setImage(width, height, 1, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE, imgObj, osg::Image::USE_MALLOC_FREE);
-					if (!osgIMG->valid())
+					if (pImage->valid())
 					{
-						return;
+						pTexture->setImage(pImage);
 					}
-
-					pTexture->setImage(osgIMG);
-
-					// OSG Image will release it auto
-					//stbi_image_free(imgObj);
-					//imgObj = nullptr;
 				}
 			}
 			catch (const std::exception& e)

@@ -14,6 +14,9 @@
     <ClInclude Include="TopScene\TopScene.h">
       <Filter>TopScene</Filter>
     </ClInclude>
+    <ClInclude Include="SkyDome\SkyDome.h">
+      <Filter>SkyDome</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Manager">
@@ -24,6 +27,12 @@
     </Filter>
     <Filter Include="TopScene">
       <UniqueIdentifier>{17eba4ea-efb7-419e-9f1e-19b3a1ecd11d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SkyDome">
+      <UniqueIdentifier>{8446e792-d666-422d-a088-19806af957b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SkyDome\shader">
+      <UniqueIdentifier>{7fc56917-9a58-4364-b882-17224e8e075c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +47,9 @@
     </ClCompile>
     <ClCompile Include="SkyBox\SkyBox.cpp">
       <Filter>SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyDome\SkyDome.cpp">
+      <Filter>SkyDome</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

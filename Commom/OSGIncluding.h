@@ -6,10 +6,12 @@
 #include <osg/BoundingSphere>
 #include <osg/ComputeBoundsVisitor>
 #include <osg/MatrixTransform>
+#include <osg/Depth>
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/Group>
 #include <osg/GraphicsContext>
+#include <osg/Math>
 #include <osg/Object>
 #include <osg/Program>
 #include <osg/PrimitiveSet>

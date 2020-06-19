@@ -8,6 +8,8 @@
 #pragma once
 #include "OSGIncluding.h"
 
+#include "../Environment/Enviroment.h"
+
 namespace PFD
 {
 	namespace Scene
@@ -24,14 +26,14 @@ namespace PFD
 			};
 
 			void ReInit();
-			void ReInitSkyBox();
 			void AddObject(osg::ref_ptr<osg::Node> pNode);
 			void AddObjects(const std::vector<osg::ref_ptr<osg::Node>>& vecNode);
 			void CleanObjects();
-			void SetSkyBox();
+			void SetViewer(osg::ref_ptr<osgViewer::Viewer> pViewer);
 		private:
 			osg::ref_ptr<osg::Group>	m_pObjects;
-			osg::ref_ptr<osg::Node>		m_pSkyBox;
+			osg::ref_ptr<Enviroment>	m_pEnvironment;
+			osg::ref_ptr<osgViewer::Viewer>	m_pViewer;
 		};
 	}	// namespace Scene
 }	// namespace PFD

@@ -125,7 +125,7 @@ void HimmelOverlay::update()
     sprintf(deb1, "%04i-%02i-%02i %02i:%02i UTC\0", atime.year, atime.month, atime.day, atime.hour, atime.minute);
 
     char deb2[64];
-    sprintf(deb2, "lat %03.2f°; lon %03.2f°; alt %01.3fkm\0"
+    sprintf(deb2, "lat %03.2f? lon %03.2f? alt %01.3fkm\0"
         , astro->getLatitude(), astro->getLongitude(), m_himmel->getAltitude());
 
     m_text_time->setText(deb1);

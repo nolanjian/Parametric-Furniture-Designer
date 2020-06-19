@@ -9,5 +9,5 @@ out vec3 aTextCoord;
 void main() 
 {
     gl_Position = osg_ModelViewProjectionMatrix * osg_Vertex;
-    aTextCoord = osg_Vertex;
+    aTextCoord = osg_Vertex.xyz;
 }

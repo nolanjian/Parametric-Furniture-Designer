@@ -12,6 +12,8 @@
 
 #define PFD_LOGGER "pfd_async_file_logger"
 
+#include <Commom/OSGIncluding.h>
+
 namespace PFD
 {
 	namespace Utils
@@ -27,6 +29,10 @@ namespace PFD
 		PFD_UTILS_API std::string WStringToString(const std::wstring& wstr);
 
 		PFD_UTILS_API std::string LoadStringFromFile(const std::string& path);
+
+		PFD_UTILS_API osg::ref_ptr<osg::Image> LoadImageFromPath(const std::string& path);
+
+		PFD_UTILS_API osg::ref_ptr<osg::Image> LoadImageFromMemory(unsigned char* pcBuffer);
 	}	// namespace Utils
 }	// namespace PFD
 
