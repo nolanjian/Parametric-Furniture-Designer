@@ -6,8 +6,12 @@ namespace PFD
 	{
 		void TopScene::ReInit()
 		{
+			removeChildren(0, getNumChildren());
+
 			m_pObjects = new osg::Group();
 			m_pEnvironment = new Enviroment();
+			addChild(m_pObjects);
+			addChild(m_pEnvironment);
 		}
 
 		void TopScene::AddObject(osg::ref_ptr<osg::Node> pNode)

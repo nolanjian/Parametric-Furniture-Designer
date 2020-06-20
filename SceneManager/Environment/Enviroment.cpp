@@ -4,9 +4,16 @@ namespace PFD
 {
 	namespace Scene
 	{
+		EnviromentCameraTrackCallback::EnviromentCameraTrackCallback(Enviroment* pEnviroment)
+			: m_pEnviroment(pEnviroment)
+		{
+
+		}
+
 		void EnviromentCameraTrackCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		{
-			if (node && nv && nv->getVisitorType() == osg::NodeVisitor::CULL_VISITOR)
+			if (m_pEnviroment && m_pEnviroment == node
+				&& nv && nv->getVisitorType() == osg::NodeVisitor::CULL_VISITOR)
 			{
 				osgUtil::CullVisitor* pCullVisitor = dynamic_cast<osgUtil::CullVisitor*>(nv);
 				if (pCullVisitor)

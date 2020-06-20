@@ -18,10 +18,15 @@ namespace PFD
 {
 	namespace Scene
 	{
+		class Enviroment;
+
 		class EnviromentCameraTrackCallback : public osg::NodeCallback
 		{
 		public:
+			EnviromentCameraTrackCallback(Enviroment* pEnviroment);
 			virtual void operator()(osg::Node* node, osg::NodeVisitor* nv) override;
+		private:
+			Enviroment* m_pEnviroment = nullptr;
 		};
 
 		class Enviroment : public osg::MatrixTransform
