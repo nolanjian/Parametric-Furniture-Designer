@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "IProgramConfig.h"
-#include <map>
-#include <string>
+#include <Commom/STLIncluding.h>
+#include <spdlog/spdlog.h>
 
 
 namespace PFD

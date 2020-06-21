@@ -1,8 +1,8 @@
 ﻿#include "Manager.h"
-#include "IProgramConfig.h"
-#include "Importer.h"
-#include "Exporter.h"
-#include "ShadingPreDefine.h"
+#include <Config/IProgramConfig.h>
+#include <GLTFHelper/Importer.h>
+#include <GLTFHelper/Exporter.h>
+#include <Commom/ShadingPreDefine.h>
 
 namespace PFD
 {

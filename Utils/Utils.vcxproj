@@ -96,7 +96,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\packages\boost.1.72.0.0\lib\native\include;D:\library\Parametric-Furniture-Designer</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer;D:\library\Parametric-Furniture-Designer\3rdPart</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile />
     </ClCompile>
     <Link>

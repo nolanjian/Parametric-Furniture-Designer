@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;__WXMSW__;wxUSE_DPI_AWARE_MANIFEST=2;WXUSINGDLL;WX_PRECOMP;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\SceneManager;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer\3rdPart\cef;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\wxBuild\include;D:\library\wxBuild\include\msvc;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart\cef;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>

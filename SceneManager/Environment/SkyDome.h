@@ -9,7 +9,7 @@
  *********************************************************************/
 #pragma once
 
-#include <OSGIncluding.h>
+#include <Commom/OSGIncluding.h>
 #include "../Config/IProgramConfig.h"
 
 namespace PFD

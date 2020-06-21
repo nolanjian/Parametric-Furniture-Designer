@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include "OSGIncluding.h"
+#include <Commom/OSGIncluding.h>
+#include <Commom/STLIncluding.h>
 
 #include "Parametric.h"
 

@@ -10,8 +10,9 @@
 #pragma once
 
 #include "IManager.h"
-#include "OSGIncluding.h"
-#include "Utils.h"
+#include <Commom/OSGIncluding.h>
+#include <Utils/Utils.h>
+#include <spdlog/spdlog.h>
 #include "../TopScene/TopScene.h"
 
 namespace PFD

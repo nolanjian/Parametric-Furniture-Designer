@@ -91,7 +91,7 @@
       <PreprocessorDefinitions>_DEBUG;PFD_SCENEMANAGER_EXPORTS;WIN32;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\Commom;D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Config;D:\library\Parametric-Furniture-Designer\GLTFHelper;D:\library\Parametric-Furniture-Designer\Component;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\OpenSceneGraph\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
@@ -99,7 +99,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <AdditionalLibraryDirectories>D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\spdlog;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgd.lib;spdlogd.lib;UTILS.lib;GLTFHelper.lib;PFDConfig.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgUtild.lib;osgd.lib;spdlogd.lib;UTILS.lib;GLTFHelper.lib;PFDConfig.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

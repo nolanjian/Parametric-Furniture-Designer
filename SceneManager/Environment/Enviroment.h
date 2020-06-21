@@ -9,7 +9,7 @@
  *********************************************************************/
 #pragma once
 
-#include <OSGIncluding.h>
+#include <Commom/OSGIncluding.h>
 
 #include "SkyDome.h"
 #include "Ground.h"

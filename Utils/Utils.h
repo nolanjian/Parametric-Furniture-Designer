@@ -5,10 +5,6 @@
 // PFD_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
 #include "PFDUtilsExport.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/rotating_file_sink.h"
 
 #define PFD_LOGGER "pfd_async_file_logger"
 

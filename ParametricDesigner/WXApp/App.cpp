@@ -1,9 +1,9 @@
 #include "WXIncluding.h"
 #include "App.h"
 #include "Frame.h"
-#include "IProgramConfig.h"
-#include "Utils.h"
-#include "spdlog/spdlog.h"
+#include <Config/IProgramConfig.h>
+#include <Utils/Utils.h>
+#include <spdlog/spdlog.h>
 
 wxIMPLEMENT_APP_NO_MAIN(PFD::GUI::App);
 

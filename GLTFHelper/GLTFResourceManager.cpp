@@ -1,6 +1,6 @@
 ﻿#include "GLTFResourceManager.h"
-#include "ShadingPreDefine.h"
-#include "Utils/Utils.h"
+#include <Commom/ShadingPreDefine.h>
+#include <Utils/Utils.h>
 
 namespace PFD
 {

@@ -1,6 +1,6 @@
 ﻿#include "BaseObject.h"
-#include "IDGenerater.h"
-#include "IParamsConverter.h"
+#include <Utils/IDGenerater.h>
+#include <Utils/IParamsConverter.h>
 #include "Coordinate.h"
 
 namespace PFD

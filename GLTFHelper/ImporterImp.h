@@ -9,8 +9,8 @@
 #pragma once
 
 #include "Importer.h"
-#include "IComponentFactory.h"
-#include "BaseObject.h"
+#include <Component/IComponentFactory.h>
+#include <Component/BaseObject.h>
 #include "IGLTFResourceManager.h"
 
 namespace PFD

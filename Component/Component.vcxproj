@@ -96,7 +96,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer\Commom;D:\library\Parametric-Furniture-Designer</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer;D:\library\Parametric-Furniture-Designer\3rdPart</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

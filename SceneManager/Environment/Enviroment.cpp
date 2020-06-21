@@ -42,7 +42,7 @@ namespace PFD
 			m_pGround = new Ground();
 			addChild(m_pGround);
 
-			setCullCallback(new EnviromentCameraTrackCallback());
+			setCullCallback(new EnviromentCameraTrackCallback(this));
 		}
 
 		void Enviroment::Build(double dRadius)

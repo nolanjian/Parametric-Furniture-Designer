@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include "PFDComponentExport.h"
-#include "OSGIncluding.h"
-#include "STLIncluding.h"
-#include "Utils.h"
-#include "fx/gltf.h"
+#include <Commom/OSGIncluding.h>
+#include <Commom/STLIncluding.h>
+#include <Utils/Utils.h>
+#include <3rdPart/fx/gltf.h>
+#include <spdlog/spdlog.h>
 
 namespace PFD
 {

@@ -10,8 +10,8 @@
 #pragma once
 #include "PFDGLTFExport.h"
 #include "fx/gltf.h"
-#include "OSGIncluding.h"
-#include "STLIncluding.h"
+#include <Commom/OSGIncluding.h>
+#include <Commom/STLIncluding.h>
 
 namespace PFD
 {

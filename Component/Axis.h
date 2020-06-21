@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "OSGIncluding.h"
-#include "STLIncluding.h"
+#include <Commom/OSGIncluding.h>
+#include <Commom/STLIncluding.h>
 
 namespace PFD
 {

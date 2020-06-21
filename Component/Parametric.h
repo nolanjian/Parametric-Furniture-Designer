@@ -1,9 +1,10 @@
 ﻿#pragma once
 
 #include "PFDComponentExport.h"
-#include "STLIncluding.h"
+#include <Commom/STLIncluding.h>
 #include "BaseObject.h"
-#include "Utils.h"
+#include <Utils/Utils.h>
+#include <spdlog/spdlog.h>
 #include "../muparserx/mpParser.h"
 #include "../muparserx/mpDefines.h"
 #include "../muparserx/mpTypes.h"

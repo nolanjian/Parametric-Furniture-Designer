@@ -1,7 +1,8 @@
 #pragma once
 
 #include "WXIncluding.h"
-#include "Utils.h"
+#include <Utils/Utils.h>
+#include <spdlog/spdlog.h>
 
 namespace PFD
 {
