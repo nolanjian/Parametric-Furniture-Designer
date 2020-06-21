@@ -56,6 +56,7 @@ namespace PFD
 
 			m_pTexture2D = new osg::Texture2D(pImage);
 			getOrCreateStateSet()->setTextureAttributeAndModes(0, m_pTexture2D);
+			getOrCreateStateSet()->addUniform(new osg::Uniform("GroundTex2D", 0));
 			return true;
 		}
 

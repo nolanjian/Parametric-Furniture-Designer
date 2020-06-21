@@ -91,12 +91,12 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;PFD_CONFIG_EXPORTS;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;PFD_CONFIG_EXPORTS;WIN32;_WINDOWS;_USRDLL;SPDLOG_SHARED_LIB;FMT_SHARED;SPDLOG_COMPILED_LIB;SPDLOG_WCHAR_FILENAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer\Utils;D:\library\Parametric-Furniture-Designer;D:\library\OpenSceneGraph\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -106,8 +106,12 @@
       <AdditionalLibraryDirectories>D:\library\Parametric-Furniture-Designer\spdlog;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)Program.json" "$(OutputPath)" /Y /F</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy "$(ProjectDir)Program.json" "$(OutputPath)" /Y /F</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

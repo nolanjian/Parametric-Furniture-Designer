@@ -94,6 +94,7 @@ namespace PFD
 			}
 
 			getOrCreateStateSet()->setTextureAttributeAndModes(0, m_pTextureCubeMap);
+			getOrCreateStateSet()->addUniform(new osg::Uniform("SkyDomeCubeMap", 0));
 
 			return true;
 		}

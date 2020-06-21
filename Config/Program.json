@@ -1,25 +1,27 @@
 {
-    "GUI": {
-        "AppTitle": "Parametric Designer",
-        "MainFrameMinSize": {
-            "X": 1500,
-            "Y": 1000
-        },
-        "3DWindowMinSize": {
-            "X": 1800,
-            "Y": 900
-        }
+  "GUI": {
+    "AppTitle": "Parametric Designer",
+    "MainFrameMinSize": {
+      "X": 1500,
+      "Y": 1000
     },
-    "VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\VERTEX.vert",
-    "FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\FRAGMENT.frag",
-    "BackgroundColor3D": {
-        "IsNormal": false,
-        "R": 94,
-        "G": 112,
-        "B": 129
-    },
-    "SkyImage": "\\Resource\\Image\\BigSky.jpeg",
-    "GroundImage": "\\Resource\\Image\\LightGraySolid.jpg",
-    "SKY_VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\SKY_VERTEX.vert",
-    "SKY_FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Commom\\SKY_FRAGMENT.frag"
+    "3DWindowMinSize": {
+      "X": 1800,
+      "Y": 900
+    }
+  },
+  "VERTEX_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\VERTEX.vert",
+  "FRAGMENT_SHADER": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\FRAGMENT.frag",
+  "BackgroundColor3D": {
+    "IsNormal": false,
+    "R": 94,
+    "G": 112,
+    "B": 129
+  },
+  "SkyImage": "\\Resource\\Image\\BigSky.jpeg",
+  "GroundImage": "\\Resource\\Image\\LightGraySolid.jpg",
+  "SKY_DOME_V_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\SkyDome.vert",
+  "SKY_DOME_F_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\SkyDome.frag",
+  "GROUND_V_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\Ground.frag",
+  "GROUND_F_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\Ground.frag"
 }
