@@ -28,7 +28,7 @@ namespace PFD
 						osg::Vec3 pos(eye.x(), eye.y(), dRadius);
 						pEnviroment->setMatrix(osg::Matrix::translate(pos));
 						// maybe no need to build every time, just build when out off range
-						pEnviroment->Build(dRadius);
+						//pEnviroment->Build(dRadius);
 					}
 				}
 			}

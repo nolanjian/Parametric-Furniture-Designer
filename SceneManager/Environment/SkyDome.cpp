@@ -28,23 +28,22 @@ namespace PFD
 		{
 			if (m_pSphereDrawable == nullptr)
 			{
-				m_pSphereDrawable = new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0, 0, 0), 0));
+				m_pSphereDrawable = new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0, 0, 0), dRadius));
 				addDrawable(m_pSphereDrawable);
 			}
 
-			assert(m_pSphereDrawable);
-			osg::Sphere* pSphere = dynamic_cast<osg::Sphere*>(m_pSphereDrawable->getShape());
+			//assert(m_pSphereDrawable);
+			//osg::Sphere* pSphere = dynamic_cast<osg::Sphere*>(m_pSphereDrawable->getShape());
+			//if (pSphere)
+			//{
+			//	pSphere->setRadius(dRadius);
 
-			osg::ref_ptr<osgUtil::Tessellator>tscx = new osgUtil::Tessellator();
-			tscx->setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
-			tscx->setBoundaryOnly(false);
-			tscx->setWindingType(osgUtil::Tessellator::TESS_WINDING_NONZERO);
-			tscx->retessellatePolygons(*m_pSphereDrawable);
-
-			if (pSphere)
-			{
-				pSphere->setRadius(dRadius);
-			}
+			//	//osg::ref_ptr<osgUtil::Tessellator>tscx = new osgUtil::Tessellator();
+			//	//tscx->setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
+			//	//tscx->setBoundaryOnly(false);
+			//	//tscx->setWindingType(osgUtil::Tessellator::TESS_WINDING_NONZERO);
+			//	//tscx->retessellatePolygons(*m_pSphereDrawable);
+			//}
 		}
 
 		double SkyDome::GetRadius() const

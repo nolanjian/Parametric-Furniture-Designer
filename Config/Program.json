@@ -29,6 +29,6 @@
   "GROUND_IMAGE_PATH": "D:\\library\\Parametric-Furniture-Designer\\Resource\\Image\\LightGraySolid.jpg",
   "SKY_DOME_V_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\SkyDome.vert",
   "SKY_DOME_F_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\SkyDome.frag",
-  "GROUND_V_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\Ground.frag",
+  "GROUND_V_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\Ground.vert",
   "GROUND_F_SHADER_PATH": "D:\\library\\Parametric-Furniture-Designer\\Shaders\\Ground.frag"
 }

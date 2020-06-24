@@ -27,17 +27,17 @@ namespace PFD
 			static double dFixHeight = 10.0;
 			if (!m_pBoxDrawable)
 			{
-				m_pBoxDrawable = new osg::ShapeDrawable(new osg::Box());
+				m_pBoxDrawable = new osg::ShapeDrawable(new osg::Box(osg::Vec3(0, 0, 0), dHalfLength * 2, dHalfLength * 2, dFixHeight));
 				addDrawable(m_pBoxDrawable);
 			}
 			
-			assert(m_pBoxDrawable);
-			osg::Box* pBox = dynamic_cast<osg::Box*>(m_pBoxDrawable->getShape());
-			if (pBox)
-			{
-				pBox->set(osg::Vec3(0, 0, 0), osg::Vec3(dHalfLength, dHalfLength, dFixHeight));
-			}
-			assert(pBox);
+			//assert(m_pBoxDrawable);
+			//osg::Box* pBox = dynamic_cast<osg::Box*>(m_pBoxDrawable->getShape());
+			//if (pBox)
+			//{
+			//	pBox->set(osg::Vec3(0, 0, 0), osg::Vec3(dHalfLength, dHalfLength, dFixHeight));
+			//}
+			//assert(pBox);
 		}
 
 		double Ground::GetHalfLength() const
