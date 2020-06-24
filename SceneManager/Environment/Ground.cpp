@@ -5,13 +5,21 @@ namespace PFD
 	namespace Scene
 	{
 		Ground::Ground()
-			: osg::Geode::Geode()
+			: EnvriomentBaseGeode()
 		{
-			setName("Ground");
 			getOrCreateStateSet();
-			InitTexture();
-			SetHalfLength(m_pConfig->GetDouble("GROUND_DEFAULT_HALF_LENGTH"));
+			setName("Ground");
+		}
 
+		bool Ground::Init()
+		{
+			if (!InitShader() || !InitTexture())
+			{
+				return false;
+			}
+
+			SetHalfLength(m_pConfig->GetDouble("GROUND_DEFAULT_HALF_LENGTH"));
+			return true;
 		}
 
 		void Ground::SetHalfLength(double dHalfLength)
@@ -60,28 +68,13 @@ namespace PFD
 			return true;
 		}
 
-		bool Ground::InitShader()
+		bool Ground::InitShaderSource()
 		{
 			assert(m_pConfig);
 
-			std::string strVShader = Utils::LoadStringFromFile(m_pConfig->GetString("GROUND_V_SHADER_PATH"));
-			std::string strFShader = Utils::LoadStringFromFile(m_pConfig->GetString("GROUND_F_SHADER_PATH"));
-
-			m_pVShader = new osg::Shader(osg::Shader::VERTEX, strVShader);
-			m_pFShader = new osg::Shader(osg::Shader::FRAGMENT, strFShader);
-
-			if (!m_pVShader.valid() || !m_pFShader.valid())
-			{
-				return false;
-			}
-
-			m_pProgram = new osg::Program();
-			m_pProgram->addShader(m_pVShader);
-			m_pProgram->addShader(m_pFShader);
-
-			getOrCreateStateSet()->setAttribute(m_pProgram);
-			return true;
+			m_strVShader = Utils::LoadStringFromFile(m_pConfig->GetString("GROUND_V_SHADER_PATH"));
+			m_strFShader = Utils::LoadStringFromFile(m_pConfig->GetString("GROUND_F_SHADER_PATH"));
+			return !m_strVShader.empty() && !m_strFShader.empty();
 		}
-
 	}	// namespace Scene
 }	// namespace PFD

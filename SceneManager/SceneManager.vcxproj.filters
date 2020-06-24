@@ -20,6 +20,9 @@
     <ClInclude Include="Environment\Enviroment.h">
       <Filter>Environment</Filter>
     </ClInclude>
+    <ClInclude Include="Environment\EnvriomentBaseGeode.h">
+      <Filter>Environment</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Manager">
@@ -51,5 +54,6 @@
     <ClCompile Include="Environment\Enviroment.cpp">
       <Filter>Environment</Filter>
     </ClCompile>
+    <ClCompile Include="Environment\EnvriomentBaseGeode.cpp" />
   </ItemGroup>
 </Project>

@@ -10,8 +10,6 @@ namespace PFD
 	{
 		Manager::Manager()
 		{
-			osg::setNotifyLevel(osg::NOTICE);
-			osg::setNotifyHandler(new osg::WinDebugNotifyHandler());
 		}
 
 		Manager::~Manager()

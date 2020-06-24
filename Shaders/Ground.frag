@@ -7,5 +7,5 @@ out vec4 fColor;
 
 void main() 
 {
-    fColor = texture(GroundTex2D, aTextCoord);
+    fColor = texture(GroundTex2D, aTextCoord.xy);
 }

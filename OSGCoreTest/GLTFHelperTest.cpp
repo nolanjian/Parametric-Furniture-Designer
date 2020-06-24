@@ -1,7 +1,7 @@
 
 #include <gtest\gtest.h>
-#include <Importer.h>
-#include <STLIncluding.h>
+#include <GLTFHelper\Importer.h>
+#include <Commom\STLIncluding.h>
 
 using namespace PFD::GLTF;
 

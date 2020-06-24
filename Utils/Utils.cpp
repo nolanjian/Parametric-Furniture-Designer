@@ -1,11 +1,12 @@
 ﻿#include "Utils.h"
 #include "windows.h"
 #include <Commom/STLIncluding.h>
+#include <Commom/OSGIncluding.h>
 
-#include "spdlog/spdlog.h"
-#include "spdlog/async.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/rotating_file_sink.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/async.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/rotating_file_sink.h>
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -16,19 +17,27 @@ namespace PFD
 {
 	namespace Utils
 	{
-		static bool bInitLogger = []() {
+		static bool s_bInitLogger = []() {
 			return InitLogger();
+		}();
+
+		static bool s_bInitOSGNotify = []() {
+			osg::setNotifyLevel(osg::NOTICE);
+#ifdef _DEBUG
+			osg::setNotifyHandler(new osg::WinDebugNotifyHandler());
+#endif // _DEBUG
+			return true;
 		}();
 
 		bool InitLogger()
 		{
-			if (bInitLogger)
+			if (s_bInitLogger)
 				return true;
 			auto max_size = 1048576 * 5;
 			auto max_files = 3;
 			auto logger = spdlog::rotating_logger_mt(PFD_LOGGER, L"logs/program.log", max_size, max_files);
-			bInitLogger = true;
-			return bInitLogger;
+			s_bInitLogger = true;
+			return s_bInitLogger;
 		}
 
 		std::wstring Utf8ToUnicode(const std::string& strUTF8)

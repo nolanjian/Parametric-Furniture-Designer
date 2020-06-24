@@ -77,7 +77,7 @@ namespace PFD
 			if (m_configJson.contains(strKey))
 			{
 				auto obj = m_configJson[strKey];
-				if (obj.is_number_float())
+				if (obj.is_number())
 				{
 					return obj.get<double>();
 				}

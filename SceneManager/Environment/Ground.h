@@ -9,23 +9,25 @@
  *********************************************************************/
 #pragma once
 
-#include <Commom/OSGIncluding.h>
-#include "../Config/IProgramConfig.h"
+#include <SceneManager/Environment/EnvriomentBaseGeode.h>
 
 namespace PFD
 {
 	namespace Scene
 	{
-		class Ground : public osg::Geode
+		class Ground : public EnvriomentBaseGeode
 		{
 		public:
 			Ground();
+
+			virtual bool Init() override;
+
 			void SetHalfLength(double dHalfLength);
 			double GetHalfLength() const;
 
 		protected:
 			bool InitTexture();
-			bool InitShader();
+			virtual bool InitShaderSource() override;
 		private:
 			Config::IProgramConfig* m_pConfig = Config::IProgramConfig::GetInstance();
 

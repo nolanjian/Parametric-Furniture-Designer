@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Environment\Enviroment.h" />
+    <ClInclude Include="Environment\EnvriomentBaseGeode.h" />
     <ClInclude Include="Environment\Ground.h" />
     <ClInclude Include="Environment\SkyDome.h" />
     <ClInclude Include="Manager\IManager.h" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Environment\Enviroment.cpp" />
+    <ClCompile Include="Environment\EnvriomentBaseGeode.cpp" />
     <ClCompile Include="Environment\Ground.cpp" />
     <ClCompile Include="Environment\SkyDome.cpp" />
     <ClCompile Include="Manager\IManager.cpp" />

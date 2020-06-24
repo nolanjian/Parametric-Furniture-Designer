@@ -38,9 +38,16 @@ namespace PFD
 			: osg::MatrixTransform()
 		{
 			m_pSkyDome = new SkyDome();
-			addChild(m_pSkyDome);
+			if (m_pSkyDome->Init())
+			{
+				addChild(m_pSkyDome);
+			}
+
 			m_pGround = new Ground();
-			addChild(m_pGround);
+			if (m_pGround->Init())
+			{
+				addChild(m_pGround);
+			}
 
 			setCullCallback(new EnviromentCameraTrackCallback(this));
 		}

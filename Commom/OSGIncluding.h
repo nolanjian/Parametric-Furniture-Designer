@@ -31,3 +31,4 @@
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
 #include <osgViewer/ViewerEventHandlers>
 #include <osgUtil/Optimizer>
+#include <osgUtil/Tessellator>

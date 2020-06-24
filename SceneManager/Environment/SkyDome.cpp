@@ -6,26 +6,40 @@ namespace PFD
 	namespace Scene
 	{
 		SkyDome::SkyDome()
-			:Geode::Geode()
+			: EnvriomentBaseGeode()
 		{
-			setName("SkyDome");
 			getOrCreateStateSet();
-			InitCubMap();
-			InitShader();
-			SetRadius(m_pConfig->GetDouble("SKY_DOME__DEFAULT_RADIUS"));
+			setName("SkyDome");
+		}
+
+		bool SkyDome::Init()
+		{
+			if (!InitShader() || !InitCubMap())
+			{
+				return false;
+			}
+
+			SetRadius(m_pConfig->GetDouble("SKY_DOME_DEFAULT_RADIUS"));
+			return true;
 		}
 
 		void SkyDome::SetRadius(double dRadius)
 		{
 			if (m_pSphereDrawable == nullptr)
 			{
-				m_pSphereDrawable = new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0, 0, 0), dRadius));
+				m_pSphereDrawable = new osg::ShapeDrawable(new osg::Sphere(osg::Vec3(0, 0, 0), 0));
 				addDrawable(m_pSphereDrawable);
-				return;
 			}
-			
+
 			assert(m_pSphereDrawable);
 			osg::Sphere* pSphere = dynamic_cast<osg::Sphere*>(m_pSphereDrawable->getShape());
+
+			osg::ref_ptr<osgUtil::Tessellator>tscx = new osgUtil::Tessellator();
+			tscx->setTessellationType(osgUtil::Tessellator::TESS_TYPE_GEOMETRY);
+			tscx->setBoundaryOnly(false);
+			tscx->setWindingType(osgUtil::Tessellator::TESS_WINDING_NONZERO);
+			tscx->retessellatePolygons(*m_pSphereDrawable);
+
 			if (pSphere)
 			{
 				pSphere->setRadius(dRadius);
@@ -45,27 +59,12 @@ namespace PFD
 			return 0.0;
 		}
 
-		bool SkyDome::InitShader()
+		bool SkyDome::InitShaderSource()
 		{
 			assert(m_pConfig);
-
-			std::string strVShader = Utils::LoadStringFromFile(m_pConfig->GetString("SKY_DOME_V_SHADER_PATH"));
-			std::string strFShader = Utils::LoadStringFromFile(m_pConfig->GetString("SKY_DOME_F_SHADER_PATH"));
-
-			m_pVShader = new osg::Shader(osg::Shader::VERTEX, strVShader);
-			m_pFShader = new osg::Shader(osg::Shader::FRAGMENT, strFShader);
-
-			if (!m_pVShader.valid() || !m_pFShader.valid())
-			{
-				return false;
-			}
-
-			m_pProgram = new osg::Program();
-			m_pProgram->addShader(m_pVShader);
-			m_pProgram->addShader(m_pFShader);
-
-			getOrCreateStateSet()->setAttribute(m_pProgram);
-			return true;
+			m_strVShader = Utils::LoadStringFromFile(m_pConfig->GetString("SKY_DOME_V_SHADER_PATH"));
+			m_strFShader = Utils::LoadStringFromFile(m_pConfig->GetString("SKY_DOME_F_SHADER_PATH"));
+			return !m_strVShader.empty() && !m_strFShader.empty();
 		}
 
 		bool SkyDome::InitCubMap()
@@ -88,7 +87,7 @@ namespace PFD
 				osg::ref_ptr<osg::Image> pImage = Utils::LoadImageFromPath(m_pConfig->GetString("SKY_DOME_" + pair.second));
 				if (!pImage)
 				{
-					// 
+					return false;
 				}
 				m_pTextureCubeMap->setImage(pair.first, pImage);
 			}

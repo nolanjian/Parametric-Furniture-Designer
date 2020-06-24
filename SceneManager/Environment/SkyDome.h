@@ -9,22 +9,24 @@
  *********************************************************************/
 #pragma once
 
-#include <Commom/OSGIncluding.h>
-#include "../Config/IProgramConfig.h"
+#include <SceneManager/Environment/EnvriomentBaseGeode.h>
 
 namespace PFD
 {
 	namespace Scene
 	{
-		class SkyDome : public osg::Geode
+		class SkyDome : public EnvriomentBaseGeode
 		{
 		public:
 			SkyDome();
+
+			virtual bool Init() override;
+
 			void SetRadius(double dRadius);
 			double GetRadius() const;
 
 		protected:
-			bool InitShader();
+			virtual bool InitShaderSource() override;
 			bool InitCubMap();
 		private:
 			osg::ref_ptr<osg::ShapeDrawable>	m_pSphereDrawable;
