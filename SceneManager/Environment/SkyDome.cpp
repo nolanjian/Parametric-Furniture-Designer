@@ -1,5 +1,6 @@
-#include "SkyDome.h"
-#include "../Utils/Utils.h"
+#include <SceneManager/Environment/SkyDome.h>
+#include <Utils/Utils.h>
+#include <osgUtil/Tessellator>
 
 namespace PFD
 {

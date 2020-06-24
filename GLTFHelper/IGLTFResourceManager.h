@@ -1,9 +1,15 @@
-﻿#pragma once
-#include <Commom/OSGIncluding.h>
-#include <Commom/STLIncluding.h>
+﻿/*****************************************************************//**
+ * \file   IGLTFResourceManager.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
 #include <Utils/Utils.h>
-#include "spdlog/spdlog.h"
-#include "spdlog/formatter.h"
+#include <spdlog/spdlog.h>
 #include <fx/gltf.h>
 
 namespace PFD

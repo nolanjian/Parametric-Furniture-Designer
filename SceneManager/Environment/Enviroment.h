@@ -9,10 +9,9 @@
  *********************************************************************/
 #pragma once
 
-#include <Commom/OSGIncluding.h>
-
-#include "SkyDome.h"
-#include "Ground.h"
+#include <SceneManager/Environment/SkyDome.h>
+#include <SceneManager/Environment/Ground.h>
+#include <osg/MatrixTransform>
 
 namespace PFD
 {

@@ -21,7 +21,7 @@
     <ClInclude Include="ProgramConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PFDConfigExport.h">
+    <ClInclude Include="Export.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

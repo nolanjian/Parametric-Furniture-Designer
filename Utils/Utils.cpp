@@ -1,7 +1,5 @@
 ﻿#include "Utils.h"
 #include "windows.h"
-#include <Commom/STLIncluding.h>
-#include <Commom/OSGIncluding.h>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/async.h>
@@ -12,6 +10,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #endif
 #include <Commom/stb_image.h>
+
+#include <fstream>
+#include <sstream>
 
 namespace PFD
 {

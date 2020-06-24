@@ -164,10 +164,10 @@
     <ClInclude Include="BaseObject.h" />
     <ClInclude Include="ComponentFactoryImp.h" />
     <ClInclude Include="Coordinate.h" />
+    <ClInclude Include="Export.h" />
     <ClInclude Include="IComponentFactory.h" />
     <ClInclude Include="BasePanel.h" />
     <ClInclude Include="Parametric.h" />
-    <ClInclude Include="PFDComponentExport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Axis.cpp" />

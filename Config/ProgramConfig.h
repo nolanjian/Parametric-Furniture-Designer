@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include "IProgramConfig.h"
-#include <Commom/STLIncluding.h>
+#include <Config/IProgramConfig.h>
 #include <spdlog/spdlog.h>
 
 

@@ -1,4 +1,7 @@
-﻿#include "Axis.h"
+﻿#include <Component/Axis.h>
+#include <osg/Geode>
+#include <osg/Shape>
+#include <osg/ShapeDrawable>
 
 namespace PFD
 {
@@ -16,8 +19,8 @@ namespace PFD
 
 			osg::ref_ptr<osg::Geode> geode = new osg::Geode;
 
-			geode->addDrawable(new osg::ShapeDrawable(new osg::Cylinder(osg::Vec3(0.0f, 0.0f, 0.0f), 0.1, m_uLen * 1.0f)));
-			geode->addDrawable(new osg::ShapeDrawable(new osg::Cone(osg::Vec3(0.0f, 0.0f, m_uLen * 1.0f), 0.15, 0.4)));
+			geode->addDrawable(new osg::ShapeDrawable(new osg::Cylinder(osg::Vec3(0.0, 0.0, 0.0), 0.1, m_uLen * 1.0)));
+			geode->addDrawable(new osg::ShapeDrawable(new osg::Cone(osg::Vec3(0.0, 0.0, m_uLen * 1.0), 0.15, 0.4)));
 
 			osg::Matrixd	mat;
 

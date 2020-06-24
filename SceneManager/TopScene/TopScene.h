@@ -6,9 +6,8 @@
  * */
 
 #pragma once
-#include <Commom/OSGIncluding.h>
-
-#include "../Environment/Enviroment.h"
+#include <SceneManager/Environment/Enviroment.h>
+#include <osgViewer/Viewer>
 
 namespace PFD
 {

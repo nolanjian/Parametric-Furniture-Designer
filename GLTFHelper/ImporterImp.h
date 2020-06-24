@@ -8,10 +8,10 @@
  *********************************************************************/
 #pragma once
 
-#include "Importer.h"
+#include <GLTFHelper/Importer.h>
+#include <GLTFHelper/IGLTFResourceManager.h>
 #include <Component/IComponentFactory.h>
 #include <Component/BaseObject.h>
-#include "IGLTFResourceManager.h"
 
 namespace PFD
 {

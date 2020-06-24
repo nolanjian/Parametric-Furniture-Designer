@@ -170,8 +170,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Export.h" />
     <ClInclude Include="IProgramConfig.h" />
-    <ClInclude Include="PFDConfigExport.h" />
     <ClInclude Include="ProgramConfig.h" />
   </ItemGroup>
   <ItemGroup>

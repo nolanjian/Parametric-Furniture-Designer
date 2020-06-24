@@ -160,9 +160,9 @@
     <ClInclude Include="Environment\EnvriomentBaseGeode.h" />
     <ClInclude Include="Environment\Ground.h" />
     <ClInclude Include="Environment\SkyDome.h" />
+    <ClInclude Include="Export.h" />
     <ClInclude Include="Manager\IManager.h" />
     <ClInclude Include="Manager\Manager.h" />
-    <ClInclude Include="SceneManagerExport.h" />
     <ClInclude Include="TopScene\TopScene.h" />
   </ItemGroup>
   <ItemGroup>

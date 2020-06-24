@@ -3,6 +3,7 @@
 #include <GLTFHelper/Importer.h>
 #include <GLTFHelper/Exporter.h>
 #include <Commom/ShadingPreDefine.h>
+#include <osgViewer/api/Win32/GraphicsWindowWin32>
 
 namespace PFD
 {

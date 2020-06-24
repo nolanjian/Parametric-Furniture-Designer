@@ -1,13 +1,21 @@
-﻿#pragma once
-
-#include "PFDComponentExport.h"
-#include <Commom/STLIncluding.h>
-#include "BaseObject.h"
+﻿/*****************************************************************//**
+ * \file   Parametric.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
+#include <Component/Export.h>
+#include <Component/BaseObject.h>
 #include <Utils/Utils.h>
 #include <spdlog/spdlog.h>
-#include "../muparserx/mpParser.h"
-#include "../muparserx/mpDefines.h"
-#include "../muparserx/mpTypes.h"
+
+#include <muparserx/mpParser.h>
+#include <muparserx/mpDefines.h>
+#include <muparserx/mpTypes.h>
 
 namespace PFD
 {

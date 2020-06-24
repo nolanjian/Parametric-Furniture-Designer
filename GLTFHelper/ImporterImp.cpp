@@ -1,5 +1,8 @@
-﻿#include "ImporterImp.h"
+﻿#include <GLTFHelper/ImporterImp.h>
 #include <Utils/Utils.h>
+#include <sstream>
+#include <filesystem>
+#include <osg/Geode>
 
 namespace PFD
 {

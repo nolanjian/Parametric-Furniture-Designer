@@ -156,13 +156,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Export.h" />
     <ClInclude Include="Exporter.h" />
     <ClInclude Include="ExporterImp.h" />
     <ClInclude Include="GLTFResourceManager.h" />
     <ClInclude Include="IGLTFResourceManager.h" />
     <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterImp.h" />
-    <ClInclude Include="PFDGLTFExport.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exporter.cpp" />

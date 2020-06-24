@@ -1,7 +1,14 @@
-﻿#pragma once
-#include "Exporter.h"
-
-
+﻿/*****************************************************************//**
+ * \file   ExporterImp.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
+#include <GLTFHelper/Exporter.h>
 
 namespace PFD
 {

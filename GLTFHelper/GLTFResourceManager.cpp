@@ -1,6 +1,10 @@
-﻿#include "GLTFResourceManager.h"
+﻿#include <GLTFHelper/GLTFResourceManager.h>
 #include <Commom/ShadingPreDefine.h>
 #include <Utils/Utils.h>
+
+#include <filesystem>
+
+#include <osg/Geode>
 
 namespace PFD
 {

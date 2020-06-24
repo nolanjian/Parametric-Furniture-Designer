@@ -1,5 +1,4 @@
-﻿
-#include "GLTFResourceManager.h"
+﻿#include <GLTFHelper/GLTFResourceManager.h>
 
 namespace PFD
 {

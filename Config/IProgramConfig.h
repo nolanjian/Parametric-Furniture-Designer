@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include "PFDConfigExport.h"
+#include <Config/Export.h>
 #include <Utils/Utils.h>
-#include <3rdPart/nlohmann/json.hpp>
-#include <string>
+#include <nlohmann/json.hpp>
 
 namespace PFD
 {

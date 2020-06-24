@@ -1,6 +1,5 @@
 #include "ParametricTreeUnitTest1.h"
 #include <gtest\gtest.h>
-#include <Commom\OSGIncluding.h>
 #include <Component\Parametric.h>
 
 using namespace PFD::Component;

@@ -1,6 +1,15 @@
-﻿#pragma once
-#include "PFDComponentExport.h"
-#include "BaseObject.h"
+﻿/*****************************************************************//**
+ * \file   IComponentFactory.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
+#include <Component/Export.h>
+#include <Component/BaseObject.h>
 
 namespace PFD
 {

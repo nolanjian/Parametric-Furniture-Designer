@@ -4,11 +4,13 @@
 // that uses this DLL. This way any other project whose source files include this file see
 // PFD_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
-#include "PFDUtilsExport.h"
+#include <Utils/Export.h>
 
 #define PFD_LOGGER "pfd_async_file_logger"
 
-#include <Commom/OSGIncluding.h>
+#include <string>
+
+#include <osg/Image>
 
 namespace PFD
 {

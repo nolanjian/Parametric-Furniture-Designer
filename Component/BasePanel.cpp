@@ -1,4 +1,4 @@
-﻿#include "BasePanel.h"
+﻿#include <Component/BasePanel.h>
 
 namespace PFD
 {

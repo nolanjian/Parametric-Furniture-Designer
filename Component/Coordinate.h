@@ -1,7 +1,15 @@
-﻿#pragma once
+﻿/*****************************************************************//**
+ * \file   Coordinate.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
 
-#include <Commom/OSGIncluding.h>
-#include <Commom/STLIncluding.h>
+#include <osg/MatrixTransform>
 
 namespace PFD
 {

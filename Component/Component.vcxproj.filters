@@ -39,7 +39,7 @@
     <ClInclude Include="ComponentFactoryImp.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="PFDComponentExport.h">
+    <ClInclude Include="Export.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

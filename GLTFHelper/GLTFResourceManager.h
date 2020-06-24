@@ -1,6 +1,17 @@
-﻿#pragma once
+﻿/*****************************************************************//**
+ * \file   GLTFResourceManager.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
 
-#include "IGLTFResourceManager.h"
+#include <GLTFHelper/IGLTFResourceManager.h>
+#include <osg/Texture2D>
+#include <osg/Geometry>
 
 namespace PFD
 {

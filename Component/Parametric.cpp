@@ -1,5 +1,6 @@
-﻿#include "Parametric.h"
-#include "../Utils/IParamsConverter.h"
+﻿#include <Component/Parametric.h>
+#include <Utils/IParamsConverter.h>
+#include <regex>
 
 namespace PFD
 {
@@ -184,10 +185,7 @@ namespace PFD
 				std::string decodeStr;
 				if (PFD::Utils::IParamsConverter::Decode(str, decodeStr))
 				{
-					nlohmann::json	paramsJson;
-					std::stringstream	ss;
-					ss << decodeStr;
-					paramsJson << ss;
+					nlohmann::json	paramsJson = nlohmann::json::parse(decodeStr, nullptr, false);
 					return ParseParams(paramsJson);
 				}
 				else

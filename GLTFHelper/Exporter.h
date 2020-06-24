@@ -8,10 +8,9 @@
  * 
  *********************************************************************/
 #pragma once
-#include "PFDGLTFExport.h"
-#include <Commom/OSGIncluding.h>
-#include <Commom/STLIncluding.h>
-#include "fx/gltf.h"
+#include <GLTFHelper/Export.h>
+#include <osg/Group>
+#include <fx/gltf.h>
 
 namespace PFD
 {

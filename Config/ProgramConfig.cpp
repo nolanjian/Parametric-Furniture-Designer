@@ -1,4 +1,4 @@
-﻿#include "ProgramConfig.h"
+﻿#include <Config/ProgramConfig.h>
 #include <filesystem>
 #include <fstream>
 #include <iostream>

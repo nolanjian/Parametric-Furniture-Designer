@@ -1,4 +1,4 @@
-#include "ExporterImp.h"
+#include <GLTFHelper/ExporterImp.h>
 
 namespace PFD
 {

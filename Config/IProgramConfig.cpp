@@ -1,4 +1,4 @@
-﻿#include "ProgramConfig.h"
+﻿#include <Config/ProgramConfig.h>
 
 namespace PFD
 {

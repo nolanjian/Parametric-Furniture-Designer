@@ -8,8 +8,8 @@
  * 
  *********************************************************************/
 #pragma once
-#include "../SceneManagerExport.h"
-#include <Commom/STLIncluding.h>
+#include <SceneManager/Export.h>
+#include <string>
 #include "windows.h"
 
 namespace PFD

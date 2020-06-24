@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "PFDUtilsExport.h"
+#include <Utils/Export.h>
 #include <atomic>
 
 namespace PFD

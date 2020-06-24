@@ -1,7 +1,8 @@
-﻿#include "BaseObject.h"
+﻿#include <Component/BaseObject.h>
+#include <Component/Coordinate.h>
+#include <osg/ComputeBoundsVisitor>
 #include <Utils/IDGenerater.h>
 #include <Utils/IParamsConverter.h>
-#include "Coordinate.h"
 
 namespace PFD
 {

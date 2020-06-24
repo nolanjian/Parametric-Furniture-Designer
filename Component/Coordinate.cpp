@@ -1,6 +1,5 @@
-﻿
-#include "Coordinate.h"
-#include "Axis.h"
+﻿#include <Component/Coordinate.h>
+#include <Component/Axis.h>
 
 namespace PFD
 {

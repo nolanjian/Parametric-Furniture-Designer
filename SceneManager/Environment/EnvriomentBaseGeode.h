@@ -9,8 +9,8 @@
  *********************************************************************/
 #pragma once
 
-#include <Commom/OSGIncluding.h>
 #include <Config/IProgramConfig.h>
+#include <osg/Geode>
 
 namespace PFD
 {

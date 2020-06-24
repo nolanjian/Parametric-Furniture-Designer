@@ -1,9 +1,15 @@
-﻿#pragma once
+﻿/*****************************************************************//**
+ * \file   BasePanel.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
 
-#include <Commom/OSGIncluding.h>
-#include <Commom/STLIncluding.h>
-
-#include "Parametric.h"
+#include <Component/Parametric.h>
 
 namespace PFD
 {

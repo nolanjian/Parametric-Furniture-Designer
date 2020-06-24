@@ -10,6 +10,8 @@
 #pragma once
 
 #include <SceneManager/Environment/EnvriomentBaseGeode.h>
+#include <osg/TextureCubeMap>
+#include <osg/ShapeDrawable>
 
 namespace PFD
 {

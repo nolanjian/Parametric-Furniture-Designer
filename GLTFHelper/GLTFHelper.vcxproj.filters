@@ -25,13 +25,13 @@
     <ClInclude Include="Importer.h">
       <Filter>Import&amp;Export</Filter>
     </ClInclude>
-    <ClInclude Include="PFDGLTFExport.h" />
     <ClInclude Include="ExporterImp.h">
       <Filter>Import&amp;Export</Filter>
     </ClInclude>
     <ClInclude Include="Exporter.h">
       <Filter>Import&amp;Export</Filter>
     </ClInclude>
+    <ClInclude Include="Export.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IGLTFResourceManager.cpp">

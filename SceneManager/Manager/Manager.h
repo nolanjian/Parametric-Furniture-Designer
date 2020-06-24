@@ -8,12 +8,10 @@
  * 
  *********************************************************************/
 #pragma once
-
-#include "IManager.h"
-#include <Commom/OSGIncluding.h>
+#include <SceneManager/Manager/IManager.h>
+#include <SceneManager/TopScene/TopScene.h>
 #include <Utils/Utils.h>
 #include <spdlog/spdlog.h>
-#include "../TopScene/TopScene.h"
 
 namespace PFD
 {

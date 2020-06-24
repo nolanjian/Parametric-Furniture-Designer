@@ -161,9 +161,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Export.h" />
     <ClInclude Include="IDGenerater.h" />
     <ClInclude Include="IParamsConverter.h" />
-    <ClInclude Include="PFDUtilsExport.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,19 @@
-﻿#pragma once
-#include "PFDComponentExport.h"
-#include <Commom/OSGIncluding.h>
-#include <Commom/STLIncluding.h>
+﻿/*****************************************************************//**
+ * \file   BaseObject.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/06/24
+ * 
+ *********************************************************************/
+#pragma once
+#include <Component/Export.h>
 #include <Utils/Utils.h>
 #include <3rdPart/fx/gltf.h>
 #include <spdlog/spdlog.h>
+
+#include <osg/MatrixTransform>
 
 namespace PFD
 {
