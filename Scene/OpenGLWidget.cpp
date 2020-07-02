@@ -30,6 +30,10 @@ namespace PFD
 				pGraphicsWin->close();
 				pGraphicsWin->SetOpenGLWidget(this);
 			}
+			if (m_renderThread.joinable())
+			{
+				m_renderThread.join();
+			}
 		}
 
 		void OpenGLWidget::Init()
@@ -219,7 +223,6 @@ namespace PFD
 			{
 				return m_Mapping[mouseButton];
 			}
-			Q_ASSERT(false);
 			return 0;
 		}
 
@@ -244,7 +247,6 @@ namespace PFD
 			{
 				return m_Mapping[key];
 			}
-			Q_ASSERT(false);
 			return 0;
 		}
 
