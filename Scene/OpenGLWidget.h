@@ -33,6 +33,9 @@ namespace PFD
 			void InitCamera();
 
 		protected:
+			osg::Vec4 GetBackgroundColor3D();
+
+		protected:
 			virtual void initializeGL() override;
 			virtual void resizeGL(int w, int h) override;
 			virtual void paintGL() override;
@@ -86,7 +89,6 @@ namespace PFD
 			osg::ref_ptr<osgViewer::Viewer> m_pViewer;
 			osg::ref_ptr<osgViewer::GraphicsWindow> m_pGraphicsWindow;
 			int m_nDevicePixelRatio = 1;
-			std::thread	m_renderThread;
 		};
 
 		class MouseButtonMap

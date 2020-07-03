@@ -1,3 +1,13 @@
+/*****************************************************************//**
+ * \file   GraphicsWin.cpp
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/07/03
+ * 
+ *********************************************************************/
+
 #include "GraphicsWin.h"
 #include <QOpenGLContext>
 
@@ -7,6 +17,10 @@ namespace PFD
 	{
 		GraphicsWin::GraphicsWin()
 			: osgViewer::GraphicsWindow()
+		{
+		}
+
+		GraphicsWin::~GraphicsWin()
 		{
 		}
 

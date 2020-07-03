@@ -7,6 +7,13 @@
  * \date   2020/07/02
  * 
  *********************************************************************/
+/**
+ * \brief  
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/07/03
+ * */
+
 #pragma once
 
 #include <osgViewer/Viewer>
@@ -20,6 +27,8 @@ namespace PFD
 		{
 		public:
 			GraphicsWin();
+
+            virtual ~GraphicsWin();
 
 			void SetOpenGLWidget(OpenGLWidget* pOpenGLWidget);
 			OpenGLWidget* GetOpenGLWidget();

@@ -1,4 +1,13 @@
-#include "OpenGLWidget.h"
+/*****************************************************************//**
+ * \file   OpenGLWidget.cpp
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/07/03
+ * 
+ *********************************************************************/
+
 #include <Qt>
 #include <QInputEvent>
 #include <QPointer>
@@ -6,7 +15,13 @@
 #include <QSurfaceFormat>
 #include <QOpenGLContext>
 
+#include <nlohmann/json.hpp>
+
+#include "OpenGLWidget.h"
 #include "GraphicsWin.h"
+
+#include <Config/IProgramConfig.h>
+
 
 namespace PFD
 {
@@ -31,11 +46,6 @@ namespace PFD
 			if (pGraphicsWin)
 			{
 				pGraphicsWin->close();
-				pGraphicsWin->SetOpenGLWidget(this);
-			}
-			if (m_renderThread.joinable())
-			{
-				m_renderThread.join();
 			}
 		}
 
@@ -44,10 +54,33 @@ namespace PFD
 			osg::Camera* pCamera = m_pViewer->getCamera();
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
 			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 10000.));
-			//pCamera->setClearColor(GetBackgroundColor3D());
+			pCamera->setClearColor(GetBackgroundColor3D());
 			pCamera->setViewport(new osg::Viewport(0, 0, width(), height()));
 			pCamera->setDrawBuffer(GL_BACK);
 			pCamera->setReadBuffer(GL_BACK);
+		}
+
+		osg::Vec4 OpenGLWidget::GetBackgroundColor3D()
+		{
+			try
+			{
+				nlohmann::json b3d = PFD::Config::IProgramConfig::GetInstance()->GetJson("BackgroundColor3D");
+				bool IsNormal = b3d["IsNormal"].get<bool>();
+				double R = b3d["R"].get<double>();
+				double G = b3d["G"].get<double>();
+				double B = b3d["B"].get<double>();
+				if (IsNormal)
+				{
+					return osg::Vec4(R, G, B, 1.0);
+				}
+				return osg::Vec4(R / 255.0, G / 255.0, B / 255.0, 1.0);
+			}
+			catch (const std::exception& ex)
+			{
+				//logger->error(ex.what());
+			}
+
+			return osg::Vec4(0.466, 0.533, 0.6, 1.0);	// default LightSlateGray
 		}
 
 		void OpenGLWidget::initializeGL()

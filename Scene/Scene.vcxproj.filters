@@ -23,12 +23,6 @@
     <ClInclude Include="scene_global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <QtMoc Include="Scene.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClInclude Include="OpenGLWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
