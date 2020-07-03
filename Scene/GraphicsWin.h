@@ -57,7 +57,9 @@ namespace PFD
             /** Swap the front and back buffers implementation.
               * Pure virtual - must be implemented by concrete implementations of GraphicsContext. */
             virtual void swapBuffersImplementation() override;
-		protected:
+
+            void init(int x, int y, int width, int height);
+
 		private:
             bool m_bRealized = false;
 			OpenGLWidget* m_pOpenGLWidget = nullptr;

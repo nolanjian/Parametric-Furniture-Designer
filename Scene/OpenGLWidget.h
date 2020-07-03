@@ -30,9 +30,12 @@ namespace PFD
 			explicit OpenGLWidget(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 			~OpenGLWidget();
 
-			void Init();
-			void RunRender();
-			void RenderThreading();
+			void InitCamera();
+
+		protected:
+			virtual void initializeGL() override;
+			virtual void resizeGL(int w, int h) override;
+			virtual void paintGL() override;
 
 		protected:
 			// Event handlers

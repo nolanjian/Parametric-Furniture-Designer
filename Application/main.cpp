@@ -10,8 +10,6 @@ int main(int argc, char *argv[])
     Application w;
 
     PFD::Scene::OpenGLWidget oglWidget;
-    oglWidget.Init();
-    oglWidget.RunRender();
 
     w.layout()->addWidget(&oglWidget);
 

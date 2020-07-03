@@ -1,7 +1,10 @@
 #include "OpenGLWidget.h"
+#include <Qt>
 #include <QInputEvent>
 #include <QPointer>
 #include <QPainter>
+#include <QSurfaceFormat>
+#include <QOpenGLContext>
 
 #include "GraphicsWin.h"
 
@@ -36,7 +39,7 @@ namespace PFD
 			}
 		}
 
-		void OpenGLWidget::Init()
+		void OpenGLWidget::InitCamera()
 		{
 			osg::Camera* pCamera = m_pViewer->getCamera();
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
@@ -47,14 +50,39 @@ namespace PFD
 			pCamera->setReadBuffer(GL_BACK);
 		}
 
-		void OpenGLWidget::RunRender()
+		void OpenGLWidget::initializeGL()
 		{
-			m_renderThread = std::thread(std::bind(&OpenGLWidget::RenderThreading, this));
+			QOpenGLContext* pQOpenGLContext = context();
+			if (!pQOpenGLContext)
+			{
+				return;
+			}
+
+			GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
+			if (pGraphicsWin)
+			{
+				pGraphicsWin->init(x(), y(), width(), height());
+			}
+
+			QSurfaceFormat qSurfaceFormat = pQOpenGLContext->format();
+			int major = qSurfaceFormat.majorVersion();
+			int minor = qSurfaceFormat.minorVersion();
+
+			m_pViewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
+
+			InitCamera();
 		}
 
-		void OpenGLWidget::RenderThreading()
+		void OpenGLWidget::resizeGL(int w, int h)
 		{
-			m_pViewer->run();
+		}
+
+		void OpenGLWidget::paintGL()
+		{
+			if (m_pViewer->isRealized())
+			{
+				m_pViewer->frame();
+			}
 		}
 
 		void OpenGLWidget::mousePressEvent(QMouseEvent* event)
@@ -102,8 +130,8 @@ namespace PFD
 			Q_ASSERT(m_pGraphicsWindow);
 			Q_ASSERT(event);
 			const QPoint& pos = event->pos();
-			auto sm = event->delta() > 0 ? 
-			osgGA::GUIEventAdapter::ScrollingMotion::SCROLL_UP : osgGA::GUIEventAdapter::ScrollingMotion::SCROLL_DOWN;
+			auto sm = event->delta() > 0 ?
+				osgGA::GUIEventAdapter::ScrollingMotion::SCROLL_UP : osgGA::GUIEventAdapter::ScrollingMotion::SCROLL_DOWN;
 
 			m_pGraphicsWindow->getEventQueue()->mouseScroll(sm);
 		}
@@ -112,7 +140,7 @@ namespace PFD
 		{
 			Q_ASSERT(m_pGraphicsWindow);
 			Q_ASSERT(event);
-			
+
 			m_pGraphicsWindow->getEventQueue()->keyPress(KeyMap::Get().GetKey(Qt::Key(event->key())));
 		}
 
@@ -142,20 +170,14 @@ namespace PFD
 
 		void OpenGLWidget::paintEvent(QPaintEvent* event)
 		{
-			makeCurrent();
-
-			QPainter painter(this);
-
 			paintGL();
-
-
 		}
 
 		void OpenGLWidget::moveEvent(QMoveEvent* event)
 		{
 			Q_ASSERT(m_pGraphicsWindow);
 			Q_ASSERT(event);
-			const QPoint & pos = event->pos();
+			const QPoint& pos = event->pos();
 			m_pGraphicsWindow->resized(pos.x(), pos.y(), width() * m_nDevicePixelRatio, height() * m_nDevicePixelRatio);
 			m_pGraphicsWindow->getEventQueue()->windowResize(pos.x(), pos.y(), width() * m_nDevicePixelRatio, height() * m_nDevicePixelRatio);
 			//m_pGraphicsWindow->requestRedraw();
@@ -230,7 +252,7 @@ namespace PFD
 		{
 			m_Mapping = std::move(std::map<Qt::MouseButton, osgGA::GUIEventAdapter::MouseButtonMask>{
 				{ Qt::MouseButton::LeftButton, osgGA::GUIEventAdapter::MouseButtonMask::LEFT_MOUSE_BUTTON },
-				{ Qt::MouseButton::RightButton, osgGA::GUIEventAdapter::MouseButtonMask::RIGHT_MOUSE_BUTTON},
+				{ Qt::MouseButton::RightButton, osgGA::GUIEventAdapter::MouseButtonMask::RIGHT_MOUSE_BUTTON },
 				{ Qt::MouseButton::MiddleButton, osgGA::GUIEventAdapter::MouseButtonMask::MIDDLE_MOUSE_BUTTON },
 			});
 		}
@@ -257,5 +279,5 @@ namespace PFD
 			});
 		}
 
-}	// namespace Scene
+	}	// namespace Scene
 }	// namespace PFD

@@ -62,6 +62,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLTFHelper", "GLTFHelper\GL
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Application", "Application\Application.vcxproj", "{12B02EDA-1B70-47D2-AB1A-6DE5BD3C2797}"
+	ProjectSection(ProjectDependencies) = postProject
+		{45A6B77F-B8F2-4FEC-AB1E-DCA79901D8CB} = {45A6B77F-B8F2-4FEC-AB1E-DCA79901D8CB}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene", "Scene\Scene.vcxproj", "{45A6B77F-B8F2-4FEC-AB1E-DCA79901D8CB}"
 EndProject

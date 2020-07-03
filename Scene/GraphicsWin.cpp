@@ -54,7 +54,8 @@ namespace PFD
 
 		bool GraphicsWin::isRealizedImplementation() const
 		{
-			return m_bRealized;
+			//return m_bRealized;
+			return true;
 		}
 
 		void GraphicsWin::closeImplementation()
@@ -66,7 +67,12 @@ namespace PFD
 		bool GraphicsWin::makeCurrentImplementation()
 		{
 			assert(m_pOpenGLWidget);
-			m_pOpenGLWidget->makeCurrent();
+
+			if (QOpenGLContext::currentContext() != m_pOpenGLWidget->context())
+			{
+				m_pOpenGLWidget->makeCurrent();
+			}
+
 			return true;
 		}
 
@@ -100,6 +106,31 @@ namespace PFD
 			if (QOpenGLContext::currentContext() != m_pOpenGLWidget->context())
 			{
 				m_pOpenGLWidget->makeCurrent();
+			}
+		}
+
+		void GraphicsWin::init(int x, int y, int width, int height)
+		{
+			_traits = new osg::GraphicsContext::Traits();
+			_traits->x = x;
+			_traits->y = y;
+			_traits->width = width;
+			_traits->height = height;
+
+			if (valid())
+			{
+				setState(new osg::State);
+				getState()->setGraphicsContext(this);
+
+				if (_traits.valid() && _traits->sharedContext.valid())
+				{
+					getState()->setContextID(_traits->sharedContext->getState()->getContextID());
+					incrementContextIDUsageCount(getState()->getContextID());
+				}
+				else
+				{
+					getState()->setContextID(osg::GraphicsContext::createNewContextID());
+				}
 			}
 		}
 
