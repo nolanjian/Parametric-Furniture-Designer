@@ -26,11 +26,17 @@ namespace PFD
 
 		class SCENE_EXPORT OpenGLWidget : public QOpenGLWidget
 		{
+			Q_OBJECT
 		public:
 			explicit OpenGLWidget(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 			~OpenGLWidget();
 
 			void InitCamera();
+		//signals:
+		//	void triggered(bool checked = false);
+
+		public slots:
+			void OpenFile();
 
 		protected:
 			osg::Vec4 GetBackgroundColor3D();
@@ -86,9 +92,14 @@ namespace PFD
 //			virtual bool nativeEvent(const QByteArray& eventType, void* message, long* result);
 //#endif
 		private:
+			bool PhotorealisticShaders(osg::StateSet* stateSet);
+
+		private:
 			osg::ref_ptr<osgViewer::Viewer> m_pViewer;
 			osg::ref_ptr<osgViewer::GraphicsWindow> m_pGraphicsWindow;
 			int m_nDevicePixelRatio = 1;
+
+			QTimer* m_timer;
 		};
 
 		class MouseButtonMap

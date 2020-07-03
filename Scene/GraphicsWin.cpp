@@ -10,6 +10,7 @@
 
 #include "GraphicsWin.h"
 #include <QOpenGLContext>
+#include <QOpenGLFunctions>
 
 namespace PFD
 {
@@ -18,6 +19,8 @@ namespace PFD
 		GraphicsWin::GraphicsWin()
 			: osgViewer::GraphicsWindow()
 		{
+			osg::setNotifyLevel(osg::NotifySeverity::NOTICE);
+			osg::setNotifyHandler(new osg::WinDebugNotifyHandler());
 		}
 
 		GraphicsWin::~GraphicsWin()
@@ -111,16 +114,21 @@ namespace PFD
 		void GraphicsWin::swapBuffersImplementation()
 		{
 			assert(m_pOpenGLWidget);
-			QOpenGLContext* pQOpenGLContext = m_pOpenGLWidget->context();
-			if (pQOpenGLContext)
-			{
-				pQOpenGLContext->swapBuffers(pQOpenGLContext->surface());
-			}
-
+			
 			if (QOpenGLContext::currentContext() != m_pOpenGLWidget->context())
 			{
 				m_pOpenGLWidget->makeCurrent();
 			}
+
+			QOpenGLContext* pQOpenGLContext = m_pOpenGLWidget->context();
+			if (pQOpenGLContext)
+			{
+
+				pQOpenGLContext->swapBuffers(pQOpenGLContext->surface());
+			}
+
+			m_pOpenGLWidget->frameSwapped();
+
 		}
 
 		void GraphicsWin::init(int x, int y, int width, int height)
@@ -130,10 +138,13 @@ namespace PFD
 			_traits->y = y;
 			_traits->width = width;
 			_traits->height = height;
+			_traits->doubleBuffer = true;
+			_traits->windowDecoration = true;
 
 			if (valid())
 			{
 				setState(new osg::State);
+				getState()->setCheckForGLErrors(osg::State::ONCE_PER_ATTRIBUTE);
 				getState()->setGraphicsContext(this);
 
 				if (_traits.valid() && _traits->sharedContext.valid())

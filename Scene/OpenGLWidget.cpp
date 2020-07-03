@@ -9,11 +9,16 @@
  *********************************************************************/
 
 #include <Qt>
+#include <QApplication>
 #include <QInputEvent>
 #include <QPointer>
 #include <QPainter>
 #include <QSurfaceFormat>
 #include <QOpenGLContext>
+#include <QFileDialog>
+#include <QDebug>
+#include <QTimer>
+#include <QOpenGLFunctions>
 
 #include <nlohmann/json.hpp>
 
@@ -21,6 +26,9 @@
 #include "GraphicsWin.h"
 
 #include <Config/IProgramConfig.h>
+#include <GLTFHelper/Importer.h>
+
+#include <Commom/ShadingPreDefine.h>
 
 
 namespace PFD
@@ -52,12 +60,54 @@ namespace PFD
 		void OpenGLWidget::InitCamera()
 		{
 			osg::Camera* pCamera = m_pViewer->getCamera();
+
+			pCamera->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER);
+
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
-			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 10000.));
+			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 100));
 			pCamera->setClearColor(GetBackgroundColor3D());
 			pCamera->setViewport(new osg::Viewport(0, 0, width(), height()));
 			pCamera->setDrawBuffer(GL_BACK);
 			pCamera->setReadBuffer(GL_BACK);
+		}
+
+		void OpenGLWidget::OpenFile()
+		{
+			InitCamera();
+
+			QString file_name = QFileDialog::getOpenFileName(NULL, "打开GLTF文件", ".", "*.gltf *.glb");
+			std::wstring path = file_name.toStdWString();
+
+			try
+			{
+				auto pImporter = PFD::GLTF::Importer::Create();
+				if (!pImporter)
+				{
+					//logger->error("Create GLTF importer fail");
+					//return false;
+				}
+
+				osg::ref_ptr<osg::Group> pScene = pImporter->Load(path);
+				if (!pScene)
+				{
+					//logger->error("Load GLTF {} fail", PFD::Utils::WStringToString(path));
+					//return false;
+				}
+
+				PhotorealisticShaders(pScene->getOrCreateStateSet());
+
+				if (m_pViewer)
+				{
+					m_pViewer->setSceneData(pScene);
+				}
+
+				paintGL();
+			}
+			catch (const std::exception& ex)
+			{
+				//logger->error(ex.what());
+				//return false;
+			}
 		}
 
 		osg::Vec4 OpenGLWidget::GetBackgroundColor3D()
@@ -91,9 +141,13 @@ namespace PFD
 				return;
 			}
 
+			makeCurrent();
+
 			GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
 			if (pGraphicsWin)
 			{
+				GLint fboID = defaultFramebufferObject();
+				pGraphicsWin->setDefaultFboId(fboID);
 				pGraphicsWin->init(x(), y(), width(), height());
 			}
 
@@ -104,6 +158,12 @@ namespace PFD
 			m_pViewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
 
 			InitCamera();
+
+			m_timer = new QTimer(this);
+			m_timer->connect(m_timer, &QTimer::timeout, [this]() {
+				this->update();
+				});
+			m_timer->start();
 		}
 
 		void OpenGLWidget::resizeGL(int w, int h)
@@ -203,7 +263,24 @@ namespace PFD
 
 		void OpenGLWidget::paintEvent(QPaintEvent* event)
 		{
+			makeCurrent();
+
+			//QPainter painter(this);
+
 			paintGL();
+
+//#ifdef WITH_SELECTION_PROCESSING
+//			if (selectionActive_ && !selectionFinished_)
+//			{
+//				painter.setPen(Qt::black);
+//				painter.setBrush(Qt::transparent);
+//				painter.drawRect(makeRectangle(selectionStart_, selectionEnd_));
+//			}
+//#endif
+
+			//painter.end();
+
+			doneCurrent();
 		}
 
 		void OpenGLWidget::moveEvent(QMoveEvent* event)
@@ -264,6 +341,30 @@ namespace PFD
 
 		void OpenGLWidget::hideEvent(QHideEvent* event)
 		{
+		}
+
+		bool OpenGLWidget::PhotorealisticShaders(osg::StateSet* stateSet)
+		{
+			std::string strVS = PFD::Utils::LoadStringFromFile(PFD::Config::IProgramConfig::GetInstance()->GetString("VERTEX_SHADER"));
+			std::string strFS = PFD::Utils::LoadStringFromFile(PFD::Config::IProgramConfig::GetInstance()->GetString("FRAGMENT_SHADER"));
+
+			osg::Shader* vShader = new osg::Shader(osg::Shader::VERTEX, strVS);
+			osg::Shader* fShader = new osg::Shader(osg::Shader::FRAGMENT, strFS);
+
+			osg::Program* program = new osg::Program;
+			program->addShader(vShader);
+			program->addShader(fShader);
+			program->addBindAttribLocation(TANGENT, TANGENT_INDEX);
+			stateSet->setAttribute(program);
+
+			stateSet->setMode(GL_DEPTH_TEST, osg::StateAttribute::ON);
+			stateSet->setMode(GL_BLEND, osg::StateAttribute::ON);
+
+			osg::Vec3f lightDir(0., 0.5, 1.);
+			lightDir.normalize();
+			stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
+
+			return true;
 		}
 
 		MouseButtonMap& MouseButtonMap::Get()

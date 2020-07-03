@@ -52,7 +52,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgUtild.lib;osgd.lib;PFDConfig.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgUtild.lib;osgd.lib;UTILS.lib;PFDConfig.lib;GLTFHelper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
@@ -75,7 +75,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PreprocessorDefinitions>SCENE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SCENE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -98,7 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsWin.h" />
-    <ClInclude Include="OpenGLWidget.h" />
+    <QtMoc Include="OpenGLWidget.h" />
     <ClInclude Include="scene_global.h" />
     <ClCompile Include="GraphicsWin.cpp" />
     <ClCompile Include="OpenGLWidget.cpp" />

@@ -10,6 +10,9 @@ class Application : public QMainWindow
 public:
     Application(QWidget *parent = Q_NULLPTR);
 
+public slots:
+    void testSlots();
+
 private:
     Ui::ApplicationClass ui;
 };
