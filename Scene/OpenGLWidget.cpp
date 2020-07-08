@@ -52,6 +52,10 @@ namespace PFD
 			{
 				pGraphicsWin->SetOpenGLWidget(this);
 			}
+
+			m_pViewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
+			m_pViewer->setCameraManipulator(new osgGA::TrackballManipulator());
+			InitCamera();
 		}
 
 		OpenGLWidget::~OpenGLWidget()
@@ -65,21 +69,17 @@ namespace PFD
 
 		void OpenGLWidget::InitCamera()
 		{
-			m_pViewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
-			m_pViewer->setCameraManipulator(new osgGA::TrackballManipulator());
-
 			osg::Camera* pCamera = m_pViewer->getCamera();
 			pCamera->setAllowEventFocus(true);
 			pCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			pCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
-			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 100));
 			pCamera->setClearColor(GetBackgroundColor3D());
-			pCamera->setViewport(new osg::Viewport(0, 0, width(), height()));
+			
 			pCamera->setDrawBuffer(GL_BACK);
 			pCamera->setReadBuffer(GL_BACK);
 
-			m_pGraphicsWindow->getEventQueue()->syncWindowRectangleWithGraphicsContext();
+			
 		}
 
 		void OpenGLWidget::OpenFile()
@@ -162,16 +162,16 @@ namespace PFD
 
 			makeCurrent();
 
+			setDefaultDisplaySettings();
+
 			emit initialized();
 		}
 
 		void OpenGLWidget::resizeGL(int w, int h)
 		{
-			GLuint defaultFBO = defaultFramebufferObject();
-
-			setDefaultDisplaySettings();
-
-			InitCamera();
+			osg::Camera* pCamera = m_pViewer->getCamera();
+			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 100));
+			pCamera->setViewport(new osg::Viewport(0, 0, width(), height()));
 
 			Q_ASSERT(m_pGraphicsWindow);
 			m_pGraphicsWindow->resized(0, 0, w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
@@ -362,9 +362,9 @@ namespace PFD
 			stateSet->setMode(GL_DEPTH_TEST, osg::StateAttribute::ON);
 			stateSet->setMode(GL_BLEND, osg::StateAttribute::ON);
 
-			osg::Vec3f lightDir(0., 0.5, 1.);
-			lightDir.normalize();
-			stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
+			//osg::Vec3f lightDir(0., 0.5, 1.);
+			//lightDir.normalize();
+			//stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
 
 			return true;
 		}
