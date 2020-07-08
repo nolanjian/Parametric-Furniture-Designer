@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer;D:\library\Parametric-Furniture-Designer\3rdPart;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>D:\library\Parametric-Furniture-Designer\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

@@ -45,6 +45,7 @@ namespace PFD
 			, m_pGraphicsWindow(new GraphicsWin())
 		{
 			setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+			setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 
 			GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
 			if (pGraphicsWin)
@@ -68,13 +69,13 @@ namespace PFD
 			m_pViewer->setCameraManipulator(new osgGA::TrackballManipulator());
 
 			osg::Camera* pCamera = m_pViewer->getCamera();
-
+			pCamera->setAllowEventFocus(true);
 			pCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			pCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
 			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 100));
 			pCamera->setClearColor(GetBackgroundColor3D());
-			pCamera->setViewport(new osg::Viewport(x(), y(), width(), height()));
+			pCamera->setViewport(new osg::Viewport(0, 0, width(), height()));
 			pCamera->setDrawBuffer(GL_BACK);
 			pCamera->setReadBuffer(GL_BACK);
 
@@ -91,15 +92,14 @@ namespace PFD
 				auto pImporter = PFD::GLTF::Importer::Create();
 				if (!pImporter)
 				{
-					//logger->error("Create GLTF importer fail");
-					//return false;
+					throw std::exception("Create GLTF importer fail");
 				}
 
 				osg::ref_ptr<osg::Group> pScene = pImporter->Load(path);
 				if (!pScene)
 				{
-					//logger->error("Load GLTF {} fail", PFD::Utils::WStringToString(path));
-					//return false;
+					std::string str = QString("Load GLTF %s fail").arg(QString(PFD::Utils::WStringToString(path).c_str())).toStdString();
+					throw std::exception(str.c_str());
 				}
 
 				PhotorealisticShaders(pScene->getOrCreateStateSet());
@@ -111,18 +111,26 @@ namespace PFD
 			}
 			catch (const std::exception& ex)
 			{
-				//logger->error(ex.what());
-				//return false;
+				logger->error(ex.what());
+				return;
 			}
 		}
 
 		void OpenGLWidget::BeginTimer()
 		{
-			m_timer = new QTimer(this);
-			m_timer->connect(m_timer, &QTimer::timeout, [this]() {
+			m_pTimer = std::make_shared<QTimer>();
+			m_pTimer->connect(m_pTimer.get(), &QTimer::timeout, [this]() {
 				this->update();
 				});
-			m_timer->start(10);
+			m_pTimer->start(10);
+		}
+
+		void OpenGLWidget::StopTimer()
+		{
+			if (m_pTimer)
+			{
+				m_pTimer->stop();
+			}
 		}
 
 		osg::Vec4 OpenGLWidget::GetBackgroundColor3D()
@@ -142,7 +150,7 @@ namespace PFD
 			}
 			catch (const std::exception& ex)
 			{
-				//logger->error(ex.what());
+				logger->error(ex.what());
 			}
 
 			return osg::Vec4(0.466, 0.533, 0.6, 1.0);	// default LightSlateGray
@@ -166,32 +174,26 @@ namespace PFD
 			InitCamera();
 
 			Q_ASSERT(m_pGraphicsWindow);
-			m_pGraphicsWindow->resized(x(), y(), w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
-			m_pGraphicsWindow->getEventQueue()->windowResize(x(), y(), w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
+			m_pGraphicsWindow->resized(0, 0, w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
+			m_pGraphicsWindow->getEventQueue()->windowResize(0, 0, w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
 			m_pGraphicsWindow->requestRedraw();
 		}
 
 		void OpenGLWidget::paintGL()
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
 			if (!bInitOSG)
 			{
-				
-
 				GLint fboID = defaultFramebufferObject();
 				if (fboID != 0)
 				{
 					GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
 					if (pGraphicsWin)
 					{
-						pGraphicsWin->init(x(), y(), width(), height());
+						pGraphicsWin->init(0, 0, width(), height());
 						m_pViewer->getCamera()->getGraphicsContext()->setDefaultFboId(fboID);
 					}
 				}
 				bInitOSG = true;
-
-				BeginTimer();
 			}
 
 			if (bInitOSG)
@@ -299,7 +301,6 @@ namespace PFD
 			const QPoint& pos = event->pos();
 			m_pGraphicsWindow->resized(pos.x(), pos.y(), width() * m_nDevicePixelRatio, height() * m_nDevicePixelRatio);
 			m_pGraphicsWindow->getEventQueue()->windowResize(pos.x(), pos.y(), width() * m_nDevicePixelRatio, height() * m_nDevicePixelRatio);
-			//m_pGraphicsWindow->requestRedraw();
 		}
 
 		void OpenGLWidget::closeEvent(QCloseEvent* event)
@@ -336,10 +337,12 @@ namespace PFD
 
 		void OpenGLWidget::showEvent(QShowEvent* event)
 		{
+			BeginTimer();
 		}
 
 		void OpenGLWidget::hideEvent(QHideEvent* event)
 		{
+			StopTimer();
 		}
 
 		bool OpenGLWidget::PhotorealisticShaders(osg::StateSet* stateSet)

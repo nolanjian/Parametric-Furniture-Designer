@@ -51,8 +51,8 @@
       <AdditionalIncludeDirectories>D:\library\OpenSceneGraph\include;D:\library\Parametric-Furniture-Designer\3rdPart;D:\library\Parametric-Furniture-Designer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgUtild.lib;osgd.lib;UTILS.lib;PFDConfig.lib;GLTFHelper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Library\OpenSceneGraph\lib;D:\library\Parametric-Furniture-Designer\x64\Debug;D:\library\Parametric-Furniture-Designer\spdlog;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>osgViewerd.lib;osgGAd.lib;osgUtild.lib;osgd.lib;UTILS.lib;PFDConfig.lib;GLTFHelper.lib;spdlogd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">

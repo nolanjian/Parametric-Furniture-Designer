@@ -17,6 +17,11 @@
 
 #include <thread>
 #include <map>
+#include <memory>
+
+#include <Utils/Utils.h>
+
+#include <spdlog/spdlog.h>
 
 namespace PFD
 {
@@ -41,6 +46,7 @@ namespace PFD
 
 		protected:
 			void BeginTimer();
+			void StopTimer();
 			osg::Vec4 GetBackgroundColor3D();
 
 		protected:
@@ -99,6 +105,8 @@ namespace PFD
 			void setDefaultDisplaySettings();
 
 		private:
+			std::shared_ptr<spdlog::logger> logger = spdlog::get(PFD_LOGGER);
+
 			osg::ref_ptr<osgViewer::Viewer> m_pViewer;
 			osg::ref_ptr<osgViewer::GraphicsWindow> m_pGraphicsWindow;
 
@@ -106,7 +114,7 @@ namespace PFD
 
 			int m_nDevicePixelRatio = 1;
 
-			QTimer* m_timer;
+			std::shared_ptr<QTimer>	m_pTimer;
 		};
 
 		class MouseButtonMap

@@ -147,7 +147,9 @@ namespace PFD
 			if (valid())
 			{
 				setState(new osg::State);
+#ifdef _DEBUG
 				getState()->setCheckForGLErrors(osg::State::ONCE_PER_ATTRIBUTE);
+#endif // _DEBUG
 				getState()->setGraphicsContext(this);
 
 				if (_traits.valid() && _traits->sharedContext.valid())
