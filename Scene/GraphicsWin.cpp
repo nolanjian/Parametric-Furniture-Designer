@@ -71,8 +71,8 @@ namespace PFD
 
 		bool GraphicsWin::isRealizedImplementation() const
 		{
-			//return m_bRealized;
-			return true;
+			return m_bRealized;
+			//return true;
 		}
 
 		void GraphicsWin::closeImplementation()
@@ -141,6 +141,10 @@ namespace PFD
 			_traits->doubleBuffer = true;
 			_traits->windowDecoration = true;
 
+			;
+
+			qglFormat2traits(m_pOpenGLWidget->format(), *_traits);
+
 			if (valid())
 			{
 				setState(new osg::State);
@@ -157,6 +161,21 @@ namespace PFD
 					getState()->setContextID(osg::GraphicsContext::createNewContextID());
 				}
 			}
+		}
+
+		void GraphicsWin::qglFormat2traits(const QSurfaceFormat& qSurfaceFormat, osg::GraphicsContext::Traits& osgTraits)
+		{
+			osgTraits.red = qSurfaceFormat.redBufferSize();
+			osgTraits.green = qSurfaceFormat.greenBufferSize();
+			osgTraits.blue = qSurfaceFormat.blueBufferSize();
+			osgTraits.alpha = qSurfaceFormat.hasAlpha() ? qSurfaceFormat.alphaBufferSize() : 0;
+			osgTraits.depth = qSurfaceFormat.depthBufferSize();
+			osgTraits.stencil = qSurfaceFormat.stencilBufferSize();
+
+			osgTraits.samples = qSurfaceFormat.samples();
+			osgTraits.quadBufferStereo = qSurfaceFormat.stereo();
+			osgTraits.doubleBuffer = qSurfaceFormat.swapBehavior() == QSurfaceFormat::DoubleBuffer;
+			osgTraits.vsync = qSurfaceFormat.swapInterval() >= 1;
 		}
 
 	}	// namespace Scene

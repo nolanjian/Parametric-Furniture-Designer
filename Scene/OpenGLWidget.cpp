@@ -7,12 +7,15 @@
  * \date   2020/07/03
  * 
  *********************************************************************/
+#include "OpenGLWidget.h"
+#include "GraphicsWin.h"
 
 #include <Qt>
 #include <QApplication>
 #include <QInputEvent>
 #include <QPointer>
 #include <QPainter>
+#include <QSurface>
 #include <QSurfaceFormat>
 #include <QOpenGLContext>
 #include <QFileDialog>
@@ -22,13 +25,13 @@
 
 #include <nlohmann/json.hpp>
 
-#include "OpenGLWidget.h"
-#include "GraphicsWin.h"
 
 #include <Config/IProgramConfig.h>
 #include <GLTFHelper/Importer.h>
 
 #include <Commom/ShadingPreDefine.h>
+
+#include <osgGA/TrackballManipulator>
 
 
 namespace PFD
@@ -41,6 +44,8 @@ namespace PFD
 			, m_pViewer(new osgViewer::Viewer())
 			, m_pGraphicsWindow(new GraphicsWin())
 		{
+			setUpdateBehavior(QOpenGLWidget::NoPartialUpdate);
+
 			GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
 			if (pGraphicsWin)
 			{
@@ -59,21 +64,27 @@ namespace PFD
 
 		void OpenGLWidget::InitCamera()
 		{
+			m_pViewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
+			m_pViewer->setCameraManipulator(new osgGA::TrackballManipulator());
+
 			osg::Camera* pCamera = m_pViewer->getCamera();
 
-			pCamera->setRenderTargetImplementation(osg::Camera::FRAME_BUFFER);
-
+			//pCamera->setRenderTargetImplementation(osg::Camera::RenderTargetImplementation(100));
+			pCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+			pCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
 			pCamera->setProjectionMatrix(osg::Matrix::perspective(30., (double)width() / (double)height(), 1., 100));
 			pCamera->setClearColor(GetBackgroundColor3D());
-			pCamera->setViewport(new osg::Viewport(0, 0, width(), height()));
+			pCamera->setViewport(new osg::Viewport(x(), y(), width(), height()));
 			pCamera->setDrawBuffer(GL_BACK);
 			pCamera->setReadBuffer(GL_BACK);
+
+			m_pGraphicsWindow->getEventQueue()->syncWindowRectangleWithGraphicsContext();
 		}
 
 		void OpenGLWidget::OpenFile()
 		{
-			InitCamera();
+			//InitCamera();
 
 			QString file_name = QFileDialog::getOpenFileName(NULL, "打开GLTF文件", ".", "*.gltf *.glb");
 			std::wstring path = file_name.toStdWString();
@@ -101,13 +112,22 @@ namespace PFD
 					m_pViewer->setSceneData(pScene);
 				}
 
-				paintGL();
+				//paintGL();
 			}
 			catch (const std::exception& ex)
 			{
 				//logger->error(ex.what());
 				//return false;
 			}
+		}
+
+		void OpenGLWidget::BeginTimer()
+		{
+			m_timer = new QTimer(this);
+			m_timer->connect(m_timer, &QTimer::timeout, [this]() {
+				this->update();
+				});
+			m_timer->start(10);
 		}
 
 		osg::Vec4 OpenGLWidget::GetBackgroundColor3D()
@@ -135,48 +155,63 @@ namespace PFD
 
 		void OpenGLWidget::initializeGL()
 		{
-			QOpenGLContext* pQOpenGLContext = context();
-			if (!pQOpenGLContext)
-			{
-				return;
-			}
+			initializeOpenGLFunctions();
 
 			makeCurrent();
 
-			GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
-			if (pGraphicsWin)
-			{
-				GLint fboID = defaultFramebufferObject();
-				pGraphicsWin->setDefaultFboId(fboID);
-				pGraphicsWin->init(x(), y(), width(), height());
-			}
-
-			QSurfaceFormat qSurfaceFormat = pQOpenGLContext->format();
-			int major = qSurfaceFormat.majorVersion();
-			int minor = qSurfaceFormat.minorVersion();
-
-			m_pViewer->setThreadingModel(osgViewer::ViewerBase::ThreadingModel::SingleThreaded);
-
-			InitCamera();
-
-			m_timer = new QTimer(this);
-			m_timer->connect(m_timer, &QTimer::timeout, [this]() {
-				this->update();
-				});
-			m_timer->start();
+			emit initialized();
 		}
 
 		void OpenGLWidget::resizeGL(int w, int h)
 		{
+			GLuint defaultFBO = defaultFramebufferObject();
+
+			setDefaultDisplaySettings();
+
+			InitCamera();
+
+			Q_ASSERT(m_pGraphicsWindow);
+			m_pGraphicsWindow->resized(x(), y(), w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
+			m_pGraphicsWindow->getEventQueue()->windowResize(x(), y(), w * m_nDevicePixelRatio, h * m_nDevicePixelRatio);
+			m_pGraphicsWindow->requestRedraw();
 		}
 
 		void OpenGLWidget::paintGL()
 		{
-			if (m_pViewer->isRealized())
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+			if (!bInitOSG)
+			{
+				
+
+				GLint fboID = defaultFramebufferObject();
+				if (fboID != 0)
+				{
+					GraphicsWin* pGraphicsWin = dynamic_cast<GraphicsWin*>(m_pGraphicsWindow.get());
+					if (pGraphicsWin)
+					{
+						pGraphicsWin->init(x(), y(), width(), height());
+						m_pViewer->getCamera()->getGraphicsContext()->setDefaultFboId(fboID);
+					}
+				}
+				bInitOSG = true;
+
+				BeginTimer();
+			}
+
+			if (bInitOSG)
 			{
 				m_pViewer->frame();
 			}
 		}
+
+		//bool OpenGLWidget::event(QEvent* e)
+		//{
+		//	d->fbo;
+
+
+		//	return false;
+		//}
 
 		void OpenGLWidget::mousePressEvent(QMouseEvent* event)
 		{
@@ -293,15 +328,15 @@ namespace PFD
 			//m_pGraphicsWindow->requestRedraw();
 		}
 
-		void OpenGLWidget::resizeEvent(QResizeEvent* event)
-		{
-			Q_ASSERT(m_pGraphicsWindow);
-			Q_ASSERT(event);
-			const QSize& size = event->size();
-			m_pGraphicsWindow->resized(x(), y(), size.width() * m_nDevicePixelRatio, size.height() * m_nDevicePixelRatio);
-			m_pGraphicsWindow->getEventQueue()->windowResize(x(), y(), size.width() * m_nDevicePixelRatio, size.height() * m_nDevicePixelRatio);
-			m_pGraphicsWindow->requestRedraw();
-		}
+		//void OpenGLWidget::resizeEvent(QResizeEvent* event)
+		//{
+		//	Q_ASSERT(m_pGraphicsWindow);
+		//	Q_ASSERT(event);
+		//	const QSize& size = event->size();
+		//	m_pGraphicsWindow->resized(x(), y(), size.width() * m_nDevicePixelRatio, size.height() * m_nDevicePixelRatio);
+		//	m_pGraphicsWindow->getEventQueue()->windowResize(x(), y(), size.width() * m_nDevicePixelRatio, size.height() * m_nDevicePixelRatio);
+		//	m_pGraphicsWindow->requestRedraw();
+		//}
 
 		void OpenGLWidget::closeEvent(QCloseEvent* event)
 		{
@@ -365,6 +400,13 @@ namespace PFD
 			stateSet->addUniform(new osg::Uniform("ecLightDir", lightDir));
 
 			return true;
+		}
+
+		void OpenGLWidget::setDefaultDisplaySettings()
+		{
+			osg::DisplaySettings* ds = osg::DisplaySettings::instance().get();
+			ds->setNvOptimusEnablement(1);
+			ds->setStereo(false);
 		}
 
 		MouseButtonMap& MouseButtonMap::Get()

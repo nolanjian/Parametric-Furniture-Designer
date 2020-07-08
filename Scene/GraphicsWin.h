@@ -69,6 +69,9 @@ namespace PFD
 
             void init(int x, int y, int width, int height);
 
+        protected:
+            void qglFormat2traits(const QSurfaceFormat& qSurfaceFormat, osg::GraphicsContext::Traits& osgTraits);
+
 		private:
             bool m_bRealized = false;
 			OpenGLWidget* m_pOpenGLWidget = nullptr;

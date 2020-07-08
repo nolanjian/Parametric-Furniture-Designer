@@ -11,6 +11,7 @@
 
 #include "scene_global.h"
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions>
 
 #include <osgViewer/Viewer>
 
@@ -24,7 +25,7 @@ namespace PFD
 		class MouseButtonMap;
 		class KeyMap;
 
-		class SCENE_EXPORT OpenGLWidget : public QOpenGLWidget
+		class SCENE_EXPORT OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 		{
 			Q_OBJECT
 		public:
@@ -37,8 +38,11 @@ namespace PFD
 
 		public slots:
 			void OpenFile();
+		signals:
+			void initialized();
 
 		protected:
+			void BeginTimer();
 			osg::Vec4 GetBackgroundColor3D();
 
 		protected:
@@ -64,7 +68,7 @@ namespace PFD
 			virtual void leaveEvent(QEvent* event) override;
 			virtual void paintEvent(QPaintEvent* event) override;
 			virtual void moveEvent(QMoveEvent* event) override;
-			virtual void resizeEvent(QResizeEvent* event) override;
+			//virtual void resizeEvent(QResizeEvent* event) override;
 			virtual void closeEvent(QCloseEvent* event) override;
 #ifndef QT_NO_CONTEXTMENU
 			virtual void contextMenuEvent(QContextMenuEvent* event) override;
@@ -94,9 +98,14 @@ namespace PFD
 		private:
 			bool PhotorealisticShaders(osg::StateSet* stateSet);
 
+			void setDefaultDisplaySettings();
+
 		private:
 			osg::ref_ptr<osgViewer::Viewer> m_pViewer;
 			osg::ref_ptr<osgViewer::GraphicsWindow> m_pGraphicsWindow;
+
+			bool bInitOSG = false;
+
 			int m_nDevicePixelRatio = 1;
 
 			QTimer* m_timer;
