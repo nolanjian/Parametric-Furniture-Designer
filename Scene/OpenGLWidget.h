@@ -33,8 +33,6 @@ namespace PFD
 			~OpenGLWidget();
 
 			void InitCamera();
-		//signals:
-		//	void triggered(bool checked = false);
 
 		public slots:
 			void OpenFile();
@@ -68,7 +66,7 @@ namespace PFD
 			virtual void leaveEvent(QEvent* event) override;
 			virtual void paintEvent(QPaintEvent* event) override;
 			virtual void moveEvent(QMoveEvent* event) override;
-			//virtual void resizeEvent(QResizeEvent* event) override;
+			//virtual void resizeEvent(QResizeEvent* event) override;	// Avoid overriding this function in derived classes
 			virtual void closeEvent(QCloseEvent* event) override;
 #ifndef QT_NO_CONTEXTMENU
 			virtual void contextMenuEvent(QContextMenuEvent* event) override;

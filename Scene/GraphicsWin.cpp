@@ -72,7 +72,6 @@ namespace PFD
 		bool GraphicsWin::isRealizedImplementation() const
 		{
 			return m_bRealized;
-			//return true;
 		}
 
 		void GraphicsWin::closeImplementation()

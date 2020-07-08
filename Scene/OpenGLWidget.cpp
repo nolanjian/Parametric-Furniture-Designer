@@ -69,7 +69,6 @@ namespace PFD
 
 			osg::Camera* pCamera = m_pViewer->getCamera();
 
-			//pCamera->setRenderTargetImplementation(osg::Camera::RenderTargetImplementation(100));
 			pCamera->setClearMask(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 			pCamera->setReferenceFrame(osg::Transform::ABSOLUTE_RF);
 			pCamera->setGraphicsContext(m_pGraphicsWindow);
@@ -84,8 +83,6 @@ namespace PFD
 
 		void OpenGLWidget::OpenFile()
 		{
-			//InitCamera();
-
 			QString file_name = QFileDialog::getOpenFileName(NULL, "打开GLTF文件", ".", "*.gltf *.glb");
 			std::wstring path = file_name.toStdWString();
 
@@ -111,8 +108,6 @@ namespace PFD
 				{
 					m_pViewer->setSceneData(pScene);
 				}
-
-				//paintGL();
 			}
 			catch (const std::exception& ex)
 			{
@@ -205,14 +200,6 @@ namespace PFD
 			}
 		}
 
-		//bool OpenGLWidget::event(QEvent* e)
-		//{
-		//	d->fbo;
-
-
-		//	return false;
-		//}
-
 		void OpenGLWidget::mousePressEvent(QMouseEvent* event)
 		{
 			Q_ASSERT(m_pGraphicsWindow);
@@ -300,20 +287,7 @@ namespace PFD
 		{
 			makeCurrent();
 
-			//QPainter painter(this);
-
 			paintGL();
-
-//#ifdef WITH_SELECTION_PROCESSING
-//			if (selectionActive_ && !selectionFinished_)
-//			{
-//				painter.setPen(Qt::black);
-//				painter.setBrush(Qt::transparent);
-//				painter.drawRect(makeRectangle(selectionStart_, selectionEnd_));
-//			}
-//#endif
-
-			//painter.end();
 
 			doneCurrent();
 		}
@@ -327,16 +301,6 @@ namespace PFD
 			m_pGraphicsWindow->getEventQueue()->windowResize(pos.x(), pos.y(), width() * m_nDevicePixelRatio, height() * m_nDevicePixelRatio);
 			//m_pGraphicsWindow->requestRedraw();
 		}
-
-		//void OpenGLWidget::resizeEvent(QResizeEvent* event)
-		//{
-		//	Q_ASSERT(m_pGraphicsWindow);
-		//	Q_ASSERT(event);
-		//	const QSize& size = event->size();
-		//	m_pGraphicsWindow->resized(x(), y(), size.width() * m_nDevicePixelRatio, size.height() * m_nDevicePixelRatio);
-		//	m_pGraphicsWindow->getEventQueue()->windowResize(x(), y(), size.width() * m_nDevicePixelRatio, size.height() * m_nDevicePixelRatio);
-		//	m_pGraphicsWindow->requestRedraw();
-		//}
 
 		void OpenGLWidget::closeEvent(QCloseEvent* event)
 		{
