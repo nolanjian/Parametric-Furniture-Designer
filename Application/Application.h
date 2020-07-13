@@ -1,18 +1,45 @@
+/*****************************************************************//**
+ * \file   Application.h
+ * \brief  
+ * 
+ * \author NolanJian
+ * \e-mail NolanJian@163.com
+ * \date   2020/07/13
+ * 
+ *********************************************************************/
 #pragma once
+#include <Application/Command.h>
 
 #include <QtWidgets/QMainWindow>
 #include "ui_Application.h"
 
-class Application : public QMainWindow
+namespace PFD
 {
-    Q_OBJECT
+    namespace GUI
+    {
+		class Application : public QMainWindow
+		{
+			Q_OBJECT
 
-public:
-    Application(QWidget *parent = Q_NULLPTR);
+		public:
+			Application(QWidget* parent = Q_NULLPTR);
 
-public slots:
-    void testSlots();
+			bool Initialize();
+			bool CreateWidgets();
 
-private:
-    Ui::ApplicationClass ui;
-};
+			void CreateActions();
+
+		public slots:
+			void ActionTriggered();
+			void testSlots();
+
+		protected:
+			void HandleCommand(CommandID id);
+
+		private:
+			Ui::ApplicationClass ui;
+
+			std::map<void*, CommandID>	m_mapActions;
+		};
+    }
+}
